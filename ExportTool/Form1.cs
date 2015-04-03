@@ -344,6 +344,18 @@ namespace ExportTool
                     cellWeek.SetCellValue(startWeek.ToUpper());
                     tempDate = tempDate.AddDays(1);
                 }
+                int i = row2.LastCellNum;
+                ICell cell8 = row2.CreateCell(i++);
+                cell8.SetCellValue("Guide");
+                ICell cell9 = row2.CreateCell(i++);
+                cell9.SetCellValue("Evaluation");
+                ICell cell10 = row2.CreateCell(i++);
+                cell10.SetCellValue("Quantity");
+                ICell cell11 = row2.CreateCell(i++);
+                cell11.SetCellValue("Amount");
+                ICell cell12 = row2.CreateCell(i++);
+                cell12.SetCellValue("Total minutes"); 
+
 
                 int rowIndex = 2;
                 foreach (var item in quantityList)
@@ -372,12 +384,18 @@ namespace ExportTool
                     ICell eff_cell7 = rowEff.CreateCell(7);
                     eff_cell7.SetCellValue(item.Efficiency);
 
-                    for (int i = 0; i < totalDay; i++)
+                    for (int ii = 0; ii < totalDay; ii++)
                     {
-                        ICell eff_cellweek = rowEff.CreateCell(7+i+1);
+                        ICell eff_cellweek = rowEff.CreateCell(7+ii+1);
                         eff_cellweek.SetCellValue(item.Frequency);
                     }
 
+                    ICell eff_cell10 = rowEff.CreateCell(21);
+                    eff_cell10.SetCellValue(item.Quantity);
+                    ICell eff_cell11 = rowEff.CreateCell(22);
+                    eff_cell11.SetCellValue(item.Amount);
+                    ICell eff_cell12 = rowEff.CreateCell(23);
+                    eff_cell12.SetCellValue(item.TotalMinutes); 
                     rowIndex++;
 
                 }
