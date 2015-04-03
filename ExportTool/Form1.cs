@@ -72,6 +72,7 @@ namespace ExportTool
                     }
                 }
             }
+            programList = programList.OrderBy(x => x.Name).ToList();
             int index = 1;
             dataGridView1.DataSource = programList.Select(x => new { SNO = index++, x.TapeCode, Duration = x.Duration.Minute.ToString()+":"+x.Duration.Second.ToString(), x.Name }).ToList();
             dataGridView1.AutoResizeColumns();
@@ -108,24 +109,24 @@ namespace ExportTool
                 cell4.SetCellValue("FREQUENCY");
                 ICell cell5 = row3.CreateCell(5);
                 cell5.SetCellValue("CATEGORY");
-                ICell cell6 = row3.CreateCell(6);
-                cell6.SetCellValue("MÃ SẢN PHẨM");
-                ICell cell7 = row3.CreateCell(7);
-                cell7.SetCellValue("SẢN PHẨM");
-                ICell cell8 = row3.CreateCell(8);
+                //ICell cell6 = row3.CreateCell(6);
+                //cell6.SetCellValue("MÃ SẢN PHẨM");
+                //ICell cell7 = row3.CreateCell(7);
+                //cell7.SetCellValue("SẢN PHẨM");
+                ICell cell8 = row3.CreateCell(6);
                 cell8.SetCellValue("GIÁ SẢN PHẨM");
 
                 ISheet scheduleSheet = schedule.GetSheetAt(0);
                 var row1 = scheduleSheet.GetRow(1);
                 var year = row1.GetCell(0).StringCellValue.Split('/').LastOrDefault();
                 var re = parseDate(scheduleSheet.SheetName, year);
-                int k = 9;
+                int k = 7;
                 DateTime startTime = re[0];
                 DateTime endTime = re[1];
                 while (DateTime.Compare(startTime, endTime) <= 0)
                 {
                     ICell cell9 = row3.CreateCell(k);
-                    cell9.SetCellValue(startTime.ToString("dd/MM/yyyy"));
+                    cell9.SetCellValue(startTime.ToString("MM/dd/yyyy"));
                     startTime = startTime.AddDays(1);
                     k++;
                 }
@@ -133,24 +134,27 @@ namespace ExportTool
                 int i = 3;
                 foreach (var item in programList)
                 {
-                    IRow row_temp = sheet.CreateRow(i);
-                    ICell cell_temp0 = row_temp.CreateCell(0);
-                    cell_temp0.SetCellValue(i-2);
-                    ICell cell_temp1 = row_temp.CreateCell(1);
-                    cell_temp1.SetCellValue(item.TapeCode);
-                    ICell cell_temp2 = row_temp.CreateCell(2);
-                    cell_temp2.SetCellValue(item.Name);
-                    ICell cell_temp3 = row_temp.CreateCell(3);
-                    DateTime time = DateTime.Today;
-                    time = time.AddMinutes(item.Duration.Minute).AddSeconds(item.Duration.Second);
-                    cell_temp3.SetCellValue(time);
-                    ICellStyle style = wb.CreateCellStyle();
-                    cell_temp3.CellStyle = style;
-                    IDataFormat dataFormatCustom = wb.CreateDataFormat();
-                    cell_temp3.CellStyle.DataFormat = dataFormatCustom.GetFormat("HH:mm:ss");
-                    ICell cell_temp4 = row_temp.CreateCell(4);
-                    cell_temp4.SetCellValue(item.Frequency);
-                    i++;
+                    if (item.Duration.Minute > 3)
+                    {
+                        IRow row_temp = sheet.CreateRow(i);
+                        ICell cell_temp0 = row_temp.CreateCell(0);
+                        cell_temp0.SetCellValue(i - 2);
+                        ICell cell_temp1 = row_temp.CreateCell(1);
+                        cell_temp1.SetCellValue(item.TapeCode);
+                        ICell cell_temp2 = row_temp.CreateCell(2);
+                        cell_temp2.SetCellValue(item.Name);
+                        ICell cell_temp3 = row_temp.CreateCell(3);
+                        DateTime time = DateTime.Today;
+                        time = time.AddMinutes(item.Duration.Minute).AddSeconds(item.Duration.Second);
+                        cell_temp3.SetCellValue(time);
+                        ICellStyle style = wb.CreateCellStyle();
+                        cell_temp3.CellStyle = style;
+                        IDataFormat dataFormatCustom = wb.CreateDataFormat();
+                        cell_temp3.CellStyle.DataFormat = dataFormatCustom.GetFormat("HH:mm:ss");
+                        ICell cell_temp4 = row_temp.CreateCell(4);
+                        cell_temp4.SetCellValue(item.Frequency);
+                        i++;
+                    }
                 }
 
                 for (int l = 0; l < row3.LastCellNum; l++)
