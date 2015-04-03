@@ -23,9 +23,13 @@ namespace ExportTool
         public Form1()
         {
             InitializeComponent();
-            textBox1.Text = @"C:\Users\thinhnguyen.DICENTRAL\Desktop\Schedule-Standard.xlsx";
-            textBox2.Text = @"C:\Users\thinhnguyen.DICENTRAL\Desktop\Schedule-Standard.xlsx";
-            textBox3.Text = @"C:\Users\thinhnguyen.DICENTRAL\Desktop\Product-Quantity-Standard.xlsx";
+            //textBox1.Text = @"C:\Users\thinhnguyen.DICENTRAL\Desktop\Schedule-Standard.xlsx";
+            //textBox2.Text = @"C:\Users\thinhnguyen.DICENTRAL\Desktop\Schedule-Standard.xlsx";
+            //textBox3.Text = @"C:\Users\thinhnguyen.DICENTRAL\Desktop\Product-Quantity-Standard.xlsx";
+            textBox1.Text = @"C:\Users\thinh\Desktop\doc\Schedule-Standard (1).xlsx";
+            textBox2.Text = @"C:\Users\thinh\Desktop\doc\Schedule-Standard (1).xlsx";
+            textBox3.Text = @"C:\Users\thinh\Desktop\doc\Product-Quantity-Standard.xlsx";
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -331,7 +335,16 @@ namespace ExportTool
                 ICell cell6 = row2.CreateCell(6);
                 cell6.SetCellValue("Price");
                 ICell cell7 = row2.CreateCell(7);
-                cell7.SetCellValue("EFF");
+                cell7.SetCellValue("EFF");  
+                var tempDate = startDay;
+                for (int p = 1; p < 12; p++)
+                {
+                    var startWeek =  tempDate.ToString("ddd");
+                    ICell cellWeek = row2.CreateCell(7+p);
+                    cellWeek.SetCellValue(startWeek.ToUpper());
+                    tempDate = tempDate.AddDays(1);
+                }
+
                 int rowIndex = 2;
                 foreach (var item in quantityList)
                 {
@@ -358,7 +371,15 @@ namespace ExportTool
                     eff_cell6.SetCellValue(item.Price);
                     ICell eff_cell7 = rowEff.CreateCell(7);
                     eff_cell7.SetCellValue(item.Efficiency);
+
+                    for (int i = 0; i < totalDay; i++)
+                    {
+                        ICell eff_cellweek = rowEff.CreateCell(7+i+1);
+                        eff_cellweek.SetCellValue(item.Frequency);
+                    }
+
                     rowIndex++;
+
                 }
 
                 for (int l = 0; l < row2.LastCellNum; l++)
