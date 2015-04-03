@@ -17,17 +17,19 @@ namespace ExportTool
     public partial class Form1 : Form
     {
         XSSFWorkbook schedule;
+        XSSFWorkbook quantity;
         List<MyProgram> programList;
         public Form1()
         {
             InitializeComponent();
             button2.Enabled = false;
             button3.Enabled = false;
+            button6.Enabled = false;
+            button7.Enabled = false;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            int size = -1;
             DialogResult result = openFileDialog1.ShowDialog(); // Show the dialog.
             if (result == DialogResult.OK) // Test result.
             {
@@ -35,8 +37,6 @@ namespace ExportTool
                 textBox1.Text = file;
                 button2.Enabled = true;
             }
-            Console.WriteLine(size); // <-- Shows file size in debugging mode.
-            Console.WriteLine(result); // <-- For debugging use.
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -74,7 +74,7 @@ namespace ExportTool
             }
             programList = programList.OrderBy(x => x.Name).ToList();
             int index = 1;
-            dataGridView1.DataSource = programList.Select(x => new { SNO = index++, x.TapeCode, Duration = x.Duration.Minute.ToString()+":"+x.Duration.Second.ToString(), x.Name }).ToList();
+            dataGridView1.DataSource = programList.Select(x => new { SNO = index++, x.TapeCode, Duration = x.Duration.Minute.ToString()+":"+x.Duration.Second.ToString(), x.Name, x.Frequency }).ToList();
             dataGridView1.AutoResizeColumns();
             dataGridView1.AutoGenerateColumns = false;
             dataGridView1.AllowUserToAddRows = false;
@@ -82,8 +82,7 @@ namespace ExportTool
         }        
 
         private void button3_Click(object sender, EventArgs e)
-        {
-            
+        {            
             using (FileStream stream = new FileStream(@"D:\Product-Quantity-Standard.xlsx", FileMode.Create, FileAccess.Write))
             {
                 IWorkbook wb = new XSSFWorkbook();
@@ -208,6 +207,61 @@ namespace ExportTool
             }
             return false;
         }
+
+        private int countDay(XSSFWorkbook quantity)
+        {
+            ISheet sheet = quantity.GetSheetAt(0);
+            int totalRow = sheet.LastRowNum;
+            int totalCol = sheet.GetRow(2).LastCellNum;
+            int result = 0;
+
+            for (int j = 7; j < totalCol; j++){
+                for (int i = 3; i < totalRow; i++)
+                {
+                    if (sheet.GetRow(i).GetCell(j)!= null && sheet.GetRow(i).GetCell(j).NumericCellValue != 0)
+                    {
+                        result++;
+                        break;
+                    }
+                }
+            }
+            return result;
+        }
         #endregion 
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            DialogResult result = openFileDialog2.ShowDialog(); // Show the dialog.
+            if (result == DialogResult.OK) // Test result.
+            {
+                string file = openFileDialog2.FileName;
+                textBox2.Text = file;
+                button6.Enabled = true;
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            DialogResult result = openFileDialog3.ShowDialog(); // Show the dialog.
+            if (result == DialogResult.OK) // Test result.
+            {
+                string file = openFileDialog3.FileName;
+                textBox3.Text = file;
+                button6.Enabled = true;
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            using (FileStream sch = new FileStream(textBox2.Text, FileMode.Open, FileAccess.Read))
+            {
+                schedule = new XSSFWorkbook(sch);
+            }
+            using (FileStream qtt = new FileStream(textBox3.Text, FileMode.Open, FileAccess.Read))
+            {
+                quantity = new XSSFWorkbook(qtt);
+            }
+            int totalDay = countDay(quantity);
+        }
     }
 }
