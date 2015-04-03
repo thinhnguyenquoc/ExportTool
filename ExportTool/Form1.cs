@@ -329,11 +329,42 @@ namespace ExportTool
                 ICell cell5 = row2.CreateCell(5);
                 cell5.SetCellValue("CATEGORY");
                 ICell cell6 = row2.CreateCell(6);
-                cell5.SetCellValue("Price");
-                ICell cell6 = row2.CreateCell(7);
-                cell5.SetCellValue("EFF");
-               
+                cell6.SetCellValue("Price");
+                ICell cell7 = row2.CreateCell(7);
+                cell7.SetCellValue("EFF");
+                int rowIndex = 2;
+                foreach (var item in quantityList)
+                {
+                    IRow rowEff = sheet.CreateRow(rowIndex);
+                    ICell eff_cell0 = rowEff.CreateCell(0);
+                    eff_cell0.SetCellValue(rowIndex -1);
+                    ICell eff_cell1 = rowEff.CreateCell(1);
+                    eff_cell1.SetCellValue(0);
+                    ICell eff_cell2 = rowEff.CreateCell(2);
+                    eff_cell2.SetCellValue(item.Name);
+                    ICell eff_cell3 = rowEff.CreateCell(3);
+                    eff_cell3.SetCellValue("");
+                    ICell eff_cell4 = rowEff.CreateCell(4);
+                    DateTime time = DateTime.Today;
+                    time = time.AddMinutes(item.Duration.Minute).AddSeconds(item.Duration.Second);
+                    eff_cell4.SetCellValue(time);
+                    ICellStyle style = wb.CreateCellStyle();
+                    eff_cell4.CellStyle = style;
+                    IDataFormat dataFormatCustom = wb.CreateDataFormat();
+                    eff_cell4.CellStyle.DataFormat = dataFormatCustom.GetFormat("HH:mm:ss");
+                    ICell eff_cell5 = rowEff.CreateCell(5);
+                    eff_cell5.SetCellValue(item.Category);
+                    ICell eff_cell6 = rowEff.CreateCell(6);
+                    eff_cell6.SetCellValue(item.Price);
+                    ICell eff_cell7 = rowEff.CreateCell(7);
+                    eff_cell7.SetCellValue(item.Efficiency);
+                    rowIndex++;
+                }
 
+                for (int l = 0; l < row2.LastCellNum; l++)
+                {
+                    sheet.AutoSizeColumn(l);
+                }
                 wb.Write(stream);
             }
         }
