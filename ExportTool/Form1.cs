@@ -19,6 +19,7 @@ namespace ExportTool
         XSSFWorkbook schedule;
         XSSFWorkbook quantity;
         List<MyProgram> programList;
+        List<MyQuantity> quantityList;
         public Form1()
         {
             InitializeComponent();
@@ -211,10 +212,9 @@ namespace ExportTool
         private int countDay(XSSFWorkbook quantity)
         {
             ISheet sheet = quantity.GetSheetAt(0);
-            int totalRow = sheet.LastRowNum;
-            int totalCol = sheet.GetRow(2).LastCellNum;
+            int totalRow = sheet.LastRowNum + 1;
+            int totalCol = sheet.GetRow(2).LastCellNum + 1;
             int result = 0;
-
             for (int j = 7; j < totalCol; j++){
                 for (int i = 3; i < totalRow; i++)
                 {
@@ -261,7 +261,41 @@ namespace ExportTool
             {
                 quantity = new XSSFWorkbook(qtt);
             }
+            quantityList = new List<MyQuantity>();
+            ISheet sheet = quantity.GetSheetAt(0);
             int totalDay = countDay(quantity);
+            int totalRow = sheet.LastRowNum + 1;
+            for (int i = 3; i < totalRow; i++)
+            {
+                MyQuantity mq = new MyQuantity();
+                mq.TapeCode = sheet.GetRow(i).GetCell(1).StringCellValue;
+                mq.Name = sheet.GetRow(i).GetCell(2).StringCellValue;
+                mq.Duration = sheet.GetRow(i).GetCell(3).DateCellValue;
+                mq.Frequency = (int) sheet.GetRow(i).GetCell(4).NumericCellValue;
+                mq.Category = sheet.GetRow(i).GetCell(5).StringCellValue;
+                mq.Price = (int)sheet.GetRow(i).GetCell(6).NumericCellValue;
+                for (int j = 7; j < 7 + totalDay; j++)
+                {                
+                    if (sheet.GetRow(i).GetCell(j) != null && sheet.GetRow(i).GetCell(j).NumericCellValue != 0)
+                    {
+                        mq.Quantity += (int)sheet.GetRow(i).GetCell(j).NumericCellValue;
+                    }
+                }
+                if (mq.Quantity != null && mq.Quantity > 0)
+                {
+                    mq.TotalMinutes = (mq.Duration.Minute + mq.Duration.Second / 60) * totalDay;
+                    mq.Amount = mq.Quantity * mq.Price;
+                    mq.Efficiency = (int)(mq.Amount / mq.TotalMinutes);
+                }
+                quantityList.Add(mq);
+            }
+            quantityList = quantityList.OrderBy(x => x.Efficiency).ToList();
+            int index = 1;
+            dataGridView2.DataSource = quantityList.Select(x => new { SNO = index++, x.TapeCode, Duration = x.Duration.Minute.ToString() + ":" + x.Duration.Second.ToString(), x.Name, x.Frequency, x.Price, x.Efficiency }).ToList();
+            dataGridView2.AutoResizeColumns();
+            dataGridView2.AutoGenerateColumns = false;
+            dataGridView2.AllowUserToAddRows = false;
+            button7.Enabled = true;
         }
     }
 }
