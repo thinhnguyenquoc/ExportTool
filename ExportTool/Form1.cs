@@ -23,10 +23,9 @@ namespace ExportTool
         public Form1()
         {
             InitializeComponent();
-            button2.Enabled = false;
-            button3.Enabled = false;
-            button6.Enabled = false;
-            button7.Enabled = false;
+            textBox1.Text = @"C:\Users\thinhnguyen.DICENTRAL\Desktop\Schedule-Standard.xlsx";
+            textBox2.Text = @"C:\Users\thinhnguyen.DICENTRAL\Desktop\Schedule-Standard.xlsx";
+            textBox3.Text = @"C:\Users\thinhnguyen.DICENTRAL\Desktop\Product-Quantity-Standard.xlsx";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -296,6 +295,47 @@ namespace ExportTool
             dataGridView2.AutoGenerateColumns = false;
             dataGridView2.AllowUserToAddRows = false;
             button7.Enabled = true;
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            ISheet quantitySheet = quantity.GetSheetAt(0);
+            int totalDay = countDay(quantity);
+            DateTime startDay = Convert.ToDateTime(quantitySheet.GetRow(2).GetCell(7).StringCellValue);
+            DateTime endDay = Convert.ToDateTime(quantitySheet.GetRow(2).GetCell(7 + totalDay).StringCellValue);
+            using (FileStream stream = new FileStream(@"D:\Efficiency("+startDay.ToString("dd.MM")+ "_"+endDay.ToString("dd.MM.yyyy")+").xlsx", FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook wb = new XSSFWorkbook();
+                // tab name
+                ISheet sheet = wb.CreateSheet("item list");
+                // header
+                IRow row = sheet.CreateRow(0);
+                ICell cell = row.CreateCell(0);
+                cell.SetCellValue("VNN Chanel");
+                NPOI.SS.Util.CellRangeAddress cra = new NPOI.SS.Util.CellRangeAddress(0, 0, 0, 1);
+                sheet.AddMergedRegion(cra);
+                // column header 
+                IRow row2 = sheet.CreateRow(1);
+                ICell cell0 = row2.CreateCell(0);
+                cell0.SetCellValue("STT");
+                ICell cell1 = row2.CreateCell(1);
+                cell1.SetCellValue("Item code");
+                ICell cell2 = row2.CreateCell(2);
+                cell2.SetCellValue("Product Name (E)");
+                ICell cell3 = row2.CreateCell(3);
+                cell3.SetCellValue("Group");
+                ICell cell4 = row2.CreateCell(4);
+                cell4.SetCellValue("Dur");
+                ICell cell5 = row2.CreateCell(5);
+                cell5.SetCellValue("CATEGORY");
+                ICell cell6 = row2.CreateCell(6);
+                cell5.SetCellValue("Price");
+                ICell cell6 = row2.CreateCell(7);
+                cell5.SetCellValue("EFF");
+               
+
+                wb.Write(stream);
+            }
         }
     }
 }
