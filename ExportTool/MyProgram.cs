@@ -10,5 +10,6 @@ namespace ExportTool
         public string TapeCode { get; set; }
         public DateTime Duration { get; set; }
         public string Name { get; set; }
+        public int Frequency { get; set; }
     }
 }

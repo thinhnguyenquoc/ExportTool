@@ -34,14 +34,6 @@ namespace ExportTool
                 string file = openFileDialog1.FileName;
                 textBox1.Text = file;
                 button2.Enabled = true;
-                //try
-                //{
-                //    string text = File.ReadAllText(file);
-                //    size = text.Length;
-                //}
-                //catch (IOException)
-                //{
-                //}
             }
             Console.WriteLine(size); // <-- Shows file size in debugging mode.
             Console.WriteLine(result); // <-- For debugging use.
@@ -52,7 +44,6 @@ namespace ExportTool
             using (FileStream sch = new FileStream(textBox1.Text, FileMode.Open, FileAccess.Read))
             {
                 schedule = new XSSFWorkbook(sch);
-
             }
             var numSheet = schedule.NumberOfSheets;
             programList = new List<MyProgram>();
@@ -72,6 +63,7 @@ namespace ExportTool
                         program.TapeCode = row.GetCell(4).StringCellValue.ToString();
                         program.Name = row.GetCell(2).StringCellValue.ToString();
                         program.Duration = row.GetCell(3).DateCellValue;
+                        program.Frequency = 1;
 
                         if (!checkDuplicate(programList, program))
                         {
@@ -86,17 +78,7 @@ namespace ExportTool
             dataGridView1.AutoGenerateColumns = false;
             dataGridView1.AllowUserToAddRows = false;
             button3.Enabled = true;
-        } 
-
-        private bool checkDuplicate(List<MyProgram> list, MyProgram pro)
-        {
-            for (int i = 0; i < list.Count(); i++)
-            {
-                if (list[i].TapeCode.Equals(pro.TapeCode))
-                    return true;
-            }
-            return false;
-        }
+        }        
 
         private void button3_Click(object sender, EventArgs e)
         {
@@ -121,15 +103,32 @@ namespace ExportTool
                 ICell cell2 = row3.CreateCell(2);
                 cell2.SetCellValue("CHƯƠNG TRÌNH");
                 ICell cell3 = row3.CreateCell(3);
-                cell3.SetCellValue("Duration");
+                cell3.SetCellValue("DURATION");
                 ICell cell4 = row3.CreateCell(4);
-                cell4.SetCellValue("CATEGORY");
+                cell4.SetCellValue("FREQUENCY");
                 ICell cell5 = row3.CreateCell(5);
-                cell5.SetCellValue("MÃ SẢN PHẨM");
+                cell5.SetCellValue("CATEGORY");
                 ICell cell6 = row3.CreateCell(6);
-                cell6.SetCellValue("SẢN PHẨM");
+                cell6.SetCellValue("MÃ SẢN PHẨM");
                 ICell cell7 = row3.CreateCell(7);
-                cell7.SetCellValue("GIÁ SẢN PHẨM");               
+                cell7.SetCellValue("SẢN PHẨM");
+                ICell cell8 = row3.CreateCell(8);
+                cell8.SetCellValue("GIÁ SẢN PHẨM");
+
+                ISheet scheduleSheet = schedule.GetSheetAt(0);
+                var row1 = scheduleSheet.GetRow(1);
+                var year = row1.GetCell(0).StringCellValue.Split('/').LastOrDefault();
+                var re = parseDate(scheduleSheet.SheetName, year);
+                int k = 9;
+                DateTime startTime = re[0];
+                DateTime endTime = re[1];
+                while (DateTime.Compare(startTime, endTime) <= 0)
+                {
+                    ICell cell9 = row3.CreateCell(k);
+                    cell9.SetCellValue(startTime.ToString("dd/MM/yyyy"));
+                    startTime = startTime.AddDays(1);
+                    k++;
+                }
                 // add Program Code
                 int i = 3;
                 foreach (var item in programList)
@@ -149,20 +148,62 @@ namespace ExportTool
                     cell_temp3.CellStyle = style;
                     IDataFormat dataFormatCustom = wb.CreateDataFormat();
                     cell_temp3.CellStyle.DataFormat = dataFormatCustom.GetFormat("HH:mm:ss");
+                    ICell cell_temp4 = row_temp.CreateCell(4);
+                    cell_temp4.SetCellValue(item.Frequency);
                     i++;
                 }
 
-                sheet.AutoSizeColumn(0);
-                sheet.AutoSizeColumn(1);
-                sheet.AutoSizeColumn(2);
-                sheet.AutoSizeColumn(3);
-                sheet.AutoSizeColumn(4);
-                sheet.AutoSizeColumn(5);
-                sheet.AutoSizeColumn(6);
-                sheet.AutoSizeColumn(7);
-
+                for (int l = 0; l < row3.LastCellNum; l++)
+                {
+                    sheet.AutoSizeColumn(l);
+                }
                 wb.Write(stream);
             }
         }
+
+        #region support function
+        private List<DateTime> parseDate(string date, string year)
+        {
+            List<DateTime> list = new List<DateTime>();
+            if (!date.Contains("&"))
+            {
+                string startDay = date.Split('-')[0];
+                string endDay = date.Split('-')[1].Split('.')[0];
+                string month = date.Split('-')[1].Split('.')[1];
+
+                DateTime start = new DateTime(Convert.ToInt32(year), Convert.ToInt32(month), Convert.ToInt32(startDay));
+                DateTime end = new DateTime(Convert.ToInt32(year), Convert.ToInt32(month), Convert.ToInt32(endDay));
+                list.Add(start);
+                list.Add(end);
+
+            }
+            else
+            {
+                string startDay = date.Split('&')[0].Split('-')[0];
+                string endDay = date.Split('&')[1].Split('.')[0];
+                string startmonth = date.Split('&')[0].Split('-')[1].Split('.')[1];
+                string endmonth = date.Split('&')[1].Split('.')[1];
+
+                DateTime start = new DateTime(Convert.ToInt32(year), Convert.ToInt32(startmonth), Convert.ToInt32(startDay));
+                DateTime end = new DateTime(Convert.ToInt32(year), Convert.ToInt32(endmonth), Convert.ToInt32(endDay));
+                list.Add(start);
+                list.Add(end);
+            }
+            return list;
+        }
+
+        private bool checkDuplicate(List<MyProgram> list, MyProgram pro)
+        {
+            for (int i = 0; i < list.Count(); i++)
+            {
+                if (list[i].TapeCode.Equals(pro.TapeCode))
+                {
+                    list[i].Frequency += 1;
+                    return true;
+                }
+            }
+            return false;
+        }
+        #endregion 
     }
 }
