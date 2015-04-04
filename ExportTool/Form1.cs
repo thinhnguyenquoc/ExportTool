@@ -311,7 +311,12 @@ namespace ExportTool
             {
                 IWorkbook wb = new XSSFWorkbook();
                 // tab name
+                ISheet sheetTime = wb.CreateSheet("time table");
                 ISheet sheet = wb.CreateSheet("item list");
+                ISheet sheetStandard = wb.CreateSheet("standard");
+                ISheet sheetCategories = wb.CreateSheet("categories");
+                ISheet sheetDuration = wb.CreateSheet("duration");
+
                 // header
                 IRow row = sheet.CreateRow(0);
                 ICell cell = row.CreateCell(0);
@@ -404,7 +409,52 @@ namespace ExportTool
                 {
                     sheet.AutoSizeColumn(l);
                 }
+
+                
+                // header
+                IRow categoryRow = sheetCategories.CreateRow(0);
+                ICell category_cell1 = categoryRow.CreateCell(0);
+                category_cell1.SetCellValue("No.");
+                ICell category_cell2 = categoryRow.CreateCell(1);
+                category_cell2.SetCellValue("Category");
+                ICell category_cell3 = categoryRow.CreateCell(2);
+                category_cell3.SetCellValue("Color");
+               
+                // content
+                string fileName = "Category.xlsx";
+                string path = Path.Combine(Environment.CurrentDirectory,fileName);
+                using (FileStream ct = new FileStream(path, FileMode.Open, FileAccess.Read))
+                {
+                    var cate = new XSSFWorkbook(ct);
+                    ISheet category = cate.GetSheetAt(0);
+                    for (int j = 1; j <= category.LastRowNum; j++)
+                    {
+                        var row_temp = category.GetRow(j);
+                        IRow categoryRow_temp = sheetCategories.CreateRow(j);
+
+                        ICell cat_cell1 = categoryRow_temp.CreateCell(0);
+                        cat_cell1.SetCellValue(j);
+
+                        ICell cat_cell2 = categoryRow_temp.CreateCell(1);
+                        cat_cell2.SetCellValue(row_temp.GetCell(1).StringCellValue.ToString());
+
+                        ICell cat_cell3 = categoryRow_temp.CreateCell(2);  
+                     
+                        var oldStyle = row_temp.GetCell(2).CellStyle;
+                        ICellStyle newStyle = wb.CreateCellStyle();
+                        newStyle.FillBackgroundColor = (short)j;
+                        newStyle.FillPattern = oldStyle.FillPattern;
+
+                        cat_cell3.CellStyle = newStyle;
+                    }
+                    for (int l = 0; l < category.GetRow(0).LastCellNum; l++)
+                    {
+                        category.AutoSizeColumn(l);
+                    }
+                }
+
                 wb.Write(stream);
+              
             }
         }
     }

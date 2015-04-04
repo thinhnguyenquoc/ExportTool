@@ -46,3 +46,4 @@ D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.csprojResolveAssemblyReferen
 D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.Form1.resources
 D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.Properties.Resources.resources
 D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.csproj.GenerateResource.Cache
+F:\clone\ExportTool\ExportTool\bin\Debug\Category.xlsx
