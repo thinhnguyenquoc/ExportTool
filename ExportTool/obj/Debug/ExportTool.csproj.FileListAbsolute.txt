@@ -26,7 +26,6 @@ F:\clone\ExportTool\ExportTool\bin\Debug\ICSharpCode.SharpZipLib.dll
 F:\clone\ExportTool\ExportTool\bin\Debug\NPOI.xml
 F:\clone\ExportTool\ExportTool\bin\Debug\NPOI.OOXML.xml
 F:\clone\ExportTool\ExportTool\bin\Debug\NPOI.OpenXml4Net.xml
-F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.csprojResolveAssemblyReference.cache
 F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.Form1.resources
 F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.Properties.Resources.resources
 F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.csproj.GenerateResource.Cache
@@ -47,3 +46,4 @@ D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.Form1.resources
 D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.Properties.Resources.resources
 D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.csproj.GenerateResource.Cache
 F:\clone\ExportTool\ExportTool\bin\Debug\Category.xlsx
+F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.csprojResolveAssemblyReference.cache
