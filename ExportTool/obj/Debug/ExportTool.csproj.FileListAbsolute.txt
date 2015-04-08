@@ -1,21 +1,4 @@
-c:\users\thinh\documents\visual studio 2013\Projects\ExportTool\ExportTool\obj\Debug\ExportTool.csprojResolveAssemblyReference.cache
-c:\users\thinh\documents\visual studio 2013\Projects\ExportTool\ExportTool\obj\Debug\ExportTool.Form1.resources
-c:\users\thinh\documents\visual studio 2013\Projects\ExportTool\ExportTool\obj\Debug\ExportTool.Properties.Resources.resources
-c:\users\thinh\documents\visual studio 2013\Projects\ExportTool\ExportTool\obj\Debug\ExportTool.csproj.GenerateResource.Cache
-c:\users\thinh\documents\visual studio 2013\Projects\ExportTool\ExportTool\bin\Debug\ExportTool.exe
-c:\users\thinh\documents\visual studio 2013\Projects\ExportTool\ExportTool\bin\Debug\ExportTool.pdb
-c:\users\thinh\documents\visual studio 2013\Projects\ExportTool\ExportTool\bin\Debug\NPOI.dll
-c:\users\thinh\documents\visual studio 2013\Projects\ExportTool\ExportTool\bin\Debug\NPOI.OOXML.dll
-c:\users\thinh\documents\visual studio 2013\Projects\ExportTool\ExportTool\bin\Debug\NPOI.OpenXml4Net.dll
-c:\users\thinh\documents\visual studio 2013\Projects\ExportTool\ExportTool\bin\Debug\NPOI.OpenXmlFormats.dll
-c:\users\thinh\documents\visual studio 2013\Projects\ExportTool\ExportTool\bin\Debug\ICSharpCode.SharpZipLib.dll
-c:\users\thinh\documents\visual studio 2013\Projects\ExportTool\ExportTool\bin\Debug\NPOI.xml
-c:\users\thinh\documents\visual studio 2013\Projects\ExportTool\ExportTool\bin\Debug\NPOI.OOXML.xml
-c:\users\thinh\documents\visual studio 2013\Projects\ExportTool\ExportTool\bin\Debug\NPOI.OpenXml4Net.xml
-c:\users\thinh\documents\visual studio 2013\Projects\ExportTool\ExportTool\obj\Debug\ExportTool.exe
-c:\users\thinh\documents\visual studio 2013\Projects\ExportTool\ExportTool\obj\Debug\ExportTool.pdb
-F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.exe
-F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.pdb
+F:\clone\ExportTool\ExportTool\bin\Debug\Category.xlsx
 F:\clone\ExportTool\ExportTool\bin\Debug\ExportTool.exe
 F:\clone\ExportTool\ExportTool\bin\Debug\ExportTool.pdb
 F:\clone\ExportTool\ExportTool\bin\Debug\NPOI.dll
@@ -29,21 +12,5 @@ F:\clone\ExportTool\ExportTool\bin\Debug\NPOI.OpenXml4Net.xml
 F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.Form1.resources
 F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.Properties.Resources.resources
 F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.csproj.GenerateResource.Cache
-D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.exe
-D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.pdb
-D:\clone\ExportTool\ExportTool\bin\Debug\ExportTool.exe
-D:\clone\ExportTool\ExportTool\bin\Debug\ExportTool.pdb
-D:\clone\ExportTool\ExportTool\bin\Debug\NPOI.dll
-D:\clone\ExportTool\ExportTool\bin\Debug\NPOI.OOXML.dll
-D:\clone\ExportTool\ExportTool\bin\Debug\NPOI.OpenXml4Net.dll
-D:\clone\ExportTool\ExportTool\bin\Debug\NPOI.OpenXmlFormats.dll
-D:\clone\ExportTool\ExportTool\bin\Debug\ICSharpCode.SharpZipLib.dll
-D:\clone\ExportTool\ExportTool\bin\Debug\NPOI.xml
-D:\clone\ExportTool\ExportTool\bin\Debug\NPOI.OOXML.xml
-D:\clone\ExportTool\ExportTool\bin\Debug\NPOI.OpenXml4Net.xml
-D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.csprojResolveAssemblyReference.cache
-D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.Form1.resources
-D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.Properties.Resources.resources
-D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.csproj.GenerateResource.Cache
-F:\clone\ExportTool\ExportTool\bin\Debug\Category.xlsx
-F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.csprojResolveAssemblyReference.cache
+F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.exe
+F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.pdb

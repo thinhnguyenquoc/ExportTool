@@ -8,6 +8,7 @@ namespace ExportTool
     public class MyQuantity: MyProgram
     {
         public string Category { get; set; }
+        public string Group { get; set; }
         public int Frequency { get; set; }
         public int Price { get; set; }
         public int Amount { get; set; }

@@ -112,18 +112,16 @@ namespace ExportTool
                 cell4.SetCellValue("FREQUENCY");
                 ICell cell5 = row3.CreateCell(5);
                 cell5.SetCellValue("CATEGORY");
-                //ICell cell6 = row3.CreateCell(6);
-                //cell6.SetCellValue("MÃ SẢN PHẨM");
-                //ICell cell7 = row3.CreateCell(7);
-                //cell7.SetCellValue("SẢN PHẨM");
-                ICell cell8 = row3.CreateCell(6);
-                cell8.SetCellValue("GIÁ SẢN PHẨM");
+                ICell cell6 = row3.CreateCell(6);
+                cell6.SetCellValue("GROUP");
+                ICell cell8 = row3.CreateCell(7);
+                cell8.SetCellValue("GIÁ SẢN PHẨM");               
 
                 ISheet scheduleSheet = schedule.GetSheetAt(0);
                 var row1 = scheduleSheet.GetRow(1);
                 var year = row1.GetCell(0).StringCellValue.Split('/').LastOrDefault();
                 var re = parseDate(scheduleSheet.SheetName, year);
-                int k = 7;
+                int k = 8;
                 DateTime startTime = re[0];
                 DateTime endTime = re[1];
                 while (DateTime.Compare(startTime, endTime) <= 0)
@@ -218,7 +216,7 @@ namespace ExportTool
             int totalRow = sheet.LastRowNum + 1;
             int totalCol = sheet.GetRow(2).LastCellNum + 1;
             int result = 0;
-            for (int j = 7; j < totalCol; j++){
+            for (int j = 8; j < totalCol; j++){
                 for (int i = 3; i < totalRow; i++)
                 {
                     if (sheet.GetRow(i).GetCell(j)!= null && sheet.GetRow(i).GetCell(j).NumericCellValue != 0)
@@ -229,6 +227,32 @@ namespace ExportTool
                 }
             }
             return result;
+        }
+
+        private List<MyProgram> getProgram(XSSFWorkbook schedule, int hour)
+        {
+            ISheet sheet = schedule.GetSheetAt(0);
+            List<MyProgram> programList = new List<MyProgram>();
+            for (int j = 4; j <= sheet.LastRowNum; j++)
+            {
+                var row = sheet.GetRow(j);
+                MyProgram program = new MyProgram();
+                if (row != null) //null is when the row only contains empty cells 
+                {
+                    if (row.GetCell(2) == null || row.GetCell(2).StringCellValue.ToString() == "")
+                    {
+                        break;
+                    }
+                    if (row.GetCell(1).DateCellValue.Hour == hour && row.GetCell(3).DateCellValue.Minute > 3)
+                    {
+                        program.TapeCode = row.GetCell(4).StringCellValue.ToString();
+                        program.Name = row.GetCell(2).StringCellValue.ToString();
+                        program.Duration = row.GetCell(3).DateCellValue;                       
+                        programList.Add(program);                        
+                    }
+                }
+            }
+            return programList;
         }
         #endregion 
 
@@ -276,8 +300,9 @@ namespace ExportTool
                 mq.Duration = sheet.GetRow(i).GetCell(3).DateCellValue;
                 mq.Frequency = (int) sheet.GetRow(i).GetCell(4).NumericCellValue;
                 mq.Category = sheet.GetRow(i).GetCell(5).StringCellValue;
-                mq.Price = (int)sheet.GetRow(i).GetCell(6).NumericCellValue;
-                for (int j = 7; j < 7 + totalDay; j++)
+                mq.Price = (int)sheet.GetRow(i).GetCell(7).NumericCellValue;
+                mq.Group = sheet.GetRow(i).GetCell(6) == null ? "" : sheet.GetRow(i).GetCell(6).StringCellValue;
+                for (int j = 8; j < 8 + totalDay; j++)
                 {                
                     if (sheet.GetRow(i).GetCell(j) != null && sheet.GetRow(i).GetCell(j).NumericCellValue != 0)
                     {
@@ -305,13 +330,14 @@ namespace ExportTool
         {
             ISheet quantitySheet = quantity.GetSheetAt(0);
             int totalDay = countDay(quantity);
-            DateTime startDay = Convert.ToDateTime(quantitySheet.GetRow(2).GetCell(7).StringCellValue);
-            DateTime endDay = Convert.ToDateTime(quantitySheet.GetRow(2).GetCell(7 + totalDay).StringCellValue);
+            DateTime startDay = Convert.ToDateTime(quantitySheet.GetRow(2).GetCell(8).StringCellValue);
+            DateTime endDay = Convert.ToDateTime(quantitySheet.GetRow(2).GetCell(8 + totalDay).StringCellValue);
             using (FileStream stream = new FileStream(@"D:\Efficiency("+startDay.ToString("dd.MM")+ "_"+endDay.ToString("dd.MM.yyyy")+").xlsx", FileMode.Create, FileAccess.Write))
             {
                 IWorkbook wb = new XSSFWorkbook();
                 // tab name
                 ISheet sheetTime = wb.CreateSheet("time table");
+                createTimeTable(sheetTime, wb, startDay);
 
                 ISheet sheet = wb.CreateSheet("item list");
                 createItemList(sheet, startDay, totalDay, wb);
@@ -330,9 +356,110 @@ namespace ExportTool
             }
         }
 
-        private void createTimeTable(ISheet sheet, IWorkbook wb)
+        private void createTimeTable(ISheet sheetTime, IWorkbook wb, DateTime startDay)
         {
+            #region header
+            IRow rowTime0 = sheetTime.CreateRow(0);
+            IRow rowTime1 = sheetTime.CreateRow(1);
+            IRow rowTime2 = sheetTime.CreateRow(2);
+            IRow rowTime3 = sheetTime.CreateRow(3);
+            ICell cellr3 = rowTime3.CreateCell(1);
+            cellr3.SetCellValue("Hour");
+            var tempDate = startDay;
+            int colIndex = 2;
+            for (int p = 1; p < 12; p++)
+            {
+                var startWeek = tempDate.ToString("ddd");
+                ICellStyle styleTimeHeader = wb.CreateCellStyle();
+                styleTimeHeader.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+                ICell cellWeek1 = null;
+                ICell cellWeek2 = null;
+                ICell cellWeek3 = null;
+                cellWeek1 = rowTime1.CreateCell(colIndex);
+                cellWeek2 = rowTime2.CreateCell(colIndex);
+                cellWeek3 = rowTime3.CreateCell(colIndex);
+                cellWeek3.SetCellValue("Min.");
+                cellWeek1.CellStyle = styleTimeHeader;
+                cellWeek2.CellStyle = styleTimeHeader;
+                cellWeek1.SetCellValue(tempDate.ToString("dd.MM"));
+                cellWeek2.SetCellValue(startWeek.ToUpper());
+                for (int l = 1; l < 6; l++)
+                {
+                    ++colIndex;
+                    cellWeek1 = rowTime1.CreateCell(colIndex);
+                    cellWeek2 = rowTime2.CreateCell(colIndex);
+                    cellWeek3 = rowTime3.CreateCell(colIndex);
+                    if (l == 1)
+                    {
+                        cellWeek3.SetCellValue("Dur.");
+                    }
+                    else if (l == 2)
+                    {
+                        cellWeek3.SetCellValue("Group");
+                    }
+                    else if (l == 3)
+                    {
+                        cellWeek3.SetCellValue("Category");
+                    }
+                    else if (l == 4)
+                    {
+                        cellWeek3.SetCellValue("");
+                    }
+                    else
+                    {
+                        cellWeek3.SetCellValue("Product Name (E)");
+                    }
+                }
 
+                NPOI.SS.Util.CellRangeAddress cra1 = new NPOI.SS.Util.CellRangeAddress(1, 1, colIndex - 5, colIndex);
+                sheetTime.AddMergedRegion(cra1);
+                NPOI.SS.Util.CellRangeAddress cra2 = new NPOI.SS.Util.CellRangeAddress(2, 2, colIndex - 5, colIndex);
+                sheetTime.AddMergedRegion(cra2);
+
+                tempDate = tempDate.AddDays(1);
+                ++colIndex;
+            }
+            #endregion
+
+            int indexRowTime = 4;
+            var totalDay = countDay(quantity);
+            for (int g = 6; g < 24; g++)
+            {
+                IRow rowTime4 = sheetTime.CreateRow(indexRowTime);
+                ICell cellWeek4 = rowTime4.CreateCell(1);
+                cellWeek4.SetCellValue(g);
+                IRow rowTime5 = sheetTime.CreateRow(++indexRowTime);
+                IRow rowTime6 = sheetTime.CreateRow(++indexRowTime);
+                IRow rowTime7 = sheetTime.CreateRow(++indexRowTime);
+
+                var listPro = getProgram(schedule, g);
+                int internalIndexRow = indexRowTime - 3;
+                foreach (var item in listPro)
+                {
+                    var myRow = sheetTime.GetRow(internalIndexRow);
+                    for (var m = 0; m < totalDay; m++)
+                    {
+                        var myCell = myRow.CreateCell(1 + (m + 1) * 6);
+                        myCell.SetCellValue(item.Name);
+                        var myCell2 = myRow.CreateCell(3 + (m) * 6);
+                        myCell2.SetCellValue(System.Math.Round(item.Duration.Minute / 1.0 + item.Duration.Second / 60.0, 1, MidpointRounding.AwayFromZero));
+                    }
+                    internalIndexRow++;
+                }
+                while (internalIndexRow <= indexRowTime)
+                {
+                    var myRow = sheetTime.GetRow(internalIndexRow);
+                    for (var m = 0; m < totalDay; m++)
+                    {
+                        var myCell = myRow.CreateCell(1 + (m + 1) * 6);
+                        myCell.SetCellValue(0);
+                        var myCell2 = myRow.CreateCell(3 + (m) * 6);
+                        myCell2.SetCellValue("#N/A");
+                    }
+                    internalIndexRow++;
+                }
+                ++indexRowTime;
+            }
         }
 
         private void createStandard(ISheet sheet, IWorkbook wb)
@@ -509,7 +636,7 @@ namespace ExportTool
                 ICell eff_cell2 = rowEff.CreateCell(2);
                 eff_cell2.SetCellValue(item.Name);
                 ICell eff_cell3 = rowEff.CreateCell(3);
-                eff_cell3.SetCellValue("");
+                eff_cell3.SetCellValue(item.Group);
                 ICell eff_cell4 = rowEff.CreateCell(4);
                 DateTime time = DateTime.Today;
                 time = time.AddMinutes(item.Duration.Minute).AddSeconds(item.Duration.Second);
@@ -589,7 +716,8 @@ namespace ExportTool
                 for (int l = 0; l < category.GetRow(0).LastCellNum; l++)
                 {
                     sheetCategories.AutoSizeColumn(l);
-                }
+                }            
+                
             }
         }
 
