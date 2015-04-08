@@ -623,6 +623,8 @@ namespace ExportTool
             cell11.SetCellValue("Amount");
             ICell cell12 = row2.CreateCell(i++);
             cell12.SetCellValue("Total minutes");
+            ICell cell13 = row2.CreateCell(i++);
+            cell12.SetCellValue("New Group");
 
 
             int rowIndex = 2;
@@ -664,6 +666,8 @@ namespace ExportTool
                 eff_cell11.SetCellValue(item.Amount);
                 ICell eff_cell12 = rowEff.CreateCell(23);
                 eff_cell12.SetCellValue(item.TotalMinutes);
+                ICell eff_cell13 = rowEff.CreateCell(24);
+                eff_cell12.SetCellValue(calculateGroup(item.Efficiency));
                 rowIndex++;
 
             }
@@ -745,6 +749,18 @@ namespace ExportTool
             colors.Add(IndexedColors.Pink.Index);
             colors.Add(IndexedColors.Violet.Index);
             return colors;
+        }
+
+        private string calculateGroup(int eff)
+        {
+            if (eff >= 200000)
+                return "A";
+            else if (eff >= 100 && eff < 200)
+                return "B";
+            else if (eff != 0)
+                return "C";
+            else
+                return "";
         }
     }
 }
