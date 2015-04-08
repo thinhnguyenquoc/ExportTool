@@ -626,7 +626,6 @@ namespace ExportTool
             ICell cell13 = row2.CreateCell(i++);
             cell12.SetCellValue("New Group");
 
-
             int rowIndex = 2;
             foreach (var item in quantityList)
             {
@@ -755,7 +754,7 @@ namespace ExportTool
         {
             if (eff >= 200000)
                 return "A";
-            else if (eff >= 100 && eff < 200)
+            else if (eff >= 100000 && eff < 200000)
                 return "B";
             else if (eff != 0)
                 return "C";
