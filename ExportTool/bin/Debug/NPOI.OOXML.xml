@@ -623,30 +623,6 @@
         <member name="M:NPOI.XSSF.Extractor.XSSFExcelExtractor.SetIncludeHeadersFooters(System.Boolean)">
             Should headers and footers be included? Default is true
         </member>
-        <member name="P:NPOI.XSSF.Extractor.XSSFExcelExtractor.IncludeHeaderFooter">
-            <summary>
-             Should header and footer be included? Default is true
-            </summary>
-        </member>
-        <member name="P:NPOI.XSSF.Extractor.XSSFExcelExtractor.IncludeSheetNames">
-            <summary>
-            Should sheet names be included? Default is true
-            </summary>
-            <value>if set to <c>true</c> [include sheet names].</value>
-        </member>
-        <member name="P:NPOI.XSSF.Extractor.XSSFExcelExtractor.FormulasNotResults">
-            <summary>
-            Should we return the formula itself, and not
-            the result it produces? Default is false
-            </summary>
-            <value>if set to <c>true</c> [formulas not results].</value>
-        </member>
-        <member name="P:NPOI.XSSF.Extractor.XSSFExcelExtractor.IncludeCellComments">
-            <summary>
-            Should cell comments be included? Default is false
-            </summary>
-            <value>if set to <c>true</c> [include cell comments].</value>
-        </member>
         <member name="P:NPOI.XSSF.Extractor.XSSFExcelExtractor.Text">
             Retreives the text contents of the file
         </member>
@@ -1043,7 +1019,7 @@
             
              @return indent - number of spaces
         </member>
-        <!-- 对于成员“P:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.TextRotation”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "P:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.TextRotation" -->
         <member name="P:NPOI.XSSF.UserModel.Extensions.XSSFCellAlignment.WrapText">
              Whether the text should be wrapped
             
@@ -1722,7 +1698,7 @@
             
              @param color the color to use, null means no color
         </member>
-        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFCellStyle.SetFillBackgroundColor(NPOI.XSSF.UserModel.XSSFColor)”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFCellStyle.SetFillBackgroundColor(NPOI.XSSF.UserModel.XSSFColor)" -->
         <member name="M:NPOI.XSSF.UserModel.XSSFCellStyle.SetFillForegroundColor(NPOI.XSSF.UserModel.XSSFColor)">
                     * Set the foreground fill color represented as a {@link XSSFColor} value.
                      * <br/>
@@ -2293,7 +2269,7 @@
              @param columnIndex - the column to get (0-based)
              @param hidden - the visiblity state of the column
         </member>
-        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFSheet.SetColumnWidth(System.Int32,System.Int32)”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFSheet.SetColumnWidth(System.Int32,System.Int32)" -->
         <member name="M:NPOI.XSSF.UserModel.XSSFSheet.SetRowGroupCollapsed(System.Int32,System.Boolean)">
              group the row It is possible for collapsed to be false and yet still have
              the rows in question hidden. This can be achieved by having a lower
@@ -2333,9 +2309,9 @@
              @param denominator   The denominator for the zoom magnification.
              @see #SetZoom(int)
         </member>
-        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFSheet.SetZoom(System.Int32)”忽略有格式错误的 XML 注释 -->
-        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFSheet.ShiftRows(System.Int32,System.Int32,System.Int32)”忽略有格式错误的 XML 注释 -->
-        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFSheet.ShiftRows(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean)”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFSheet.SetZoom(System.Int32)" -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFSheet.ShiftRows(System.Int32,System.Int32,System.Int32)" -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFSheet.ShiftRows(System.Int32,System.Int32,System.Int32,System.Boolean,System.Boolean)" -->
         <member name="M:NPOI.XSSF.UserModel.XSSFSheet.ShowInPane(System.Int16,System.Int16)">
              Location of the top left visible cell Location of the top left visible cell in the bottom right
              pane (when in Left-to-Right mode).
@@ -2857,7 +2833,7 @@
             Standard Red Green Blue ctColor value (RGB).
             If there was an A (Alpha) value, it will be stripped.
         </member>
-        <!-- 对于成员“P:NPOI.XSSF.UserModel.XSSFColor.Theme”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "P:NPOI.XSSF.UserModel.XSSFColor.Theme" -->
         <member name="P:NPOI.XSSF.UserModel.XSSFColor.Tint">
              Specifies the tint value applied to the ctColor.
             
@@ -3680,7 +3656,7 @@
         <member name="M:NPOI.XSSF.UserModel.XSSFGraphicFrame.SetChart(NPOI.XSSF.UserModel.XSSFChart,System.String)">
             Assign a DrawingML chart to the graphic frame.
         </member>
-        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFGraphicFrame.AppendChartElement(NPOI.OpenXmlFormats.Dml.CT_GraphicalObjectData,System.String)”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFGraphicFrame.AppendChartElement(NPOI.OpenXmlFormats.Dml.CT_GraphicalObjectData,System.String)" -->
         <member name="P:NPOI.XSSF.UserModel.XSSFGraphicFrame.Name">
             Returns the frame name.
             @return name of the frame
@@ -3751,7 +3727,7 @@
             output values resulting from Applying an advanced filter criteria to a source
             range
         </member>
-        <!-- 对于成员“F:NPOI.XSSF.UserModel.XSSFName.BUILTIN_FILTER_DB”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "F:NPOI.XSSF.UserModel.XSSFName.BUILTIN_FILTER_DB" -->
         <member name="F:NPOI.XSSF.UserModel.XSSFName.BUILTIN_CONSOLIDATE_AREA">
             A built-in defined name that refers to a consolidation area
         </member>
@@ -4368,7 +4344,7 @@
              @param row the xml bean Containing all cell defInitions for this row.
              @param sheet the parent sheet.
         </member>
-        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFRow.CellIterator”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFRow.CellIterator" -->
         <member name="M:NPOI.XSSF.UserModel.XSSFRow.GetEnumerator">
              Alias for {@link #cellIterator()} to allow  foreach loops:
              <blockquote><pre>
@@ -4392,8 +4368,8 @@
              		 greater than the row number of the argument <code>XSSFRow</code>.
              @throws ArgumentException if the argument row belongs to a different worksheet
         </member>
-        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFRow.CreateCell(System.Int32)”忽略有格式错误的 XML 注释 -->
-        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFRow.CreateCell(System.Int32,NPOI.SS.UserModel.CellType)”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFRow.CreateCell(System.Int32)" -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFRow.CreateCell(System.Int32,NPOI.SS.UserModel.CellType)" -->
         <member name="M:NPOI.XSSF.UserModel.XSSFRow.GetCell(System.Int32)">
              Returns the cell at the given (0 based) index,
               with the {@link NPOI.SS.usermodel.Row.MissingCellPolicy} from the parent Workbook.
@@ -4410,7 +4386,7 @@
             <param name="cellnum">0 based column number</param>
             <returns>Cell representing that column or null if Undefined.</returns>
         </member>
-        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFRow.GetCell(System.Int32,NPOI.SS.UserModel.MissingCellPolicy)”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFRow.GetCell(System.Int32,NPOI.SS.UserModel.MissingCellPolicy)" -->
         <member name="M:NPOI.XSSF.UserModel.XSSFRow.SetRowStyle(NPOI.SS.UserModel.ICellStyle)">
             Applies a whole-row cell styling to the row.
             If the value is null then the style information is Removed,
@@ -4586,8 +4562,8 @@
              {@link NPOI.ss.usermodel.ComparisonOperator#BETWEEN}) and
              {@link NPOI.ss.usermodel.ComparisonOperator#NOT_BETWEEN} operations)
         </member>
-        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFSheetConditionalFormatting.CreateConditionalFormattingRule(System.String)”忽略有格式错误的 XML 注释 -->
-        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFSheetConditionalFormatting.AddConditionalFormatting(NPOI.SS.UserModel.IConditionalFormatting)”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFSheetConditionalFormatting.CreateConditionalFormattingRule(System.String)" -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFSheetConditionalFormatting.AddConditionalFormatting(NPOI.SS.UserModel.IConditionalFormatting)" -->
         <member name="M:NPOI.XSSF.UserModel.XSSFSheetConditionalFormatting.GetConditionalFormattingAt(System.Int32)">
              Gets Conditional Formatting object at a particular index
             
@@ -4839,7 +4815,7 @@
                   pkg.close(); // gracefully closes the underlying zip file
               </code></pre>     
         </member>
-        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFWorkbook.#ctor(System.String)”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFWorkbook.#ctor(System.String)" -->
         <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.OnWorkbookCreate">
             Create a new CT_Workbook with all values Set to default
         </member>
@@ -4998,7 +4974,7 @@
              @param name of the sheet
              @return XSSFSheet with the name provided or <code>null</code> if it does not exist
         </member>
-        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFWorkbook.GetSheetAt(System.Int32)”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFWorkbook.GetSheetAt(System.Int32)" -->
         <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.GetSheetIndex(System.String)">
             <summary>
             Returns the index of the sheet by his name (case insensitive match)
@@ -5068,7 +5044,7 @@
              @throws ArgumentException if the index is out of range (index
                         &lt; 0 || index &gt;= NumberOfSheets).
         </member>
-        <!-- 对于成员“M:NPOI.XSSF.UserModel.XSSFWorkbook.SetPrintArea(System.Int32,System.String)”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XSSF.UserModel.XSSFWorkbook.SetPrintArea(System.Int32,System.String)" -->
         <member name="M:NPOI.XSSF.UserModel.XSSFWorkbook.SetPrintArea(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
             For the Convenience of Java Programmers maintaining pointers.
             @see #setPrintArea(int, String)
@@ -5707,7 +5683,7 @@
             <li> If the parent paragraph is right to left, then these behaviors are
             also reversed. </li>
         </member>
-        <!-- 对于成员“F:NPOI.XWPF.UserModel.BreakClear.RIGHT”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "F:NPOI.XWPF.UserModel.BreakClear.RIGHT" -->
         <member name="F:NPOI.XWPF.UserModel.BreakClear.ALL">
             Specifies that the text wrapping break shall advance the text to the next
             line in the WordProcessingML document which spans the full width of the
@@ -5916,31 +5892,6 @@
         </member>
         <member name="T:NPOI.XWPF.UserModel.TextSegement">
             saves the begin and end position  of a text in a Paragraph
-        </member>
-        <member name="P:NPOI.XWPF.UserModel.TextSegement.BeginRun">
-            <summary>
-            The index of the start run
-            </summary>
-        </member>
-        <member name="P:NPOI.XWPF.UserModel.TextSegement.BeginText">
-            <summary>
-            The index of the start CT_Text
-            </summary>
-        </member>
-        <member name="P:NPOI.XWPF.UserModel.TextSegement.BeginChar">
-            <summary>
-            The index of the start text character
-            </summary>
-        </member>
-        <member name="P:NPOI.XWPF.UserModel.TextSegement.EndText">
-            <summary>
-            the index of the end CT_Text 
-            </summary>
-        </member>
-        <member name="P:NPOI.XWPF.UserModel.TextSegement.EndChar">
-            <summary>
-            the index of the end text character
-            </summary>
         </member>
         <member name="T:NPOI.XWPF.UserModel.UnderlinePatterns">
             Specifies the types of patterns which may be used to create the underline
@@ -6399,7 +6350,7 @@
         <member name="F:NPOI.XWPF.UserModel.XWPFDocument.headerFooterPolicy">
             Handles the joy of different headers/footers for different pages 
         </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFDocument.NewPackage">
+        <member name="M:NPOI.XWPF.UserModel.XWPFDocument.newPackage">
             Create a new WordProcessingML package and Setup the default minimal content
         </member>
         <member name="M:NPOI.XWPF.UserModel.XWPFDocument.OnDocumentCreate">
@@ -7044,26 +6995,8 @@
              @param value the literal text which shall be displayed in the document
              @param pos - position in the text array (NB: 0 based)
         </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFRun.InsertText(System.String,System.Int32)">
-            <summary>
-            insert text at start index in the run
-            </summary>
-            <param name="text">insert text</param>
-            <param name="startIndex">start index of the insertion in the run text</param>
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFRun.SetUnderline(NPOI.XWPF.UserModel.UnderlinePatterns)">
-             Specifies that the contents of this run.should be displayed along with an
-             underline appearing directly below the character heigh
-             If this element is not present, the default value is to leave the
-             formatting applied at previous level in the style hierarchy. If this
-             element is never applied in the style hierarchy, then an underline shall
-             not be applied to the contents of this run.
-            
-             @param value -
-                          underline type
-             @see UnderlinePatterns : all possible patterns that could be applied
-        </member>
-        <!-- 对于成员“M:NPOI.XWPF.UserModel.XWPFRun.SetStrike(System.Boolean)”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XWPF.UserModel.XWPFRun.SetUnderline(NPOI.XWPF.UserModel.UnderlinePatterns)" -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XWPF.UserModel.XWPFRun.SetStrike(System.Boolean)" -->
         <member name="M:NPOI.XWPF.UserModel.XWPFRun.GetTextPosition">
              This element specifies the amount by which text shall be raised or
              lowered for this run.in relation to the default baseline of the
@@ -7072,24 +7005,7 @@
             
              @return a big integer representing the amount of text shall be "moved"
         </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFRun.SetTextPosition(System.Int32)">
-            This element specifies the amount by which text shall be raised or
-            lowered for this run.in relation to the default baseline of the
-            surrounding non-positioned text. This allows the text to be repositioned
-            without altering the font size of the contents.
-            
-            If the val attribute is positive, then the parent run.shall be raised
-            above the baseline of the surrounding text by the specified number of
-            half-points. If the val attribute is negative, then the parent run.shall
-            be lowered below the baseline of the surrounding text by the specified
-            number of half-points.
-                    * 
-            If this element is not present, the default value is to leave the
-            formatting applied at previous level in the style hierarchy. If this
-            element is never applied in the style hierarchy, then the text shall not
-            be raised or lowered relative to the default baseline location for the
-            contents of this run.
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:NPOI.XWPF.UserModel.XWPFRun.SetTextPosition(System.Int32)" -->
         <member name="M:NPOI.XWPF.UserModel.XWPFRun.RemoveBreak">
             
         </member>
@@ -7379,13 +7295,6 @@
             add a new run at the end of the position of 
             the content of parameter run
             @param run
-        </member>
-        <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.ReplaceText(System.String,System.String)">
-            <summary>
-            Replace text inside each run (cross run is not supported yet)
-            </summary>
-            <param name="oldText">target text</param>
-            <param name="newText">replacement text</param>
         </member>
         <member name="M:NPOI.XWPF.UserModel.XWPFParagraph.SearchText(System.String,NPOI.XWPF.UserModel.PositionInParagraph)">
             <summary>

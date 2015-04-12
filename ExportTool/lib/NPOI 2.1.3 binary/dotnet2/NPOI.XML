@@ -1848,16 +1848,31 @@
             
             @return {@link ValueEval} with date as its value.
         </member>
-        <member name="T:NPOI.SS.Formula.Functions.Code">
-             Implementation for Excel CODE () function.<p/>
-             <p/>
-             <b>Syntax</b>:<br/> <b>CODE   </b>(<b>text</b> )<br/>
-             <p/>
-             Returns a numeric code for the first character in a text string. The returned code corresponds to the character set used by your computer.
-             <p/>
-             text The text for which you want the code of the first character.
+        <member name="T:NPOI.SS.Formula.Functions.Errortype">
+             Implementation for the ERROR.TYPE() Excel function.
+             <p>
+             <b>Syntax:</b><br/>
+             <b>ERROR.TYPE</b>(<b>errorValue</b>)</p>
+             <p>
+             Returns a number corresponding to the error type of the supplied argument.</p>
+             <p>
+                <table border="1" cellpadding="1" cellspacing="1" summary="Return values for ERROR.TYPE()">
+                  <tr><td>errorValue</td><td>Return Value</td></tr>
+                  <tr><td>#NULL!</td><td>1</td></tr>
+                  <tr><td>#DIV/0!</td><td>2</td></tr>
+                  <tr><td>#VALUE!</td><td>3</td></tr>
+                  <tr><td>#REF!</td><td>4</td></tr>
+                  <tr><td>#NAME?</td><td>5</td></tr>
+                  <tr><td>#NUM!</td><td>6</td></tr>
+                  <tr><td>#N/A!</td><td>7</td></tr>
+                  <tr><td>everything else</td><td>#N/A!</td></tr>
+                </table>
             
-             @author cedric dot walter @ gmail dot com
+             Note - the results of ERROR.TYPE() are different to the constants defined in
+             <tt>ErrorConstants</tt>.
+             </p>
+            
+             @author Josh Micich
         </member>
         <member name="T:NPOI.SS.Formula.Functions.Fixed1ArgFunction">
              Convenience base class for functions that must take exactly one argument.
@@ -1887,82 +1902,6 @@
         <member name="M:NPOI.SS.Formula.Functions.Function1Arg.Evaluate(System.Int32,System.Int32,NPOI.SS.Formula.Eval.ValueEval)">
             see {@link Function#Evaluate(ValueEval[], int, int)}
         </member>
-        <member name="T:NPOI.SS.Formula.Functions.Complex">
-             Implementation for Excel COMPLEX () function.<p/>
-             <p/>
-             <b>Syntax</b>:<br/> <b>COMPLEX   </b>(<b>real_num</b>,<b>i_num</b>,<b>suffix </b> )<br/>
-             <p/>
-             Converts real and imaginary coefficients into a complex number of the form x + yi or x + yj.
-             <p/>
-             <p/>
-             All complex number functions accept "i" and "j" for suffix, but neither "I" nor "J".
-             Using uppercase results in the #VALUE! error value. All functions that accept two
-             or more complex numbers require that all suffixes match.
-             <p/>
-             <b>real_num</b> The real coefficient of the complex number.
-             If this argument is nonnumeric, this function returns the #VALUE! error value.
-             <p/>
-             <p/>
-             <b>i_num</b> The imaginary coefficient of the complex number.
-             If this argument is nonnumeric, this function returns the #VALUE! error value.
-             <p/>
-             <p/>
-             <b>suffix</b> The suffix for the imaginary component of the complex number.
-             <ul>
-             <li>If omitted, suffix is assumed to be "i".</li>
-             <li>If suffix is neither "i" nor "j", COMPLEX returns the #VALUE! error value.</li>
-             </ul>
-            
-             @author cedric dot walter @ gmail dot com
-        </member>
-        <member name="T:NPOI.SS.Formula.Functions.Var2or3ArgFunction">
-             Convenience base class for any function which must take two or three
-             arguments
-            
-             @author Josh Micich
-        </member>
-        <member name="T:NPOI.SS.Formula.Functions.Function2Arg">
-             Implemented by all functions that can be called with two arguments
-            
-             @author Josh Micich
-        </member>
-        <member name="M:NPOI.SS.Formula.Functions.Function2Arg.Evaluate(System.Int32,System.Int32,NPOI.SS.Formula.Eval.ValueEval,NPOI.SS.Formula.Eval.ValueEval)">
-            see {@link Function#Evaluate(ValueEval[], int, int)}
-        </member>
-        <member name="T:NPOI.SS.Formula.Functions.Function3Arg">
-             Implemented by all functions that can be called with three arguments
-            
-             @author Josh Micich
-        </member>
-        <member name="M:NPOI.SS.Formula.Functions.Function3Arg.Evaluate(System.Int32,System.Int32,NPOI.SS.Formula.Eval.ValueEval,NPOI.SS.Formula.Eval.ValueEval,NPOI.SS.Formula.Eval.ValueEval)">
-            see {@link Function#Evaluate(ValueEval[], int, int)}
-        </member>
-        <member name="T:NPOI.SS.Formula.Functions.Errortype">
-             Implementation for the ERROR.TYPE() Excel function.
-             <p>
-             <b>Syntax:</b><br/>
-             <b>ERROR.TYPE</b>(<b>errorValue</b>)</p>
-             <p>
-             Returns a number corresponding to the error type of the supplied argument.</p>
-             <p>
-                <table border="1" cellpadding="1" cellspacing="1" summary="Return values for ERROR.TYPE()">
-                  <tr><td>errorValue</td><td>Return Value</td></tr>
-                  <tr><td>#NULL!</td><td>1</td></tr>
-                  <tr><td>#DIV/0!</td><td>2</td></tr>
-                  <tr><td>#VALUE!</td><td>3</td></tr>
-                  <tr><td>#REF!</td><td>4</td></tr>
-                  <tr><td>#NAME?</td><td>5</td></tr>
-                  <tr><td>#NUM!</td><td>6</td></tr>
-                  <tr><td>#N/A!</td><td>7</td></tr>
-                  <tr><td>everything else</td><td>#N/A!</td></tr>
-                </table>
-            
-             Note - the results of ERROR.TYPE() are different to the constants defined in
-             <tt>ErrorConstants</tt>.
-             </p>
-            
-             @author Josh Micich
-        </member>
         <member name="T:NPOI.SS.Formula.Functions.Hyperlink">
              Implementation of Excel HYPERLINK function.<p/>
             
@@ -1985,6 +1924,14 @@
             
              @author Josh Micich
         </member>
+        <member name="T:NPOI.SS.Formula.Functions.Function2Arg">
+             Implemented by all functions that can be called with two arguments
+            
+             @author Josh Micich
+        </member>
+        <member name="M:NPOI.SS.Formula.Functions.Function2Arg.Evaluate(System.Int32,System.Int32,NPOI.SS.Formula.Eval.ValueEval,NPOI.SS.Formula.Eval.ValueEval)">
+            see {@link Function#Evaluate(ValueEval[], int, int)}
+        </member>
         <member name="T:NPOI.SS.Formula.Functions.Rank">
                  * Returns the rank of a number in a list of numbers. The rank of a number is its size relative to other values in a list.
             
@@ -1999,6 +1946,20 @@
                  * 
                  * @author Rubin Wang
         </member>
+        <member name="T:NPOI.SS.Formula.Functions.Var2or3ArgFunction">
+             Convenience base class for any function which must take two or three
+             arguments
+            
+             @author Josh Micich
+        </member>
+        <member name="T:NPOI.SS.Formula.Functions.Function3Arg">
+             Implemented by all functions that can be called with three arguments
+            
+             @author Josh Micich
+        </member>
+        <member name="M:NPOI.SS.Formula.Functions.Function3Arg.Evaluate(System.Int32,System.Int32,NPOI.SS.Formula.Eval.ValueEval,NPOI.SS.Formula.Eval.ValueEval,NPOI.SS.Formula.Eval.ValueEval)">
+            see {@link Function#Evaluate(ValueEval[], int, int)}
+        </member>
         <member name="T:NPOI.SS.Formula.Functions.Rate">
             Implements the Excel Rate function
         </member>
@@ -2006,28 +1967,6 @@
             Excel does not support infinities and NaNs, rather, it gives a #NUM! error in these cases
             
             @throws EvaluationException (#NUM!) if result is NaN or Infinity
-        </member>
-        <member name="T:NPOI.SS.Formula.Functions.Rept">
-             Implementation for Excel REPT () function.<p/>
-             <p/>
-             <b>Syntax</b>:<br/> <b>REPT  </b>(<b>text</b>,<b>number_times</b> )<br/>
-             <p/>
-             Repeats text a given number of times. Use REPT to fill a cell with a number of instances of a text string.
-            
-             text : text The text that you want to repeat.
-             number_times:	A positive number specifying the number of times to repeat text.
-            
-             If number_times is 0 (zero), REPT returns "" (empty text).
-             If this argument contains a decimal value, this function ignores the numbers to the right side of the decimal point.
-            
-             The result of the REPT function cannot be longer than 32,767 characters, or REPT returns #VALUE!.
-            
-             @author cedric dot walter @ gmail dot com
-        </member>
-        <member name="T:NPOI.SS.Formula.Functions.Fixed2ArgFunction">
-             Convenience base class for functions that must take exactly two arguments.
-            
-             @author Josh Micich
         </member>
         <member name="T:NPOI.SS.Formula.Functions.Sumifs">
              Implementation for the Excel function SUMIFS<br/>
@@ -2056,7 +1995,7 @@
             
              @throws EvaluationException if
         </member>
-        <member name="M:NPOI.SS.Formula.Functions.Sumifs.SumMatchingCells(NPOI.SS.Formula.Eval.AreaEval[],NPOI.SS.Formula.Functions.IMatchPredicate[],NPOI.SS.Formula.Eval.AreaEval)">
+        <member name="M:NPOI.SS.Formula.Functions.Sumifs.SumMatchingCells(NPOI.SS.Formula.Eval.AreaEval[],NPOI.SS.Formula.Functions.I_MatchPredicate[],NPOI.SS.Formula.Eval.AreaEval)">
             
              @param ranges  criteria ranges, each range must be of the same dimensions as <code>aeSum</code>
              @param predicates  array of predicates, a predicate for each value in <code>ranges</code>
@@ -11020,13 +10959,6 @@
             intended for display to the user.
             </summary>
         </member>
-        <member name="T:NPOI.SS.Extractor.IExcelExtractor">
-            Common interface for Excel text extractors, covering
-             HSSF and XSSF
-        </member>
-        <member name="P:NPOI.SS.Extractor.IExcelExtractor.Text">
-            Retreives the text contents of the file
-        </member>
         <member name="M:NPOI.HSSF.Extractor.ExcelExtractor.#ctor(NPOI.HSSF.UserModel.HSSFWorkbook)">
             <summary>
             Initializes a new instance of the <see cref="T:NPOI.HSSF.Extractor.ExcelExtractor"/> class.
@@ -16706,6 +16638,23 @@
             <value>The size of the big block.</value>
             @return 
         </member>
+        <member name="T:NPOI.SS.Extractor.ExcelExtractor">
+            Common interface for Excel text extractors, covering
+             HSSF and XSSF
+        </member>
+        <member name="M:NPOI.SS.Extractor.ExcelExtractor.SetIncludeSheetNames(System.Boolean)">
+            Should sheet names be included? Default is true
+        </member>
+        <member name="M:NPOI.SS.Extractor.ExcelExtractor.SetFormulasNotResults(System.Boolean)">
+            Should we return the formula itself, and not
+             the result it produces? Default is false
+        </member>
+        <member name="M:NPOI.SS.Extractor.ExcelExtractor.SetIncludeCellComments(System.Boolean)">
+            Should cell comments be included? Default is false
+        </member>
+        <member name="P:NPOI.SS.Extractor.ExcelExtractor.Text">
+            Retreives the text contents of the file
+        </member>
         <member name="T:NPOI.SS.Format.CellDateFormatter">
              Formats a date value.
             
@@ -18047,7 +17996,7 @@
             @param sid - record sid we want to check if it belongs to drawing layer
             @return true if record is instance of DrawingRecord or ContinueRecord or ObjRecord or TextObjRecord
         </member>
-        <!-- 对于成员“M:NPOI.HSSF.Record.EscherAggregate.CreateAggregate(System.Collections.Generic.List{NPOI.HSSF.Record.RecordBase},System.Int32)”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.HSSF.Record.EscherAggregate.CreateAggregate(System.Collections.Generic.List{NPOI.HSSF.Record.RecordBase},System.Int32)" -->
         <member name="M:NPOI.HSSF.Record.EscherAggregate.Serialize(System.Int32,System.Byte[])">
              Serializes this aggregate to a byte array.  Since this Is an aggregate
              record it will effectively Serialize the aggregated records.
@@ -30966,7 +30915,7 @@
             </summary>
             <param name="range">the range of cells to filter</param>
         </member>
-        <!-- 对于成员“M:NPOI.HSSF.UserModel.HSSFSheet.CopySheet”忽略有格式错误的 XML 注释 -->
+        <!-- Badly formed XML comment ignored for member "M:NPOI.HSSF.UserModel.HSSFSheet.CopySheet" -->
         <member name="P:NPOI.HSSF.UserModel.HSSFSheet.DisplayZeros">
             Gets the flag indicating whether the window should show 0 (zero) in cells containing zero value.
             When false, cells with zero value appear blank instead of showing the number zero.
@@ -32072,6 +32021,11 @@
             @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
              
         </member>
+        <member name="T:NPOI.SS.Formula.Functions.Fixed2ArgFunction">
+             Convenience base class for functions that must take exactly two arguments.
+            
+             @author Josh Micich
+        </member>
         <member name="T:NPOI.SS.Formula.Eval.ErrorEval">
              @author Amol S. Deshmukh &lt; amolweb at ya hoo dot com &gt;
             
@@ -32967,7 +32921,7 @@
             
               @see Subtotal
         </member>
-        <member name="T:NPOI.SS.Formula.Functions.IMatchPredicate">
+        <member name="T:NPOI.SS.Formula.Functions.I_MatchPredicate">
             Common interface for the matching criteria.
         </member>
         <member name="T:NPOI.SS.Formula.Functions.Counta">
@@ -33005,7 +32959,7 @@
             
             @author Josh Micich
         </member>
-        <member name="M:NPOI.SS.Formula.Functions.Countif.CountMatchingCellsInArea(NPOI.SS.Formula.Eval.ValueEval,NPOI.SS.Formula.Functions.IMatchPredicate)">
+        <member name="M:NPOI.SS.Formula.Functions.Countif.CountMatchingCellsInArea(NPOI.SS.Formula.Eval.ValueEval,NPOI.SS.Formula.Functions.I_MatchPredicate)">
             @return the number of evaluated cells in the range that match the specified criteria
         </member>
         <member name="M:NPOI.SS.Formula.Functions.Countif.EvaluateCriteriaArg(NPOI.SS.Formula.Eval.ValueEval,System.Int32,System.Int32)">
@@ -33037,10 +32991,10 @@
             
              @author Josh Micich 
         </member>
-        <member name="M:NPOI.SS.Formula.Functions.CountUtils.CountMatchingCell(NPOI.SS.Formula.Eval.RefEval,NPOI.SS.Formula.Functions.IMatchPredicate)">
+        <member name="M:NPOI.SS.Formula.Functions.CountUtils.CountMatchingCell(NPOI.SS.Formula.Eval.RefEval,NPOI.SS.Formula.Functions.I_MatchPredicate)">
             @return 1 if the evaluated cell matches the specified criteria
         </member>
-        <member name="M:NPOI.SS.Formula.Functions.CountUtils.CountMatchingCellsInArea(NPOI.SS.Formula.TwoDEval,NPOI.SS.Formula.Functions.IMatchPredicate)">
+        <member name="M:NPOI.SS.Formula.Functions.CountUtils.CountMatchingCellsInArea(NPOI.SS.Formula.TwoDEval,NPOI.SS.Formula.Functions.I_MatchPredicate)">
             @return the number of evaluated cells in the range that match the specified criteria
         </member>
         <member name="T:NPOI.SS.Formula.Functions.DateFunc">

@@ -14,3 +14,4 @@ F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.Properties.Resources.resourc
 F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.csproj.GenerateResource.Cache
 F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.exe
 F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.pdb
+F:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.csprojResolveAssemblyReference.cache

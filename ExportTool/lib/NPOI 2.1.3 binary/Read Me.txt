@@ -27,11 +27,9 @@ medium trust environment in ASP.NET
 =================
 *  NPOI on SNS  *
 =================
+QQ群: 124527967, 116053476
 Twitter: http://twitter.com/tonyqus 
-User Group[Linkedin]: http://www.linkedin.com/groups/NPOI-User-Group-6655065 
 新浪微博: http://t.sina.com.cn/npoi 
-企业客户QQ群: 116053476
-个人客户QQ群：20144214
 
 ================
 * Team Members *
@@ -88,11 +86,11 @@ Main contribution: NPOIFS/POIFS
 
 NPOI 2.0
 --------------------------------------------------------------------------------
-Tony Qu - chief developer
+Tony Qu - developer
 -------------------------------
 From: Shanghai, China
 Time Zone: GMT+8
-Main Contribution: OpenXml4Net, OpenXmlFormats, NPOI.XSSF, NPOI.XWPF implementation
+Main Contribution: OpenXml4Net, OpenXmlFormats, NPOI.XSSF implementation
 
 Antony - developer
 ------------------------------
@@ -117,15 +115,6 @@ Paul Kratt - developer
 From: Greater Milwaukee Area, Wisconsin, USA
 Time Zone: GMT
 Main contribution: CopyTo, CopySheet functions in HSSFSheet
-
-NPOI 2.1
---------------------------------------------------------------------------------
-Tony Qu - main contributor
-Antony - fix some poi bugs
-
-Phil Rykoff - developer
-------------------------------
-Main contribution: XSSF bug fixing and feature implement
 
 ==================
 * How to join us *
