@@ -1,4 +1,3 @@
-F:\clone\ExportTool\ExportTool\bin\Debug\Category.xlsx
 F:\clone\ExportTool\ExportTool\bin\Debug\ExportTool.exe
 F:\clone\ExportTool\ExportTool\bin\Debug\ExportTool.pdb
 F:\clone\ExportTool\ExportTool\bin\Debug\NPOI.dll

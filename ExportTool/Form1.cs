@@ -88,84 +88,11 @@ namespace ExportTool
         }        
 
         private void button3_Click(object sender, EventArgs e)
-        {            
-            using (FileStream stream = new FileStream(@"D:\Product-Quantity-Standard.xlsx", FileMode.Create, FileAccess.Write))
-            {
-                IWorkbook wb = new XSSFWorkbook();
-                // tab name
-                ISheet sheet = wb.CreateSheet("Bao cao SL ban ra hang ngay");
-                // header
-                IRow row = sheet.CreateRow(0);
-                ICell cell = row.CreateCell(0);
-                cell.SetCellValue("BÁO CÁO SẢN PHẨM HÀNG NGÀY CÔNG TY ATZ");
-                NPOI.SS.Util.CellRangeAddress cra = new NPOI.SS.Util.CellRangeAddress(0, 0, 0, 2);
-                sheet.AddMergedRegion(cra);
-                // column header 
-                IRow row3 = sheet.CreateRow(2);
-                ICell cell0 = row3.CreateCell(0);
-                cell0.SetCellValue("STT");
-                ICell cell1 = row3.CreateCell(1);
-                cell1.SetCellValue("MÃ CHƯƠNG TRÌNH");
-                ICell cell2 = row3.CreateCell(2);
-                cell2.SetCellValue("CHƯƠNG TRÌNH");
-                ICell cell3 = row3.CreateCell(3);
-                cell3.SetCellValue("DURATION");
-                ICell cell4 = row3.CreateCell(4);
-                cell4.SetCellValue("FREQUENCY");
-                ICell cell5 = row3.CreateCell(5);
-                cell5.SetCellValue("CATEGORY");
-                ICell cell6 = row3.CreateCell(6);
-                cell6.SetCellValue("GROUP");
-                ICell cell8 = row3.CreateCell(7);
-                cell8.SetCellValue("GIÁ SẢN PHẨM");               
-
-                ISheet scheduleSheet = schedule.GetSheetAt(0);
-                var row1 = scheduleSheet.GetRow(1);
-                var year = row1.GetCell(0).StringCellValue.Split('/').LastOrDefault();
-                var re = parseDate(scheduleSheet.SheetName, year);
-                int k = 8;
-                DateTime startTime = re[0];
-                DateTime endTime = re[1];
-                while (DateTime.Compare(startTime, endTime) <= 0)
-                {
-                    ICell cell9 = row3.CreateCell(k);
-                    cell9.SetCellValue(startTime.ToString("MM/dd/yyyy"));
-                    startTime = startTime.AddDays(1);
-                    k++;
-                }
-                // add Program Code
-                int i = 3;
-                foreach (var item in programList)
-                {
-                    if (item.Duration.Minute > 3)
-                    {
-                        IRow row_temp = sheet.CreateRow(i);
-                        ICell cell_temp0 = row_temp.CreateCell(0);
-                        cell_temp0.SetCellValue(i - 2);
-                        ICell cell_temp1 = row_temp.CreateCell(1);
-                        cell_temp1.SetCellValue(item.TapeCode);
-                        ICell cell_temp2 = row_temp.CreateCell(2);
-                        cell_temp2.SetCellValue(item.Name);
-                        ICell cell_temp3 = row_temp.CreateCell(3);
-                        DateTime time = DateTime.Today;
-                        time = time.AddMinutes(item.Duration.Minute).AddSeconds(item.Duration.Second);
-                        cell_temp3.SetCellValue(time);
-                        ICellStyle style = wb.CreateCellStyle();
-                        cell_temp3.CellStyle = style;
-                        IDataFormat dataFormatCustom = wb.CreateDataFormat();
-                        cell_temp3.CellStyle.DataFormat = dataFormatCustom.GetFormat("HH:mm:ss");
-                        ICell cell_temp4 = row_temp.CreateCell(4);
-                        cell_temp4.SetCellValue(item.Frequency);
-                        i++;
-                    }
-                }
-
-                for (int l = 0; l < row3.LastCellNum; l++)
-                {
-                    sheet.AutoSizeColumn(l);
-                }
-                wb.Write(stream);
-            }
+        {
+            saveFileDialog1.Filter = "Excel|*.xlsx";
+            saveFileDialog1.FileName = "Product-Quantity-Standard";
+            saveFileDialog1.DefaultExt = "xlsx";
+            saveFileDialog1.ShowDialog();           
         }
 
         #region support function
@@ -276,7 +203,16 @@ namespace ExportTool
             {
                 string file = openFileDialog3.FileName;
                 textBox3.Text = file;
-                button6.Enabled = true;
+            }
+        }
+        
+        private void button8_Click(object sender, EventArgs e)
+        {
+            DialogResult result = openFileDialog4.ShowDialog(); // Show the dialog.
+            if (result == DialogResult.OK) // Test result.
+            {
+                string file = openFileDialog4.FileName;
+                textBox4.Text = file;
             }
         }
 
@@ -330,37 +266,10 @@ namespace ExportTool
 
         private void button7_Click(object sender, EventArgs e)
         {
-            ISheet quantitySheet = quantity.GetSheetAt(0);
-            int totalDay = countDay(quantity);
-            DateTime startDay = Convert.ToDateTime(quantitySheet.GetRow(2).GetCell(8).StringCellValue);
-            DateTime endDay = Convert.ToDateTime(quantitySheet.GetRow(2).GetCell(8 + totalDay).StringCellValue);
-            IWorkbook wb;
-            //using (FileStream stream = new FileStream(@"D:\Efficiency("+startDay.ToString("dd.MM")+ "_"+endDay.ToString("dd.MM.yyyy")+").xlsx", FileMode.Create, FileAccess.Write))
-            using (FileStream stream = new FileStream(@"D:\TemplateEfficiency.xlsx", FileMode.Open, FileAccess.Read))
-            {
-                wb = new XSSFWorkbook(stream);
-                stream.Close();           
-            }
-            ISheet sheetTime = wb.GetSheetAt(0);
-            createTimeTable(sheetTime, startDay);
-
-            ISheet sheet = wb.GetSheetAt(1);
-            createItemList(sheet, startDay, totalDay, wb);
-
-            ISheet sheetStandard = wb.GetSheetAt(2);
-            createStandard(sheetStandard);
-
-            //ISheet sheetCategories = wb.GetSheetAt(3);
-            //createCategory(sheetCategories);
-
-            ISheet sheetDuration = wb.GetSheetAt(4);
-            createDuration(sheetDuration, wb);
-
-            using (FileStream stream = new FileStream(@"D:\TemplateEfficiency-2.xlsx", FileMode.Create, FileAccess.Write))
-            {
-                wb.Write(stream);
-                stream.Close();
-            }
+            saveFileDialog2.Filter = "Excel|*.xlsx";
+            saveFileDialog2.FileName = "Efficiency";
+            saveFileDialog2.DefaultExt = "xlsx";
+            saveFileDialog2.ShowDialog();           
         }
 
         private void createTimeTable(ISheet sheetTime, DateTime startDay)
@@ -620,5 +529,127 @@ namespace ExportTool
             else
                 return "";
         }
+
+        private void changeTab(object sender, EventArgs e)
+        {
+            textBox2.Text = textBox1.Text;
+        }
+
+        private void saveFileDialog2_FileOk(object sender, CancelEventArgs e)
+        {
+            string name = saveFileDialog2.FileName;
+            ISheet quantitySheet = quantity.GetSheetAt(0);
+            int totalDay = countDay(quantity);
+            DateTime startDay = Convert.ToDateTime(quantitySheet.GetRow(2).GetCell(8).StringCellValue);
+            DateTime endDay = Convert.ToDateTime(quantitySheet.GetRow(2).GetCell(8 + totalDay).StringCellValue);
+            IWorkbook wb;
+            //using (FileStream stream = new FileStream(@"D:\Efficiency("+startDay.ToString("dd.MM")+ "_"+endDay.ToString("dd.MM.yyyy")+").xlsx", FileMode.Create, FileAccess.Write))
+            using (FileStream stream = new FileStream(textBox4.Text, FileMode.Open, FileAccess.Read))
+            {
+                wb = new XSSFWorkbook(stream);
+                stream.Close();
+            }
+            ISheet sheetTime = wb.GetSheetAt(0);
+            createTimeTable(sheetTime, startDay);
+
+            ISheet sheet = wb.GetSheetAt(1);
+            createItemList(sheet, startDay, totalDay, wb);
+
+            ISheet sheetStandard = wb.GetSheetAt(2);
+            createStandard(sheetStandard);
+
+            //ISheet sheetCategories = wb.GetSheetAt(3);
+            //createCategory(sheetCategories);
+
+            ISheet sheetDuration = wb.GetSheetAt(4);
+            createDuration(sheetDuration, wb);           
+            using (FileStream stream = new FileStream(name, FileMode.Create, FileAccess.Write))
+            {
+                wb.Write(stream);
+                stream.Close();
+            }
+        }
+
+        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {           
+            string name = saveFileDialog1.FileName;
+            using (FileStream stream = new FileStream(name, FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook wb = new XSSFWorkbook();
+                // tab name
+                ISheet sheet = wb.CreateSheet("Bao cao SL ban ra hang ngay");
+                // header
+                IRow row = sheet.CreateRow(0);
+                ICell cell = row.CreateCell(0);
+                cell.SetCellValue("BÁO CÁO SẢN PHẨM HÀNG NGÀY CÔNG TY ATZ");
+                NPOI.SS.Util.CellRangeAddress cra = new NPOI.SS.Util.CellRangeAddress(0, 0, 0, 2);
+                sheet.AddMergedRegion(cra);
+                // column header 
+                IRow row3 = sheet.CreateRow(2);
+                ICell cell0 = row3.CreateCell(0);
+                cell0.SetCellValue("STT");
+                ICell cell1 = row3.CreateCell(1);
+                cell1.SetCellValue("MÃ CHƯƠNG TRÌNH");
+                ICell cell2 = row3.CreateCell(2);
+                cell2.SetCellValue("CHƯƠNG TRÌNH");
+                ICell cell3 = row3.CreateCell(3);
+                cell3.SetCellValue("DURATION");
+                ICell cell4 = row3.CreateCell(4);
+                cell4.SetCellValue("FREQUENCY");
+                ICell cell5 = row3.CreateCell(5);
+                cell5.SetCellValue("CATEGORY");
+                ICell cell6 = row3.CreateCell(6);
+                cell6.SetCellValue("GROUP");
+                ICell cell8 = row3.CreateCell(7);
+                cell8.SetCellValue("GIÁ SẢN PHẨM");
+
+                ISheet scheduleSheet = schedule.GetSheetAt(0);
+                var row1 = scheduleSheet.GetRow(1);
+                var year = row1.GetCell(0).StringCellValue.Split('/').LastOrDefault();
+                var re = parseDate(scheduleSheet.SheetName, year);
+                int k = 8;
+                DateTime startTime = re[0];
+                DateTime endTime = re[1];
+                while (DateTime.Compare(startTime, endTime) <= 0)
+                {
+                    ICell cell9 = row3.CreateCell(k);
+                    cell9.SetCellValue(startTime.ToString("MM/dd/yyyy"));
+                    startTime = startTime.AddDays(1);
+                    k++;
+                }
+                // add Program Code
+                int i = 3;
+                foreach (var item in programList)
+                {
+                    if (item.Duration.Minute > 3)
+                    {
+                        IRow row_temp = sheet.CreateRow(i);
+                        ICell cell_temp0 = row_temp.CreateCell(0);
+                        cell_temp0.SetCellValue(i - 2);
+                        ICell cell_temp1 = row_temp.CreateCell(1);
+                        cell_temp1.SetCellValue(item.TapeCode);
+                        ICell cell_temp2 = row_temp.CreateCell(2);
+                        cell_temp2.SetCellValue(item.Name);
+                        ICell cell_temp3 = row_temp.CreateCell(3);
+                        DateTime time = DateTime.Today;
+                        time = time.AddMinutes(item.Duration.Minute).AddSeconds(item.Duration.Second);
+                        cell_temp3.SetCellValue(time);
+                        ICellStyle style = wb.CreateCellStyle();
+                        cell_temp3.CellStyle = style;
+                        IDataFormat dataFormatCustom = wb.CreateDataFormat();
+                        cell_temp3.CellStyle.DataFormat = dataFormatCustom.GetFormat("HH:mm:ss");
+                        ICell cell_temp4 = row_temp.CreateCell(4);
+                        cell_temp4.SetCellValue(item.Frequency);
+                        i++;
+                    }
+                }
+
+                for (int l = 0; l < row3.LastCellNum; l++)
+                {
+                    sheet.AutoSizeColumn(l);
+                }
+                wb.Write(stream);
+            }
+        }       
     }
 }

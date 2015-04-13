@@ -51,6 +51,12 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog3 = new System.Windows.Forms.OpenFileDialog();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.button8 = new System.Windows.Forms.Button();
+            this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.saveFileDialog2 = new System.Windows.Forms.SaveFileDialog();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -67,6 +73,7 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(832, 573);
             this.tabControl1.TabIndex = 0;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.changeTab);
             // 
             // tabPage1
             // 
@@ -150,6 +157,9 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.button8);
+            this.tabPage2.Controls.Add(this.textBox4);
+            this.tabPage2.Controls.Add(this.label6);
             this.tabPage2.Controls.Add(this.button7);
             this.tabPage2.Controls.Add(this.dataGridView2);
             this.tabPage2.Controls.Add(this.label5);
@@ -181,15 +191,15 @@
             // dataGridView2
             // 
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(36, 145);
+            this.dataGridView2.Location = new System.Drawing.Point(36, 156);
             this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(751, 357);
+            this.dataGridView2.Size = new System.Drawing.Size(751, 346);
             this.dataGridView2.TabIndex = 8;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(33, 102);
+            this.label5.Location = new System.Drawing.Point(33, 120);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(115, 13);
             this.label5.TabIndex = 7;
@@ -197,7 +207,7 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(667, 97);
+            this.button6.Location = new System.Drawing.Point(667, 114);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(75, 23);
             this.button6.TabIndex = 6;
@@ -207,7 +217,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(667, 62);
+            this.button5.Location = new System.Drawing.Point(667, 49);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 5;
@@ -217,7 +227,7 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(169, 64);
+            this.textBox3.Location = new System.Drawing.Point(169, 51);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(446, 20);
             this.textBox3.TabIndex = 4;
@@ -225,7 +235,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(33, 67);
+            this.label4.Location = new System.Drawing.Point(33, 56);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(65, 13);
             this.label4.TabIndex = 3;
@@ -233,7 +243,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(667, 25);
+            this.button4.Location = new System.Drawing.Point(667, 15);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 2;
@@ -243,7 +253,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(169, 27);
+            this.textBox2.Location = new System.Drawing.Point(169, 17);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(446, 20);
             this.textBox2.TabIndex = 1;
@@ -251,7 +261,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(30, 30);
+            this.label3.Location = new System.Drawing.Point(33, 21);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(71, 13);
             this.label3.TabIndex = 0;
@@ -268,6 +278,44 @@
             // openFileDialog3
             // 
             this.openFileDialog3.FileName = "openFileDialog3";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(33, 86);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(96, 13);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Efficiency template";
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(169, 83);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(446, 20);
+            this.textBox4.TabIndex = 11;
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(667, 81);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(75, 23);
+            this.button8.TabIndex = 12;
+            this.button8.Text = "Search";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
+            // openFileDialog4
+            // 
+            this.openFileDialog4.FileName = "openFileDialog4";
+            // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
+            // 
+            // saveFileDialog2
+            // 
+            this.saveFileDialog2.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog2_FileOk);
             // 
             // Form1
             // 
@@ -313,6 +361,12 @@
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.OpenFileDialog openFileDialog2;
         private System.Windows.Forms.OpenFileDialog openFileDialog3;
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.OpenFileDialog openFileDialog4;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog2;
 
     }
 }
