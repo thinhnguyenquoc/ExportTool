@@ -30,3 +30,4 @@ D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.csprojResolveAssemblyReferen
 D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.Form1.resources
 D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.Properties.Resources.resources
 D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.csproj.GenerateResource.Cache
+D:\clone\ExportTool\ExportTool\obj\Debug\ExportTool.AlertForm.resources
