@@ -288,7 +288,7 @@ namespace ExportTool
                     }
                     quantityList.Add(mq);
                 }
-                quantityList = quantityList.OrderBy(x => x.Efficiency).ToList();
+                quantityList = quantityList.OrderByDescending(x => x.Efficiency).ToList();
                 int index = 1;
                 dataGridView2.DataSource = quantityList.Select(x => new { SNO = index++, x.TapeCode, Duration = x.Duration.Minute.ToString() + ":" + x.Duration.Second.ToString(), x.Name, x.Frequency, x.Price, x.Efficiency }).ToList();
                 dataGridView2.AutoResizeColumns();
@@ -525,6 +525,7 @@ namespace ExportTool
         private void changeTab(object sender, EventArgs e)
         {
             textBox2.Text = textBox1.Text;
+            textBox1.Text = textBox2.Text;
         }
 
         private void saveFileDialog2_FileOk(object sender, CancelEventArgs e)
@@ -640,7 +641,7 @@ namespace ExportTool
                             ICellStyle style = wb.CreateCellStyle();
                             cell_temp3.CellStyle = style;
                             IDataFormat dataFormatCustom = wb.CreateDataFormat();
-                            cell_temp3.CellStyle.DataFormat = dataFormatCustom.GetFormat("HH:mm:ss");
+                            cell_temp3.CellStyle.DataFormat = dataFormatCustom.GetFormat("mm:ss");
                             ICell cell_temp4 = row_temp.CreateCell(4);
                             cell_temp4.SetCellValue(item.Frequency);
                             i++;
@@ -660,6 +661,11 @@ namespace ExportTool
                 alert.SetLabel(ex.Message.ToString());
                 alert.ShowDialog();
             }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }       
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.label1 = new System.Windows.Forms.Label();
@@ -38,6 +39,9 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button8 = new System.Windows.Forms.Button();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.button7 = new System.Windows.Forms.Button();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.label5 = new System.Windows.Forms.Label();
@@ -51,9 +55,6 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.openFileDialog3 = new System.Windows.Forms.OpenFileDialog();
-            this.label6 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.button8 = new System.Windows.Forms.Button();
             this.openFileDialog4 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.saveFileDialog2 = new System.Windows.Forms.SaveFileDialog();
@@ -103,7 +104,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(651, 507);
+            this.button3.Location = new System.Drawing.Point(709, 508);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 13;
@@ -122,7 +123,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(32, 75);
+            this.label2.Location = new System.Drawing.Point(535, 75);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(112, 13);
             this.label2.TabIndex = 11;
@@ -130,7 +131,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(651, 70);
+            this.button2.Location = new System.Drawing.Point(709, 70);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 10;
@@ -142,12 +143,12 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(169, 34);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(410, 20);
+            this.textBox1.Size = new System.Drawing.Size(478, 20);
             this.textBox1.TabIndex = 9;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(651, 32);
+            this.button1.Location = new System.Drawing.Point(709, 32);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 8;
@@ -178,9 +179,35 @@
             this.tabPage2.Text = "Step 2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(712, 81);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(75, 23);
+            this.button8.TabIndex = 12;
+            this.button8.Text = "Search";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(190, 83);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(446, 20);
+            this.textBox4.TabIndex = 11;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(33, 86);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(96, 13);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Efficiency template";
+            // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(667, 510);
+            this.button7.Location = new System.Drawing.Point(712, 513);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(75, 23);
             this.button7.TabIndex = 9;
@@ -199,7 +226,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(33, 120);
+            this.label5.Location = new System.Drawing.Point(521, 120);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(115, 13);
             this.label5.TabIndex = 7;
@@ -207,7 +234,7 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(667, 114);
+            this.button6.Location = new System.Drawing.Point(712, 115);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(75, 23);
             this.button6.TabIndex = 6;
@@ -217,7 +244,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(667, 49);
+            this.button5.Location = new System.Drawing.Point(712, 51);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 5;
@@ -227,7 +254,7 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(169, 51);
+            this.textBox3.Location = new System.Drawing.Point(190, 53);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(446, 20);
             this.textBox3.TabIndex = 4;
@@ -243,7 +270,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(667, 15);
+            this.button4.Location = new System.Drawing.Point(712, 16);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 2;
@@ -253,7 +280,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(169, 17);
+            this.textBox2.Location = new System.Drawing.Point(190, 18);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(446, 20);
             this.textBox2.TabIndex = 1;
@@ -279,32 +306,6 @@
             // 
             this.openFileDialog3.FileName = "openFileDialog3";
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(33, 86);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(96, 13);
-            this.label6.TabIndex = 10;
-            this.label6.Text = "Efficiency template";
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(169, 83);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(446, 20);
-            this.textBox4.TabIndex = 11;
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(667, 81);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(75, 23);
-            this.button8.TabIndex = 12;
-            this.button8.Text = "Search";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
-            // 
             // openFileDialog4
             // 
             this.openFileDialog4.FileName = "openFileDialog4";
@@ -323,8 +324,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(903, 620);
             this.Controls.Add(this.tabControl1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Export Tool";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
