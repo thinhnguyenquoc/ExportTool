@@ -44,6 +44,8 @@ namespace ExportTool
                     button2.Enabled = true;
                 else
                     button2.Enabled = false;
+                dataGridView1.DataSource = null;
+                button3.Enabled = false;
             }
         }
 
@@ -57,7 +59,7 @@ namespace ExportTool
                 }
                 var numSheet = schedule.NumberOfSheets;
                 programList = new List<MyProgram>();
-                for (int i = 0; i < numSheet; i++)
+                for (int i = numSheet-1; i < numSheet; i++)
                 {
                     ISheet sheet = schedule.GetSheetAt(i);
                     for (int j = 4; j <= sheet.LastRowNum; j++)
@@ -210,6 +212,8 @@ namespace ExportTool
                     button6.Enabled = true;
                 else
                     button6.Enabled = false;
+                dataGridView2.DataSource = null;
+                button7.Enabled = false;
             }
         }
 
@@ -227,6 +231,8 @@ namespace ExportTool
                     button6.Enabled = true;
                 else
                     button6.Enabled = false;
+                dataGridView2.DataSource = null;
+                button7.Enabled = false;
             }
         }
         
@@ -244,6 +250,8 @@ namespace ExportTool
                     button6.Enabled = true;
                 else
                     button6.Enabled = false;
+                dataGridView2.DataSource = null;
+                button7.Enabled = false;
             }
         }
 

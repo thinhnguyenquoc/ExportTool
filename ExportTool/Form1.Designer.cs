@@ -125,9 +125,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(535, 75);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(112, 13);
+            this.label2.Size = new System.Drawing.Size(92, 13);
             this.label2.TabIndex = 11;
-            this.label2.Text = "Generate Quantity File";
+            this.label2.Text = "Load Quantity File";
             // 
             // button2
             // 
@@ -135,7 +135,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 10;
-            this.button2.Text = "Generate";
+            this.button2.Text = "Load";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -228,9 +228,9 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(521, 120);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(115, 13);
+            this.label5.Size = new System.Drawing.Size(95, 13);
             this.label5.TabIndex = 7;
-            this.label5.Text = "Generate efficiency file";
+            this.label5.Text = "Load efficiency file";
             // 
             // button6
             // 
@@ -238,7 +238,7 @@
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(75, 23);
             this.button6.TabIndex = 6;
-            this.button6.Text = "Generate";
+            this.button6.Text = "Load";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
