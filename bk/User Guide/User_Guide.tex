@@ -1,0 +1,441 @@
+\documentclass[11pt]{article}
+\usepackage[english,vietnam]{babel}
+\usepackage[utf8x]{inputenc}
+
+%\usepackage[utf8]{inputenc}
+%\usepackage[francais]{babel}
+\usepackage{a4wide,amssymb,epsfig,latexsym,multicol,array,hhline,fancyhdr}
+\usepackage{lastpage}
+
+\usepackage[lined,boxed,commentsnumbered]{algorithm2e}
+\usepackage{enumerate}
+\usepackage{color}
+\usepackage{graphicx}							% Standard graphics package
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{rotating}
+\usepackage{graphics}
+\usepackage[a4paper,left=2cm,right=2cm,top=1.8cm,bottom=2.8cm]{geometry}
+\usepackage{setspace}
+\usepackage{epsfig}
+\usepackage{tikz}
+\usepackage{listings}
+\usetikzlibrary{arrows,snakes,backgrounds}
+\usepackage{hyperref}
+\hypersetup{urlcolor=blue,linkcolor=black,citecolor=black,colorlinks=true} 
+%\usepackage{pstcol} 								% PSTricks with the standard color package
+
+\newtheorem{theorem}{{\bf Định lý}}
+\newtheorem{property}{{\bf Tính chất}}
+\newtheorem{proposition}{{\bf Mệnh đề}}
+\newtheorem{corollary}[proposition]{{\bf Hệ quả}}
+\newtheorem{lemma}[proposition]{{\bf Bổ đề}}
+
+\definecolor{cm}{rgb}{0.0, 0.5, 0.0}
+\lstdefinelanguage{mipsasm}{
+	keywords={if,else,while,break,continue},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={class, export, boolean, throw, implements, import, this},
+	ndkeywordstyle=\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},	
+	commentstyle=\color{cm}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+\lstset{
+	language=mipsasm,
+	backgroundcolor=\color{white},
+	extendedchars=true,
+	basicstyle=\footnotesize\ttfamily,
+	showstringspaces=false,
+	showspaces=false,
+	numbers=left,
+	numberstyle=\footnotesize,
+	numbersep=9pt,
+	tabsize=2,
+	breaklines=true,
+	showtabs=false,
+	captionpos=b
+}
+
+%%ensembles de nombres
+\def\NP{$\mathcal{NP}$}
+\def\N{\mathbb{N}}
+\def\Z{\mathbb{Z}}
+\def\R{\mathbb{R}}
+\def\Q{\mathbb{Q}}
+
+
+%\usepackage{fancyhdr}
+\setlength{\headheight}{40pt}
+\pagestyle{fancy}
+\fancyhead{} % clear all header fields
+\fancyhead[L]{
+ \begin{tabular}{rl}
+    \begin{picture}(25,15)(0,0)
+    \put(0,-8){\includegraphics[width=8mm, height=8mm]{hcmut.png}}
+    %\put(0,-8){\epsfig{width=10mm,figure=hcmut.eps}}
+   \end{picture}&
+	%\includegraphics[width=8mm, height=8mm]{hcmut.png} & %
+	\begin{tabular}{l}
+		\textbf{\bf \ttfamily Trường Đại Học Bách Khoa Tp.Hồ Chí Minh}\\
+		\textbf{\bf \ttfamily Khoa Khoa Học và Kỹ Thuật Máy Tính}
+	\end{tabular} 	
+ \end{tabular}
+}
+\fancyhead[R]{
+	\begin{tabular}{l}
+		\tiny \bf \\
+		\tiny \bf 
+	\end{tabular}  }
+\fancyfoot{} % clear all footer fields
+\fancyfoot[L]{\scriptsize \ttfamily Bài tập lớn môn Giải thuật nâng cao -- Niên khóa 2014-2015}
+\fancyfoot[R]{\scriptsize \ttfamily Trang {\thepage}/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0.3pt}
+
+
+\begin{document}
+\begin{titlepage}
+\begin{flushleft}
+\noindent Trường Đại Học Bách Khoa Tp. Hồ Chí Minh\\
+Khoa Khoa Học \& Kỹ Thuật Máy Tính\\
+\end{flushleft}
+
+\vspace{1cm}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=3cm]{hcmut.png}
+\end{center}
+\end{figure}
+
+\vspace{1cm}
+
+
+\begin{center}
+\begin{tabular}{c}
+\multicolumn{1}{l}{\textbf{{\Large GIẢI THUẬT NÂNG CAO}}}\\
+~~\\
+\hline
+\\
+\multicolumn{1}{l}{\textbf{{\Large Bài tập lớn}}}\\
+\\
+\textbf{{\Huge Tối thiểu hóa chi phí bốc xếp}}\\
+\textbf{{\Huge cho hệ thống khai thác cảng container}}\\
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{3cm}
+
+\vspace{3cm}
+
+\begin{minipage}[t]{0.60\linewidth}
+	CBGD:\\
+	TS. Huỳnh Tường Nguyên
+\end{minipage}
+\begin{minipage}[t]{0.40\linewidth}
+	Nhóm 6:\\
+	Hồ Quang Chi Bảo - 7140219\\ 
+	Nguyễn Quốc Thịnh - 7140027\\
+	Trần Ngọc Thịnh - 7140259\\
+	Nguyễn Đức Đình Nghĩa - 7140248\\
+	Trịnh Thị Hồng Nhung - 7140672
+\end{minipage}
+\begin{center}
+Phiên bản 2.0
+\end{center}
+\end{titlepage}
+
+\newpage
+
+\tableofcontents %summary insertion
+
+\newpage
+
+\title{Scheduling in port container terminals \\
+Tối thiểu hóa chi phí bốc xếp cho hệ thống khai thác cảng container}
+% author names and affiliations
+% use a multiple column layout for up to three different
+% affiliations
+\author{$\ldots$, Nguyen HUYNH TUONG\\
+Faculty of Computer Science \& Engineering, \\ Ho Chi Minh city University of Technology, Vietnam\\
+268 Lý Thường Kiệt, Hồ Chí Minh, Viet Nam\\
+htnguyen@cse.hcmut.edu.vn}
+% make the title area
+\maketitle
+
+
+
+\begin{abstract}
+%\boldmath
+%The abstract goes here.
+\noindent 
+
+
+\end{abstract}
+
+\small
+\noindent {\bf Keywords:} transportation management. 
+
+\vspace*{1cm}
+
+
+
+%%%%%%%%%%%%%%
+\section{\texorpdfstring{Giới thiệu}{Introduction}}
+
+$\indent$Container (sau đây được gọi tắt là cont) ra đời đã làm thay đổi nhiều lĩnh vực trong vận chuyển hàng hóa và nó đã và đang dành vị trí quan trọng trong hệ thống vận tải phục vụ nền kinh tế quốc dân và thương mại quốc tế. 
+Mục tiêu hoàn thiện quy trình khai thác container tại các Cảng biển là nâng cao hiệu quả hoạt động của quy trình khai thác container, giúp doanh nghiệp giảm chi phí bốc xếp nhằm đứng vững hơn trong cuộc cạnh tranh gay gắt của nền kinh tế thị trường.
+
+Khai thác container bao gồm nhiều quy trình tương ứng với các chi phí khác nhau mà đòi hỏi nhà quản trị phải hoạch định và giảm thiểu thông qua nhiều giải pháp. Đã có nhiều nghiên cứu trước đây quan tâm đến vấn đề giảm thiểu chi phí bốc xếp, vận chuyển container ở các cảng biển bằng việc lập lịch hoạt động cho các loại cẩu tàu, cẩu bãi, xe tải trung gian, kho bãi,... Tuy nhiên, đây vẫn còn là một mảng nghiên cứu lớn cần được tập trung phát triển và hoàn thiện hơn nữa nhằm tối thiểu hóa tối đa chi phí khai thác trong ngành công nghiệp tỷ đô này. Trong các quy trình khai thác container ở cảng biển, thì việc bốc xếp container từ tàu vào bãi lưu trữ và từ bãi xuất cho khách hàng là một quy trình con chiếm một lượng chi phí đáng kể. Và chi phí này có thể được tối thiểu nếu ta có một lịch biểu bốc xếp các container từ tàu vào bãi ở thời điểm và vị trí phù hợp. 
+
+%Đây cũng là hướng nghiên cứu chính của luận văn này với mục tiêu tìm ra thuật toán phù hợp để giải bài toán trong thực tế.
+
+%%%%%%%%%%%%%%
+\subsection{\texorpdfstring{Động cơ nghiên cứu}{Motivation}}
+\label{motivation}
+
+$\indent$Với mục đích giải quyết vấn đề giảm thiểu chi phí bốc xếp container trong quy trình nhập container từ tàu, lưu bãi và xuất container giao cho khách hàng, công việc nghiên cứu hướng đến 
+giải pháp khả thi cho bài toán và nghiên cứu, thiết kế giải thuật dựa trên heuristic để tăng hiệu quả trong việc giải quyết bài toán. 
+Một số vấn đề cần giải quyết như sau:
+\begin{itemize}
+\item Xác định và chứng minh độ phức tạp của bài toán.
+\item Thiết lập mô hình toán học cho bài toán.
+\item Dùng solver để tìm lời giải cho bài toán dựa trên mô hình toán học đề xuất ở trên.
+\item Đề xuất thuật toán heuristic để giải bài toán phù hợp với yêu cầu thực tế.
+\end{itemize}
+
+
+Bài nghiên cứu này được tổ chức như sau. Phần \ref{statement} sẽ định nghĩa lại bài toán một cách hình thức . 
+Kế đến, phần \ref{survey} sẽ trình bày về các công trình nghiên cứu có liên quan đến bài toán được nghiên cứu.
+Phần \ref{inout} sẽ đặc tả định dạng dữ liệu đầu vào và kết quả xuất ra.
+Phần \ref{result} sẽ đánh giá lại kết quả thu được dựa trên giải pháp được đề xuất.
+Nhiệm vụ của mỗi nhóm và các thông tin liên quan được trình bày trong phần \ref{mission}.
+Và cuối cùng, đánh giá tổng kết sẽ được trình bày trong phần \ref{conclusion}.
+
+
+
+
+
+%%%%%%%%%%%%%%
+\subsection{\texorpdfstring{Các nghiên cứu liên quan}{Related works}}
+\label{relatedworks}
+
+% C.Bierwirth, F. Meisel, A survey of berth allocation and quay crane scheduling problems in containers terminals
+\begin{itemize}
+	\item Berth allocation problem (BAP): assignment of quay space and service time to vessels that have to be unloaded and loaded at a terminal.
+	\item Quay crane assignement problem and quay crane scheduling problem: assignment of the quay cranes to vessels and determination of work plans for the cranes addresses when the transshipment of containers between a vessel and the quay is generally performed by specialized cranes, which are mounted on rail tracks alongside the quay. The solutions to these problems must respect the berth layout and the used equipement, whereas they impact the yard operations and the workforce planning.
+	\item
+\end{itemize}
+
+
+%%%%%%%%%%%%%%
+\subsection{\texorpdfstring{Mô tả bài toán}{Problem description}}
+\label{statement}
+
+$\indent$Trong phần này, chúng ta xem xét một bài toán bốc xếp container cụ thể với thông tin biết trước về vị trí các container trên tàu cần lưu trữ trên cảng và thời điểm mà các container này rời khỏi bãi lưu trữ xuất cho khách hàng. Ngữ cảnh thực tế như sau:
+\begin{itemize}
+\item Vị trí các container cần lưu trữ trên cảng được tàu cung cấp trước khi tàu cập cảng. Thời điểm mà các container này rời khỏi bãi được khách hàng cung cấp trước khi tiến hành bốc xếp. Bãi (nơi lưu trữ container của cảng) phải có sức chứa lớn hơn hoặc bằng số container trên con tàu cần cập cảng. Các container  được dỡ trên tàu theo thứ tự từ trên xuống dưới (container nằm trên thì lấy trước). Các container được đặt lên bãi lưu trữ tại vị trí thấp nhất đến cao nhất (xếp chồng lên nhau, gọi là các tier). Các contaner trên bãi được giao cho khách hàng cũng phải được bốc theo thứ tự từ trên xuống dưới (do xếp chồng lên nhau nên phải lấy container ở trên trước), nếu container cần giao cho khách hàng được nằm ở vị trí bên dưới một hoặc nhiều container khác thì các container đó phải được bốc ra vùng tạm để lấy container cần thiết giao cho khách hàng (gọi là đảo chuyển), chi phí này do cảng chịu.
+\item Mục tiêu của bài toán là tìm phương án xếp cont từ tàu lên bãi sao cho tổng chi phí bốc từ tàu và chi phí xuất bãi là nhỏ nhất (hạn chế đảo chuyển).
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=8cm]{Yardcrane.png}
+\end{center}
+\caption{Minh họa quy trình bốc xếp container ở cảng biển}
+\end{figure}
+\end{itemize}
+
+%%%%%%%%%%%%%%
+\subsection{\texorpdfstring{Các ràng buộc chính}{Constraints}} 
+Với mục đích tìm phương án xếp cont từ tàu lên bãi sao cho tổng chi phí bốc từ tàu và chi phí xuất bãi là nhỏ nhất, bài toán được cụ thể như sau: 
+\begin{itemize}
+\item Khi bốc cont trên tàu để xếp lên bãi chính phải đảm bảo không dùng vùng tạm (hoặc dùng là ít nhất).
+\begin{itemize}
+\item Bãi chính phải có sức chứa lớn hơn hoặc bằng số lượng các cont cần bốc từ tàu và được ký hiệu theo chuẩn block-bay-row-tier.
+\item Vùng tạm có một tier duy nhất.
+\end{itemize}
+\item Thứ tự sắp xếp trên bãi chính phải đảm bảo khi khách hàng vào lấy cont thì không phải đảo chuyển(hoặc đảo chuyển ít nhất).
+\item Chi phí bốc xếp được xác định dựa trên số lần di chuyển cont từ vị trí này sang vị trí khác (tàu, vùng tạm, bãi chính).
+\end{itemize} 
+
+
+%%%%%%%%%%%%%%
+\section{\texorpdfstring{Các công trình nghiên cứu liên quan}{State-of-the-art}}\label{survey}
+
+$\indent$Ngày nay, lưu lượng trao đổi hàng hóa giữa các quốc gia, giữa các vùng miền ngày càng tăng theo nhu cầu phát triển của xã hội. Trong đó, ngành Logictics được biết đến như một ngành quan trọng trong lĩnh vực hàng hải trên thế giới. Đơn vị lao động trực tiếp trong lĩnh vực này là các cảng biển được đóng tại khắp nơi dọc theo bờ biển của các nước. Việc ra đời của container và các cảng biển hiện nay tao nhiều cơ hội cũng như đặt ra các thách thức cho hệ thống cảng biển. Trong đó, cạnh tranh về chi phí thực hiện dịch vụ luôn là vấn đề được quan tâm hàng đầu của các cảng biển. Theo đó, các giải thuật tối ưu thời gian làm việc của các thiết bị nhằm giảm chi phí nhiên liệu, nhân công và chi phí quản lý đã, đang và sẽ được phát triển ngày một hoàn thiện.
+
+
+Cần cẩu bãi là những thiết bị xếp dỡ container phổ biến nhất để bốc dỡ container lên hoặc xuống xe tải trong bãi container với diện tích đất có hạn của cảng. Tuy nhiên , thiết bị này rất cồng kềnh và thường xuyên gây ra tình trạng thắt cổ chai trong luồng di chuyển các container do thao tác chậm chạp của nó. Do đó, nảy sinh nhu cầu cấp thiết để phát triển một lịch làm việc tốt nhất cho các cần cẩu bãi này nhằm nâng cao năng suất thông bãi.
+W.C. Ng và K.L. Mak trong \cite{Ng:Mak:2003} nghiên cứu vấn đề lập kế hoạch cho một cẩu bãi để thực hiện một tập hợp các theo tác nâng/hạ container với thời gian sẵn sàng khác nhau. Mục tiêu là để giảm thiểu tổng số thời gian đợi giữa các công việc này.
+Tác giả đề xuất giải thuật nhánh và cận để giải quyết vấn đề lập kế hoạch cho cẩu bãi thỏa mãn yêu cầu giảm thiểu thời gian chờ giữa các công việc.
+Vấn đề lập kế hoạch cho cẩu bãi để xử lý tất cả các công việc với thời gian sẵn sàng khác nhau trong bãi container được xây dựng bằng mô hình quy hoạch nguyên. 
+Mục tiêu của việc vập kế hoạch cho cẩu bãi (YCS) là để giảm thiểu số thời gian chờ các công việc. 
+Nhằm mục đích làm cho giải thuật nhánh và cận hiệu quả hơn, tác giả đề xuất một heuristic bằng cách chỉnh sửa thủ tục tìm cận dưới (Lower Bound), tính toán thời gian của mỗi công việc tới tổng thời gian hoàn thành và tìm trình tự cục bộ với tổng thời gian riêng này nhỏ nhất. 
+Hiệu quả của thuật toán được đánh giá bởi một tập kiểm tra được tạo ra dựa trên dữ liệu thực tế.
+Kết quả cho thấy rằng thuật toán có thể tìm thấy các trình tự tối ưu cho vấn đề đặt ra với  kích thước dữ liệu thực tế.\\
+
+
+
+Lập lịch xe tải trên sân và phân bổ lưu trữ là hai bài toán ra quyết định quan trọng ảnh hưởng đến hiệu quả hoạt động cảng container. 
+Đây cũng là một vấn đề nan giải nổi tiếng trong hoạt động cảng container. 
+Tầm quan trọng của việc tích hợp hai vấn đề đã được chỉ ra bởi Bish và các cộng sự (2001) \cite{Bish:al:2001}.
+Nhóm tác giả, Der-Horng Lee và các cộng sự trong \cite{Lee:al:2009}, đề xuất một phương pháp mới, gọi là HIA, tích hợp hai vấn đề này thành một vấn đề tổng thể. 
+Mục tiêu là để giảm thiểu tổng có trọng số của toàn bộ gian trễ của các yêu cầu và tổng thời gian đi lại của xe tải trên sân. 
+Vì tính chất khó kiểm soát của bài toán đề ra, một thuật toán lai chèn (hyprid insertion) được thiết kế cho lời giải hiệu quả của bài toán. 
+Giải thuật lai chèn này là sự kết hợp giữa phương pháp heuristic chèn (insertion heuristic)và thuật toán đấu giá (auction algorithm), trong đó các tham số có trọng số được chọn tương ứng với các yêu cầu của người ra quyết định.
+Tác giả đã giả sử rằng số xe tải là có giới hạn. 
+Mục tiêu của bài toán là tối thiểu tổng trọng số của tổng thời gian chờ và chi phí tổng thời gian di chuyển. 
+Trước khi phát triển giải thuật heuristic, nhóm tác giả giới thiệu một mô hình cho việc phân bổ lưu trữ trong đó hàm mục tiêu và tham số là chi phí phân bổ container trong một đường đi riêng phần hiện tại. Một đường đi riêng phần hiện tại chỉ bao gồm một phần các request trong xử lý heuristic. Trong phần xử lý này, chỉ có các container nhập được quan tâm vì chi phí tải container được xác định trước bởi các gốc và các đích, có nghĩa là nó sẽ không bị ảnh hưởng bởi vấn đề phân bổ vị trí lưu trữ. Một khi các đường đi riêng phần được xác định, chi phí có thể được tính toán và quan tâm như một tham số.
+Tác giả định nghĩa "Lưu trữ tối ưu tiềm năng" (Potentially Optimal Storage - POS) cho một \textit{discharging request} trong đường đi riêng phần. POS của đường đi riêng phần là vị trí lưu trữ cho mỗi container nhập được xác định. 
+Tác giả gọi là "tiềm năng" vì nó dùng để chọn việc chèn tốt nhất thay vì xác định vị trí cuối cùng của container nhập. 
+Trong giải thuật chèn lai, một thao tác chèn được ký hiệu bằng ($j,r,i$) có nghĩa là "chèn Request $j$ vào đường đi $r$ tại nơi thứ i", Đường đi $r$ là đại diện cho tập các thao tác có thứ tự. Trong mỗi việc chèn, tác giả đánh giá chi phí theo cơ cấu chi phí. Tại mỗi lần lặp, tác giả chọn ra một thao tác chèn tối ưu và cập nhật đường đi với việc chèn tối ưu đó. 
+Mặc dù HIA đạt gần giải pháp tối ưu cho bài toán này, nó còn có thể giải quyết vấn đề kích thước thực tế trực tuyến cho cả bốc dỡ hàng. Phương pháp đề xuất của tác giả cung cấp một ý tưởng mới lạ để xử lý các vấn đề cũng như vấn đề tối ưu hóa khác trong các hoạt động cảng container. Trong nghiên cứu tương lai, sự phát triển của các thuật toán giải pháp tốt hơn sẽ vẫn là một sự nhấn mạnh vào việc nghiên cứu tích hợp mô hình tối ưu hóa trong các hoạt động cảng container.
+
+%%%%%%%%%%%%%%
+\section{\texorpdfstring{Kết quả sơ khởi}{Preliminary}}\label{prel}
+
+\subsection{\texorpdfstring{Các tính chất của giải pháp tối ưu}{Property}}\label{properties}
+%\input{preli.tex}
+
+%%%%%%%%%%%%%%
+\subsection{\texorpdfstring{Độ khó của bài toán}{NP-hardness}}\label{NP}
+%\input{nphard}
+
+%%%%%%%%%%%%%%
+\subsection{\texorpdfstring{Các trường hợp đặc biệt}{Special cases}}\label{specialCases}
+%\input{specialCases}
+
+%%%%%%%%%%%%%%
+\subsection{\texorpdfstring{Thuật giải đề xuất}{Proposed algorithm}}\label{algo}
+$\indent$ Để đơn giản hóa bài toán chúng tôi chỉ xét các container nằm trên một mặt cắt của tàu. Việc đơn giản hóa này không làm thay đổi độ phức tạp của thuật toán đề xuất bởi vì số mặt cắt là hữu hạn và khi ta áp dụng giải thuật trên từng mặt cắt thì độ phức tạp của toàn bộ giải pháp không tăng đáng kể.\\
+$\indent$Ta gọi:
+\begin{itemize}
+	\item $N$ : tổng số container cần bốc dỡ trên mặt cắt đang xét.
+	\item $C_k$: với $k=1..N$ là chỉ số của container $C$. Chỉ số này xác định độ ưu tiên mà khách hàng cần lấy ra khỏi bãi chính sau khi đã sắp xếp.
+	\item $P_i$ : là số container có thể bốc dỡ tại lần thứ $i$.
+	\item $T_i$: là số container đang có trong bãi tạm tại lần bốc dỡ thứ $i$.
+	\item $S$: số container tối đa của một cột trong bãi chính, ta gọi là chiều cao của bãi chính.
+\end{itemize}
+Từ bộ tham số đầu vào, chúng tôi đề xuất 2 giải thuật như sau:
+\subsubsection{\texorpdfstring{Giải thuật ngây thơ}{Naive Algorithms}}\label{algo:naive}
+\input{BH_NaiveAlgo.tex}
+\subsubsection{\texorpdfstring{Giải thuật heuristic}{Heuristic Algorithms}}\label{algo:heuris}
+\input{BH_HeurisAlgo.tex}
+%%%%%%%%%%%%%%
+\subsection{\texorpdfstring{Ví dụ 1}{Example 1}}\label{input1}
+\subsubsection{\texorpdfstring{Dữ liệu đầu vào}{Input format}}\label{input}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline 4 & & 9 & 3 & & \\
+\hline  & & 2 & & 11 & 6 \\
+\hline  & 1 &  & 12 & 5 & \\
+\hline 8 & &  & 7 & & \\
+\hline  & 10 & & & & \\ \hline
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%
+\subsubsection{\texorpdfstring{Xuất kết quả}{Output format}}\label{output}
+
+$\indent$Chúng ta sẽ biểu diễn kết quả tại kho và trạng thái của bãi trung chuyển bằng 1 bảng được đánh chỉ số cột từ 0, 1, ...
+Trong đó, cột 0 tương ứng với bãi trung chuyển.
+Từ cột 1 trờ đi sẽ dùng để lưu trạng thái của kho chứa.
+
+Do vậy, từ cột 1 trở về sau, điều kiện cần để có kết quả hợp lệ là các số ở dưới phải lớn hơn số ở trên trong cùng một cột.
+Riêng cột 0 thì chỉ để lưu các cont đã phải thực hiện thao tác đổi chuyển nhiều lần (có cần dùng bãi trung chuyển). 
+Điều này có nghĩa là cột 0 không có ràng buộc quan hệ trên dưới của các cont như các cột khác.
+Hàm chi phí có thể được tính nhanh bởi tổng của số cont cần bỏ vào kho chứa và số cont xuất hiện ở bãi trung chuyển.
+
+Với ví dụ đơn giản này, chúng ta có thể tự tính toán thử.\\ 
+Một kết quả tối ưu có thể tìm thấy với chi phí là 12.\\
+Giải pháp là: $\{(9,1), (3,1), (1,1), (11,2), (6,2), (2,2), (12,3), (5,3), (4,3), (10,4), (8,4), (7,4)\}$.
+Kết quả tại kho sẽ có dạng:
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline & 1 & 2 & 4 & 7 \\
+\hline & 3 & 6 & 5 & 8 \\
+\hline & 9 & 11 & 12 & 10 \\
+\hline [0] & [1] & [2] & [3] & [4]
+\end{tabular}
+\end{center}
+Chi phí được xét cho giải pháp này là: 12.
+
+Hoặc một giải pháp khác là: $\{(11,1), (9,2), (3,1), (12,3), (4,2), (1,2), (10,4), (8,3), (7,4), (6,3), (5,4), (2,1)\}$.
+Giải pháp này cũng có cùng chi phí như giải pháp trước.
+Kết quả tại kho lúc này sẽ có dạng:
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline & 2 & 1 & 6 & 5 \\
+\hline & 3 & 4 & 8 & 7 \\
+\hline & 11 & 9 & 12 & 10 \\
+\hline [0] & [1] & [2] & [3] & [4]
+\end{tabular}
+\end{center}
+
+Trong trường hợp:
+
+Kết quả sẽ là:
+
+%%%%%%%%%%%%%%
+\subsection{\texorpdfstring{Giải pháp đề xuất}{Proposed approach}}\label{algoPropos}
+
+%{\color{blue} Phần đóng góp của các nhóm ở đây.}
+
+%%%%%%%%%%%%%%
+\section{\texorpdfstring{Kết quả}{Experimental results}}\label{result}
+
+
+%%%%%%%%%%%%%%
+\subsection{\texorpdfstring{Yêu cầu công việc}{Requirement}}\label{mission}
+
+Mỗi nhóm, từ 3 đến 5 sinh viên, đề xuất giải pháp để giải bài toán trên. 
+Nhóm cần nộp báo cáo trình bày về thuật giải đề xuất và kết quả thực nghiệm. Đồng thời, nhóm cũng cần nộp source code, và trình bày công trình của mình trong khoảng 15 minutes.
+Báo cáo và slide trình bày cần được viết dưới dạng LaTeX.  
+\textbf{Hạn chót nộp báo cáo và sản phẩm demo: 20/11/2014}.
+
+Kết quả điểm sẽ được sắp thứ tự theo nhóm từ trên xuống thông qua sự so sánh kết quả giữa các nhóm với nhau về chất lượng của giải pháp đề ra và thời gian cần tính toán
+
+Một vài lưu ý về điểm thưởng cộng 0.5 điểm vào kỳ thi cuối kỳ cho mỗi sinh viên trong:
+\begin{enumerate}
+	 \item nhóm có đóng góp nhiều nhất và nổi bật cho việc phát hiện các đặc tính/tính chất của giải pháp tối ưu;
+		\item nhóm trình bày về ``\textit{state-of-the-art}'' chi tiết và rõ ràng nhất;
+		\item nhóm viết báo cáo tốt nhất;
+		\item nhóm trình bày tốt nhất.
+\end{enumerate}
+
+%%%%%%%%%%%%%%
+\subsection{\texorpdfstring{Đánh giá kết quả}{Evaluation}}\label{eval}
+
+Nếu có nhóm giành được nhiều giải tốt nhất, điểm thưởng sẽ được tích lũy cho các bạn tham gia trong nhóm.
+
+Yêu cầu thuật toán cần xử lý tối đa là \textbf{5 phút}, cho mỗi trường hợp cụ thể của bài toán.
+Dữ liệu kiểm thử sẽ được tạo ngẫu nhiên, mỗi mẫu sẽ có :
+
+\begin{itemize}
+	\item blah blah blah;
+	\item blah blah blah;
+	\item blah blah blah.
+\end{itemize}
+
+
+%%%%%%%%%%%%%%
+\section{\texorpdfstring{Kết luận}{Conclusion}}\label{conclusion}
+
+Đây là một bài toán ví dụ trong số các bài toán tối ưu chung quanh chúng ta.
+nếu chúng ta có thể xác định được các bài toán này, và đề xuất được các thuật giải/giải pháp tìm ra đáp án tốt cho bài toán, điều này sẽ giúp cho các công việc hàng ngày của chúng ta sẽ được thực hiện trôi chảy và hiệu quả hơn.
+Hy vọng thông qua việc tìm hiểu và giải bài toán này, chúng ta sẽ hiểu hơn về các thuật toán ứng dụng trong công nghiệp cũng như trong các bài thực tế quanh ta; và hy vọng trong một tương lai gần, các ban có cơ hội và có thể đề xuất các giải pháp tốt cho các bài toán hỗ trợ ra quyết định. 
+Chúc các bạn thành công.
+
+\include{bibliography}
+\end{document}
+
+
