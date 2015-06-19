@@ -21,5 +21,17 @@ namespace AZReport.Services
             var result = _iStoredProcedureRepository.GetProductivity(start, end);
             return result;
         }
+
+        public List<ReportViewModel> GetQuantity(DateTime start, DateTime end)
+        {
+            var result = _iStoredProcedureRepository.GetQuantity(start, end);
+            return result;
+        }
+
+        public List<ReportViewModel> GetFreq(DateTime start, DateTime end)
+        {
+            var result = _iStoredProcedureRepository.GetFreq(start, end);
+            return result;
+        }
     }
 }

@@ -9,5 +9,7 @@ namespace AZReport.Services.IServices
     public interface IReportService
     {
         List<ProductivityViewModel> GetProductivity(DateTime start, DateTime end);
+        List<ReportViewModel> GetQuantity(DateTime start, DateTime end);
+        List<ReportViewModel> GetFreq(DateTime start, DateTime end);
     }
 }

@@ -25,6 +25,8 @@ namespace AZReport
         IReportService _iReportService;
         DateTime start;
         DateTime end;
+        DateTime reportStart;
+        DateTime reportEnd;
         IFormatProvider culture;
 
         public Form1(IProgramService iProgramService, IScheduleService iScheduleService, ISaleService iSaleService, IReportService iReportService)
@@ -37,6 +39,8 @@ namespace AZReport
             var all = _iProgramService.GetAll().ToList();
             start = DateTime.Today;
             end = DateTime.Today;
+            reportStart = DateTime.Today;
+            reportEnd = DateTime.Today;
             culture = new System.Globalization.CultureInfo("fr-FR", true);
         }
 
@@ -452,15 +456,132 @@ namespace AZReport
                             sale.Date = DateTime.Parse(proSheet.GetRow(2).GetCell(k).StringCellValue.ToString(), culture, System.Globalization.DateTimeStyles.AssumeLocal);
                             _iSaleService.CheckAndUpdate(sale);
                             _iSaleService.Save();
-                        }
+                        }                        
                     }
+                    
                 }
             }
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
+            saveFileDialog2.Filter = "Excel|*.xls;*.xlsx";
+            saveFileDialog2.FileName = "AZ_Efficiency_" + reportStart.ToString("dd_MM_yyyy");
+            saveFileDialog2.DefaultExt = "xlsx";
+            saveFileDialog2.ShowDialog();
+        }
 
+        private void saveFileDialog2_FileOk(object sender, CancelEventArgs e)
+        {
+            string name = saveFileDialog2.FileName;
+            var wb = new XSSFWorkbook();
+            using (FileStream stream = new FileStream(@"E:\AZReport\TemplateEfficiency.xlsx", FileMode.Open, FileAccess.Read))
+            {
+                wb = new XSSFWorkbook(stream);
+                stream.Close();
+            }
+            ISheet sheet = wb.GetSheetAt(1);
+            createItemList(sheet, reportStart, reportEnd, wb);
+            using (FileStream stream = new FileStream(name, FileMode.Create, FileAccess.Write))
+            {
+                wb.Write(stream);
+                stream.Close();
+            }
+        }
+
+        private void createItemList(ISheet sheet, DateTime startDay, DateTime endDay, IWorkbook wb)
+        {
+            ICell topCel3 = sheet.GetRow(0).GetCell(3);
+            topCel3.SetCellValue(startDay.ToString("dd/MM/yyyy") + " - " + endDay.ToString("dd/MM/yyyy"));
+
+            var startDayTem = new DateTime(startDay.Year, startDay.Month, startDay.Day, 0, 0, 0);            
+            IRow dayHeaderList = sheet.GetRow(1);
+            for (int m = 0; m < 11; m++)
+            {
+                ICell dayHeader = dayHeaderList.GetCell(8 + m);
+                dayHeader.SetCellValue(startDayTem.ToString("ddd"));
+                startDayTem = startDayTem.AddDays(1);
+            }
+            var result = _iReportService.GetProductivity(new DateTime(startDay.Year, startDay.Month, startDay.Day, 0, 0, 0), new DateTime(endDay.Year, endDay.Month, endDay.Day, 23, 59, 59));
+            var quantityList = _iReportService.GetQuantity(new DateTime(startDay.Year, startDay.Month, startDay.Day, 0, 0, 0), new DateTime(endDay.Year, endDay.Month, endDay.Day, 23, 59, 59));
+            var freqList = _iReportService.GetFreq(new DateTime(startDay.Year, startDay.Month, startDay.Day, 0, 0, 0), new DateTime(endDay.Year, endDay.Month, endDay.Day, 23, 59, 59));
+            IRow row2 = sheet.GetRow(1);
+            int rowIndex = 2;
+            foreach (var item in result)
+            {
+                DateTime time = Convert.ToDateTime(item.Duration);
+                if (time.Minute > 4)
+                {
+                    IRow rowEff = sheet.GetRow(rowIndex);
+                    ICell eff_cell0 = rowEff.GetCell(0);
+                    eff_cell0.SetCellValue(rowIndex - 1);
+                    ICell eff_cell1 = rowEff.GetCell(1);
+                    eff_cell1.SetCellValue(item.Code);
+                    ICell eff_cell2 = rowEff.GetCell(2);
+                    eff_cell2.SetCellValue(item.Name);
+                    ICell eff_cell4 = rowEff.GetCell(4);
+
+                    eff_cell4.SetCellValue(time.Minute+ time.Second/60.0);
+                    ICell eff_cell5 = rowEff.GetCell(5);
+                    eff_cell5.SetCellValue(item.Category);
+                    ICell eff_cell6 = rowEff.GetCell(6);
+                    eff_cell6.SetCellValue(item.Price);                   
+
+                    var tempDate = startDay;
+                    int l = 1;
+                    while (tempDate <= endDay)
+                    {
+                        ICell eff_cellweek = rowEff.GetCell(7 + l);
+                        eff_cellweek.SetCellValue(freqList.Where(x=>x.Code == item.Code && x.Date == new DateTime(startDay.Year, startDay.Month, startDay.Day, 0, 0, 0)).FirstOrDefault().Freq);
+                        tempDate = tempDate.AddDays(1);
+                        l++;
+                    }
+
+                    int q = (int)quantityList.Where(x => x.Code == item.Code).FirstOrDefault().Quantity;
+                    ICell eff_cell10 = rowEff.CreateCell(27);
+                    eff_cell10.SetCellValue(q);
+                    ICell eff_cell11 = rowEff.CreateCell(28);
+                    var amount = q * Convert.ToInt32(item.Price);
+                    eff_cell11.SetCellValue(amount);
+                    ICell eff_cell12 = rowEff.CreateCell(29);
+                    var totalTime = freqList.Where(x => x.Code == item.Code).Sum(x => x.Freq) * (time.Minute + time.Second / 60.0);
+                    eff_cell12.SetCellValue(totalTime);
+
+                    ICell eff_cell7 = rowEff.GetCell(7);
+                    eff_cell7.SetCellValue(amount/totalTime);
+
+                    ICell eff_cell13 = rowEff.CreateCell(3);
+                    eff_cell13.SetCellValue(calculateGroup(amount / totalTime));
+                    rowIndex++;
+                }              
+            }
+
+            //for (int l = 0; l < row2.LastCellNum; l++)
+            //{
+            //    sheet.AutoSizeColumn(l);
+            //}
+        }
+
+        private void dateTimePicker3_ValueChanged(object sender, EventArgs e)
+        {
+            reportStart = dateTimePicker3.Value;
+        }
+
+        private void dateTimePicker4_ValueChanged(object sender, EventArgs e)
+        {
+            reportEnd = dateTimePicker4.Value;
+        }
+
+        private string calculateGroup(double eff)
+        {
+            if (eff >= 200000)
+                return "A";
+            else if (eff >= 100000 && eff < 200000)
+                return "B";
+            else if (eff != 0)
+                return "C";
+            else
+                return "";
         }
     }
 

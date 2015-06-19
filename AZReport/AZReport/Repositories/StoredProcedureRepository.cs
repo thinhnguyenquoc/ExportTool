@@ -34,10 +34,39 @@ namespace AZReport.Repositories
             return courseList;
         }
 
-        public List<ReportViewModel> GetReport(DateTime start, DateTime end)
+        public List<ReportViewModel> GetQuantity(DateTime start, DateTime end)
         {
-            return null;
+            var startTime = new SqlParameter
+            {
+                ParameterName = "param1",
+                Value = start.ToString()
+            };
+            var endTime = new SqlParameter
+            {
+                ParameterName = "param2",
+                Value = end.ToString()
+            };
+            var courseList = _context.Database.SqlQuery<ReportViewModel>("GetTotalQuantity @param1, @param2 ", startTime, endTime).ToList<ReportViewModel>();
+
+            return courseList;
         }
-            
+
+        public List<ReportViewModel> GetFreq(DateTime start, DateTime end)
+        {
+            var startTime = new SqlParameter
+            {
+                ParameterName = "param1",
+                Value = start.ToString()
+            };
+            var endTime = new SqlParameter
+            {
+                ParameterName = "param2",
+                Value = end.ToString()
+            };
+            var courseList = _context.Database.SqlQuery<ReportViewModel>("GetTotalFrequency @param1, @param2 ", startTime, endTime).ToList<ReportViewModel>();
+
+            return courseList;
+        }
+              
     }
 }

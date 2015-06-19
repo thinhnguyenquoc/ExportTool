@@ -21,3 +21,26 @@ C:\Users\thinh\Documents\Visual Studio 2012\Projects\AZReport\AZReport\obj\Debug
 C:\Users\thinh\Documents\Visual Studio 2012\Projects\AZReport\AZReport\obj\Debug\AZReport.csproj.GenerateResource.Cache
 C:\Users\thinh\Documents\Visual Studio 2012\Projects\AZReport\AZReport\obj\Debug\AZReport.exe
 C:\Users\thinh\Documents\Visual Studio 2012\Projects\AZReport\AZReport\obj\Debug\AZReport.pdb
+E:\AZReport\AZReport\bin\Debug\AZReport.exe.config
+E:\AZReport\AZReport\obj\Debug\AZReport.exe
+E:\AZReport\AZReport\obj\Debug\AZReport.pdb
+E:\AZReport\AZReport\bin\Debug\AZDb.mdf
+E:\AZReport\AZReport\bin\Debug\AZDb_log.ldf
+E:\AZReport\AZReport\bin\Debug\AZReport.exe
+E:\AZReport\AZReport\bin\Debug\AZReport.pdb
+E:\AZReport\AZReport\bin\Debug\EntityFramework.dll
+E:\AZReport\AZReport\bin\Debug\ICSharpCode.SharpZipLib.dll
+E:\AZReport\AZReport\bin\Debug\Ninject.dll
+E:\AZReport\AZReport\bin\Debug\NPOI.dll
+E:\AZReport\AZReport\bin\Debug\NPOI.OOXML.dll
+E:\AZReport\AZReport\bin\Debug\NPOI.OpenXml4Net.dll
+E:\AZReport\AZReport\bin\Debug\NPOI.OpenXmlFormats.dll
+E:\AZReport\AZReport\bin\Debug\EntityFramework.xml
+E:\AZReport\AZReport\bin\Debug\Ninject.xml
+E:\AZReport\AZReport\bin\Debug\NPOI.xml
+E:\AZReport\AZReport\bin\Debug\NPOI.OOXML.xml
+E:\AZReport\AZReport\bin\Debug\NPOI.OpenXml4Net.xml
+E:\AZReport\AZReport\obj\Debug\AZReport.csprojResolveAssemblyReference.cache
+E:\AZReport\AZReport\obj\Debug\AZReport.Form1.resources
+E:\AZReport\AZReport\obj\Debug\AZReport.Properties.Resources.resources
+E:\AZReport\AZReport\obj\Debug\AZReport.csproj.GenerateResource.Cache
