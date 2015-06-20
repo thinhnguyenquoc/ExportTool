@@ -27,5 +27,10 @@ namespace AZReport.Services
             }
             return schedule;
         }
+
+        public List<Schedule> GetByDate(DateTime start, DateTime end)
+        {
+            return _scheduleRepository.FindBy(x => x.Date <= end && x.Date >= start).ToList();
+        }
     }
 }

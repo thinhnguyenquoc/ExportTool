@@ -13,5 +13,6 @@ namespace AZReport.ViewModel
         public string Price { get; set; }
         public string Note { get; set; }
         public string Duration { get; set; }
+        public string Group { get; set; }
     }
 }

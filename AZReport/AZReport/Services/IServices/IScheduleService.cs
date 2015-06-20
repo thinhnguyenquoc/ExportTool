@@ -9,5 +9,6 @@ namespace AZReport.Services.IServices
     public interface IScheduleService : IEntityService<Schedule>
     {
         Schedule CheckAndCreate(Schedule schedule);
+        List<Schedule> GetByDate(DateTime start, DateTime end);
     }
 }

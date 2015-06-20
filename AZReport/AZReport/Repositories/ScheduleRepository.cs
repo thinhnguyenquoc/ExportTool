@@ -18,5 +18,6 @@ namespace AZReport.Repositories
         {
             return _entities.Set<Schedule>().AsEnumerable();
         }
+     
     }
 }

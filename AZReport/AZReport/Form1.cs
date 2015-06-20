@@ -1,5 +1,6 @@
 ﻿using AZReport.Services;
 using AZReport.Services.IServices;
+using AZReport.ViewModel;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -28,6 +29,7 @@ namespace AZReport
         DateTime reportStart;
         DateTime reportEnd;
         IFormatProvider culture;
+        List<ProductivityViewModel> totalResult;
 
         public Form1(IProgramService iProgramService, IScheduleService iScheduleService, ISaleService iSaleService, IReportService iReportService)
         {
@@ -475,13 +477,15 @@ namespace AZReport
         {
             string name = saveFileDialog2.FileName;
             var wb = new XSSFWorkbook();
-            using (FileStream stream = new FileStream(@"E:\AZReport\TemplateEfficiency.xlsx", FileMode.Open, FileAccess.Read))
+            using (FileStream stream = new FileStream(@"H:\AZReport\TemplateEfficiency.xlsx", FileMode.Open, FileAccess.Read))
             {
                 wb = new XSSFWorkbook(stream);
                 stream.Close();
             }
-            ISheet sheet = wb.GetSheetAt(1);
-            createItemList(sheet, reportStart, reportEnd, wb);
+            ISheet itemListSheet = wb.GetSheetAt(1);
+            createItemList(itemListSheet, reportStart, reportEnd);
+            ISheet timeTableSheet = wb.GetSheetAt(0);
+            createTimeTable(timeTableSheet, reportStart, reportEnd);
             using (FileStream stream = new FileStream(name, FileMode.Create, FileAccess.Write))
             {
                 wb.Write(stream);
@@ -489,7 +493,7 @@ namespace AZReport
             }
         }
 
-        private void createItemList(ISheet sheet, DateTime startDay, DateTime endDay, IWorkbook wb)
+        private void createItemList(ISheet sheet, DateTime startDay, DateTime endDay)
         {
             ICell topCel3 = sheet.GetRow(0).GetCell(3);
             topCel3.SetCellValue(startDay.ToString("dd/MM/yyyy") + " - " + endDay.ToString("dd/MM/yyyy"));
@@ -551,7 +555,8 @@ namespace AZReport
                     eff_cell7.SetCellValue(amount/totalTime);
 
                     ICell eff_cell13 = rowEff.CreateCell(3);
-                    eff_cell13.SetCellValue(calculateGroup(amount / totalTime));
+                    item.Group = calculateGroup(amount / totalTime);
+                    eff_cell13.SetCellValue(item.Group);
                     rowIndex++;
                 }              
             }
@@ -560,7 +565,124 @@ namespace AZReport
             //{
             //    sheet.AutoSizeColumn(l);
             //}
+
+            totalResult = result;
         }
+
+        private void createTimeTable(ISheet sheetTime, DateTime startDay, DateTime endDay)
+        {
+            #region header
+            IRow rowTime1 = sheetTime.GetRow(1);
+            IRow rowTime2 = sheetTime.GetRow(2);
+            var tempDate = startDay;
+            for (int p = 1; p < 12; p++)
+            {
+                var startWeek = tempDate.ToString("ddd");
+                var cellWeek1 = rowTime1.GetCell((p - 1) * 6 + 2);
+                var cellWeek2 = rowTime2.GetCell((p - 1) * 6 + 2);
+                cellWeek1.SetCellValue(tempDate.ToString("dd.MM"));
+                cellWeek2.SetCellValue(startWeek.ToUpper());
+                tempDate = tempDate.AddDays(1);
+            }
+            #endregion
+            var scheduleList = _iScheduleService.GetByDate(startDay, endDay);
+            var timeTemp = startDay;
+            int dd = 0;
+            while (timeTemp <= endDay)
+            {
+                var schedulePerDay = scheduleList.Where(x => x.Date.ToShortDateString() == timeTemp.ToShortDateString()).ToList();
+                int index = 4;
+                foreach (var i in schedulePerDay)
+                {                    
+                    var item = totalResult.Where(x=>x.Code==i.Code).FirstOrDefault();
+                    if (Convert.ToDateTime(item.Duration).Minute > 4)
+                    {
+                        IRow rowTime4 = sheetTime.GetRow(index++);
+                        if (rowTime4 == null)
+                        {
+                            rowTime4 = sheetTime.CreateRow(index++);
+                        }
+                        var myCell = rowTime4.GetCell(7 + dd * 6);
+                        if (myCell == null)
+                        {
+                            myCell = rowTime4.CreateCell(7 + dd * 6);
+                        }
+                        myCell.SetCellValue(item.Name);
+                        var myCell2 = rowTime4.GetCell(3 + dd * 6);
+                        if (myCell2 == null)
+                        {
+                            myCell2 = rowTime4.CreateCell(3 + dd * 6);
+                        }
+                        myCell2.SetCellValue(Convert.ToDateTime(item.Duration).Minute);
+                        var myCell4 = rowTime4.GetCell(4 + dd * 6);
+                        if (myCell4 == null)
+                        {
+                            myCell4 = rowTime4.CreateCell(4 + dd * 6);
+                        }
+                        myCell4.SetCellValue(item.Group);
+                        var myCell3 = rowTime4.GetCell(5 + dd * 6);
+                        if (myCell3 == null)
+                        {
+                            myCell3 = rowTime4.CreateCell(5 + dd * 6);
+                        }
+                        myCell3.SetCellValue(item.Category);
+                        var myCell5 = rowTime4.GetCell(2 + dd * 6);
+                        if (myCell5 == null)
+                        {
+                            myCell5 = rowTime4.CreateCell(2 + dd * 6);
+                        }
+                        myCell5.SetCellValue(i.Date.ToShortTimeString());
+                    }
+                }
+                timeTemp = timeTemp.AddDays(1);
+                dd++;
+
+            }
+            //var totalDay = countDay(quantity);
+            //for (int g = 6; g < 24; g++)
+            //{
+            //    IRow rowTime4 = sheetTime.GetRow(indexRowTime);
+            //    ICell cellWeek4 = rowTime4.GetCell(1);
+            //    cellWeek4.SetCellValue(g);
+            //    IRow rowTime5 = sheetTime.GetRow(++indexRowTime);
+            //    IRow rowTime6 = sheetTime.GetRow(++indexRowTime);
+            //    IRow rowTime7 = sheetTime.GetRow(++indexRowTime);
+
+            //    var listPro = getProgram(schedule, g);
+            //    int internalIndexRow = indexRowTime - 3;
+            //    foreach (var item in listPro)
+            //    {
+            //        var myRow = sheetTime.GetRow(internalIndexRow);
+            //        for (var m = 0; m < totalDay; m++)
+            //        {
+            //            var myCell = myRow.GetCell(1 + (m + 1) * 6);
+            //            myCell.SetCellValue(item.Name);
+            //            var myCell2 = myRow.GetCell(3 + (m) * 6);
+            //            myCell2.SetCellValue(System.Math.Round(item.Duration.Minute / 1.0 + item.Duration.Second / 60.0, 1, MidpointRounding.AwayFromZero));
+            //            var myCell4 = myRow.GetCell(4 + (m) * 6);
+            //            myCell4.SetCellValue(quantityList.Where(x => x.TapeCode == item.TapeCode).FirstOrDefault().Group);
+            //            var myCell3 = myRow.GetCell(5 + (m) * 6);
+            //            myCell3.SetCellValue(quantityList.Where(x => x.TapeCode == item.TapeCode).FirstOrDefault().Category);
+
+            //        }
+            //        internalIndexRow++;
+            //    }
+            //    while (internalIndexRow <= indexRowTime)
+            //    {
+            //        var myRow = sheetTime.GetRow(internalIndexRow);
+            //        for (var m = 0; m < totalDay; m++)
+            //        {
+            //            var myCell = myRow.GetCell(1 + (m + 1) * 6);
+            //            myCell.SetCellValue(0);
+            //            var myCell2 = myRow.GetCell(3 + (m) * 6);
+            //            myCell2.SetCellValue("#N/A");
+            //        }
+            //        internalIndexRow++;
+            //    }
+            //    ++indexRowTime;
+            //}
+        }
+
 
         private void dateTimePicker3_ValueChanged(object sender, EventArgs e)
         {
