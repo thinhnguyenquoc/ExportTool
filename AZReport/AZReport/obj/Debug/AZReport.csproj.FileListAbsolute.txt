@@ -24,8 +24,6 @@ C:\Users\thinh\Documents\Visual Studio 2012\Projects\AZReport\AZReport\obj\Debug
 E:\AZReport\AZReport\bin\Debug\AZReport.exe.config
 E:\AZReport\AZReport\obj\Debug\AZReport.exe
 E:\AZReport\AZReport\obj\Debug\AZReport.pdb
-E:\AZReport\AZReport\bin\Debug\AZDb.mdf
-E:\AZReport\AZReport\bin\Debug\AZDb_log.ldf
 E:\AZReport\AZReport\bin\Debug\AZReport.exe
 E:\AZReport\AZReport\bin\Debug\AZReport.pdb
 E:\AZReport\AZReport\bin\Debug\EntityFramework.dll
@@ -44,11 +42,10 @@ E:\AZReport\AZReport\obj\Debug\AZReport.csprojResolveAssemblyReference.cache
 E:\AZReport\AZReport\obj\Debug\AZReport.Form1.resources
 E:\AZReport\AZReport\obj\Debug\AZReport.Properties.Resources.resources
 E:\AZReport\AZReport\obj\Debug\AZReport.csproj.GenerateResource.Cache
+H:\AZReport\AZReport\obj\Debug\AZReport.Form1.resources
+H:\AZReport\AZReport\obj\Debug\AZReport.Properties.Resources.resources
+H:\AZReport\AZReport\obj\Debug\AZReport.csproj.GenerateResource.Cache
 H:\AZReport\AZReport\bin\Debug\AZReport.exe.config
-H:\AZReport\AZReport\obj\Debug\AZReport.exe
-H:\AZReport\AZReport\obj\Debug\AZReport.pdb
-H:\AZReport\AZReport\bin\Debug\AZDb.mdf
-H:\AZReport\AZReport\bin\Debug\AZDb_log.ldf
 H:\AZReport\AZReport\bin\Debug\AZReport.exe
 H:\AZReport\AZReport\bin\Debug\AZReport.pdb
 H:\AZReport\AZReport\bin\Debug\EntityFramework.dll
@@ -64,6 +61,7 @@ H:\AZReport\AZReport\bin\Debug\NPOI.xml
 H:\AZReport\AZReport\bin\Debug\NPOI.OOXML.xml
 H:\AZReport\AZReport\bin\Debug\NPOI.OpenXml4Net.xml
 H:\AZReport\AZReport\obj\Debug\AZReport.csprojResolveAssemblyReference.cache
-H:\AZReport\AZReport\obj\Debug\AZReport.Form1.resources
-H:\AZReport\AZReport\obj\Debug\AZReport.Properties.Resources.resources
-H:\AZReport\AZReport\obj\Debug\AZReport.csproj.GenerateResource.Cache
+H:\AZReport\AZReport\obj\Debug\AZReport.exe
+H:\AZReport\AZReport\obj\Debug\AZReport.pdb
+E:\AZReport\AZReport\obj\Debug\AZReport.SuccessForm.resources
+E:\AZReport\AZReport\obj\Debug\AZReport.ErrorForm.resources

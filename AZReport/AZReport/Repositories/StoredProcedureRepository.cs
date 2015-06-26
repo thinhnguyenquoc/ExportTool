@@ -1,4 +1,5 @@
-﻿using AZReport.Repositories.Interface;
+﻿using AZReport.Model;
+using AZReport.Repositories.Interface;
 using AZReport.ViewModel;
 using System;
 using System.Collections.Generic;

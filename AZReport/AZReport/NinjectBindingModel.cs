@@ -1,4 +1,5 @@
-﻿using AZReport.Repositories;
+﻿using AZReport.Model;
+using AZReport.Repositories;
 using AZReport.Repositories.Interface;
 using AZReport.Services;
 using AZReport.Services.IServices;
@@ -20,11 +21,15 @@ namespace AZReport
             Bind<IScheduleRepository>().To<ScheduleRepository>();
             Bind<ISaleRepository>().To<SaleRepository>();
             Bind<IStoredProcedureRepository>().To<StoredProcedureRepository>();
+            Bind<ILevelRepository>().To<LevelRepository>();
+            Bind<ITimeSettingRepository>().To<TimeSettingRepository>();
 
             Bind<IProgramService>().To<ProgramService>();
             Bind<IScheduleService>().To<ScheduleService>();
             Bind<ISaleService>().To<SaleService>();
             Bind<IReportService>().To<ReportService>();
+            Bind<ILevelService>().To<LevelService>();
+            Bind<ITimeSettingService>().To<TimeSettingService>();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using AZReport.Services;
+﻿using AZReport.Model;
+using AZReport.Services;
 using AZReport.Services.IServices;
 using AZReport.ViewModel;
 using NPOI.HSSF.UserModel;
@@ -24,6 +25,8 @@ namespace AZReport
         IScheduleService _iScheduleService;
         ISaleService _iSaleService;
         IReportService _iReportService;
+        ILevelService _iLevelService;
+        ITimeSettingService _iTimeSettingService;
         DateTime start;
         DateTime end;
         DateTime reportStart;
@@ -31,19 +34,46 @@ namespace AZReport
         IFormatProvider culture;
         List<ProductivityViewModel> totalResult;
 
-        public Form1(IProgramService iProgramService, IScheduleService iScheduleService, ISaleService iSaleService, IReportService iReportService)
+        public Form1(IProgramService iProgramService, IScheduleService iScheduleService, ISaleService iSaleService,
+            IReportService iReportService, ILevelService iLevelService, ITimeSettingService iTimeSettingService)
         {
             InitializeComponent();
             _iProgramService = iProgramService;
             _iScheduleService = iScheduleService;
             _iSaleService = iSaleService;
             _iReportService = iReportService;
+            _iLevelService = iLevelService;
+            _iTimeSettingService = iTimeSettingService;
+            dateTimePicker5.Format = DateTimePickerFormat.Time;
+            dateTimePicker5.ShowUpDown = true;
             var all = _iProgramService.GetAll().ToList();
             start = DateTime.Today;
             end = DateTime.Today;
             reportStart = DateTime.Today;
             reportEnd = DateTime.Today;
             culture = new System.Globalization.CultureInfo("fr-FR", true);
+            var levelList = _iLevelService.GetAll().ToList();
+            var a = levelList.Where(x => x.Name == "A").FirstOrDefault();
+            if (a != null && a.Begin.HasValue) { 
+                textBox4.Text = a.Begin.Value.ToString("N", CultureInfo.CreateSpecificCulture("en-US"));
+                textBox7.Text = a.End.Value.ToString("N", CultureInfo.CreateSpecificCulture("en-US"));
+            
+                var b = levelList.Where(x => x.Name == "B").FirstOrDefault();
+                textBox5.Text = b.Begin.Value.ToString("N", CultureInfo.CreateSpecificCulture("en-US"));
+                textBox8.Text = b.End.Value.ToString("N", CultureInfo.CreateSpecificCulture("en-US"));
+                var c = levelList.Where(x => x.Name == "C").FirstOrDefault();
+                textBox6.Text = c.Begin.Value.ToString("N", CultureInfo.CreateSpecificCulture("en-US"));
+                textBox9.Text = c.End.Value.ToString("N", CultureInfo.CreateSpecificCulture("en-US"));
+            }
+            var timesetting = _iTimeSettingService.GetAll().ToList().FirstOrDefault();
+            if (timesetting != null)
+            {
+                dateTimePicker5.Value = timesetting.time;
+            }
+            else
+            {
+                dateTimePicker5.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 6, 0, 0);
+            }
         }
 
         private void ReadProgram(IWorkbook _iWordbook)
@@ -262,24 +292,31 @@ namespace AZReport
             DialogResult result = openFileDialog1.ShowDialog(); // Show the dialog.
             if (result == DialogResult.OK) // Test result.
             {
-                string file = openFileDialog1.FileName;
-                textBox1.Text = file;               
-                using (FileStream pr = new FileStream(file, FileMode.Open, FileAccess.Read))
+                try
                 {
-                    if (file.Contains(".xlsx"))
+                    string file = openFileDialog1.FileName;
+                    textBox1.Text = file;
+                    using (FileStream pr = new FileStream(file, FileMode.Open, FileAccess.Read))
                     {
-                        _iWorkbook = new XSSFWorkbook(pr);
+                        if (file.Contains(".xlsx"))
+                        {
+                            _iWorkbook = new XSSFWorkbook(pr);
+                        }
+                        else if (file.Contains(".xls"))
+                        {
+                            _iWorkbook = new HSSFWorkbook(pr);
+                        }
+                        else
+                        {
+                            return;
+                        }
                     }
-                    else if (file.Contains(".xls"))
-                    {
-                        _iWorkbook = new HSSFWorkbook(pr);
-                    }
-                    else
-                    {
-                        return;
-                    }
-                    ReadProgram(_iWorkbook);
-                }                
+                }
+                catch (Exception ex)
+                {
+                    var errorForm = new ErrorForm(ex.Message);
+                    errorForm.ShowDialog();
+                }
             }
         }
 
@@ -289,23 +326,30 @@ namespace AZReport
             DialogResult result = openFileDialog2.ShowDialog(); // Show the dialog.
             if (result == DialogResult.OK) // Test result.
             {
-                string file = openFileDialog2.FileName;
-                textBox2.Text = file;
-                using (FileStream pr = new FileStream(file, FileMode.Open, FileAccess.Read))
+                try
                 {
-                    if (file.Contains(".xlsx"))
+                    string file = openFileDialog2.FileName;
+                    textBox2.Text = file;
+                    using (FileStream pr = new FileStream(file, FileMode.Open, FileAccess.Read))
                     {
-                        _iWorkbook = new XSSFWorkbook(pr);
+                        if (file.Contains(".xlsx"))
+                        {
+                            _iWorkbook = new XSSFWorkbook(pr);
+                        }
+                        else if (file.Contains(".xls"))
+                        {
+                            _iWorkbook = new HSSFWorkbook(pr);
+                        }
+                        else
+                        {
+                            return;
+                        }
                     }
-                    else if (file.Contains(".xls"))
-                    {
-                        _iWorkbook = new HSSFWorkbook(pr);
-                    }
-                    else
-                    {
-                        return;
-                    }
-                    ReadSchedule(_iWorkbook);
+                }
+                catch (Exception ex)
+                {
+                    var errorForm = new ErrorForm(ex.Message);
+                    errorForm.ShowDialog();
                 }
             }
         }
@@ -330,83 +374,93 @@ namespace AZReport
 
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-            var result = _iReportService.GetProductivity(new DateTime(start.Year, start.Month, start.Day, 0, 0, 0), new DateTime(end.Year, end.Month, end.Day, 23, 59, 59));
-            string name = saveFileDialog1.FileName;
-            var wb = new XSSFWorkbook();
-            // tab name
-            ISheet sheet = wb.CreateSheet("Bao cao SL ban ra hang ngay");
-            // header
-            IRow row = sheet.CreateRow(0);
-            ICell cell = row.CreateCell(0);
-            cell.SetCellValue("BÁO CÁO SẢN PHẨM HÀNG NGÀY CÔNG TY ATZ");
-            NPOI.SS.Util.CellRangeAddress cra = new NPOI.SS.Util.CellRangeAddress(0, 0, 0, 2);
-            sheet.AddMergedRegion(cra);
-            // column header 
-            IRow row3 = sheet.CreateRow(2);
-            ICell cell0 = row3.CreateCell(0);
-            cell0.SetCellValue("STT");
-            ICell cell1 = row3.CreateCell(1);
-            cell1.SetCellValue("MÃ CHƯƠNG TRÌNH");
-            ICell cell2 = row3.CreateCell(2);
-            cell2.SetCellValue("CHƯƠNG TRÌNH");
-            ICell cell3 = row3.CreateCell(3);
-            cell3.SetCellValue("DURATION");
-            ICell cell4 = row3.CreateCell(4);
-            cell4.SetCellValue("CATEGORY");
-            ICell cell5 = row3.CreateCell(5);
-            cell5.SetCellValue("GIÁ SẢN PHẨM");
-            ICell cell6 = row3.CreateCell(6);
-            cell6.SetCellValue("Ghi chú");
-            var tempStart = start;
-            var k = 7;
-            while (DateTime.Compare(tempStart, end) <= 0)
+            try
             {
-                ICell cellk = row3.CreateCell(k);
-                cellk.SetCellValue(tempStart.ToString("dd/MM/yyyy"));
-                tempStart = tempStart.AddDays(1);
-                k++;
-            }
-            // add Program Code
-            int i = 3;
-            foreach (var item in result)
-            {
-                var time = Convert.ToDateTime(item.Duration);
-                if (time.Minute > 4)
+                var result = _iReportService.GetProductivity(new DateTime(start.Year, start.Month, start.Day, 0, 0, 0), new DateTime(end.Year, end.Month, end.Day, 23, 59, 59));
+                string name = saveFileDialog1.FileName;
+                var wb = new XSSFWorkbook();
+                // tab name
+                ISheet sheet = wb.CreateSheet("Bao cao SL ban ra hang ngay");
+                // header
+                IRow row = sheet.CreateRow(0);
+                ICell cell = row.CreateCell(0);
+                cell.SetCellValue("BÁO CÁO SẢN PHẨM HÀNG NGÀY CÔNG TY ATZ");
+                NPOI.SS.Util.CellRangeAddress cra = new NPOI.SS.Util.CellRangeAddress(0, 0, 0, 2);
+                sheet.AddMergedRegion(cra);
+                // column header 
+                IRow row3 = sheet.CreateRow(2);
+                ICell cell0 = row3.CreateCell(0);
+                cell0.SetCellValue("STT");
+                ICell cell1 = row3.CreateCell(1);
+                cell1.SetCellValue("MÃ CHƯƠNG TRÌNH");
+                ICell cell2 = row3.CreateCell(2);
+                cell2.SetCellValue("CHƯƠNG TRÌNH");
+                ICell cell3 = row3.CreateCell(3);
+                cell3.SetCellValue("DURATION");
+                ICell cell4 = row3.CreateCell(4);
+                cell4.SetCellValue("CATEGORY");
+                ICell cell5 = row3.CreateCell(5);
+                cell5.SetCellValue("GIÁ SẢN PHẨM");
+                ICell cell6 = row3.CreateCell(6);
+                cell6.SetCellValue("Ghi chú");
+                var tempStart = start;
+                var k = 7;
+                while (DateTime.Compare(tempStart, end) <= 0)
                 {
-                    IRow row_temp = sheet.CreateRow(i);
-                    ICell cell_temp0 = row_temp.CreateCell(0);
-                    cell_temp0.SetCellValue(i - 2);
-                    ICell cell_temp1 = row_temp.CreateCell(1);
-                    cell_temp1.SetCellValue(item.Code);
-                    ICell cell_temp2 = row_temp.CreateCell(2);
-                    cell_temp2.SetCellValue(item.Name);
-                    ICell cell_temp3 = row_temp.CreateCell(3);
-                    DateTime time1 = DateTime.Today;
-                    time1 = time1.AddMinutes(time.Minute).AddSeconds(time.Second);
-                    cell_temp3.SetCellValue(time1);
-                    ICellStyle style = wb.CreateCellStyle();
-                    cell_temp3.CellStyle = style;
-                    IDataFormat dataFormatCustom = wb.CreateDataFormat();
-                    cell_temp3.CellStyle.DataFormat = dataFormatCustom.GetFormat("mm:ss");
-                    ICell cell_temp4 = row_temp.CreateCell(4);
-                    cell_temp4.SetCellValue(item.Category);
-                    ICell cell_temp5 = row_temp.CreateCell(5);
-                    cell_temp5.SetCellValue(item.Price);
-                    ICell cell_temp6 = row_temp.CreateCell(6);
-                    cell_temp6.SetCellValue(item.Note);
-                    i++;
+                    ICell cellk = row3.CreateCell(k);
+                    cellk.SetCellValue(tempStart.ToString("dd/MM/yyyy"));
+                    tempStart = tempStart.AddDays(1);
+                    k++;
                 }
-            }
+                // add Program Code
+                int i = 3;
+                foreach (var item in result)
+                {
+                    var time = Convert.ToDateTime(item.Duration);
+                    if (time.Minute > 4)
+                    {
+                        IRow row_temp = sheet.CreateRow(i);
+                        ICell cell_temp0 = row_temp.CreateCell(0);
+                        cell_temp0.SetCellValue(i - 2);
+                        ICell cell_temp1 = row_temp.CreateCell(1);
+                        cell_temp1.SetCellValue(item.Code);
+                        ICell cell_temp2 = row_temp.CreateCell(2);
+                        cell_temp2.SetCellValue(item.Name);
+                        ICell cell_temp3 = row_temp.CreateCell(3);
+                        DateTime time1 = DateTime.Today;
+                        time1 = time1.AddMinutes(time.Minute).AddSeconds(time.Second);
+                        cell_temp3.SetCellValue(time1);
+                        ICellStyle style = wb.CreateCellStyle();
+                        cell_temp3.CellStyle = style;
+                        IDataFormat dataFormatCustom = wb.CreateDataFormat();
+                        cell_temp3.CellStyle.DataFormat = dataFormatCustom.GetFormat("mm:ss");
+                        ICell cell_temp4 = row_temp.CreateCell(4);
+                        cell_temp4.SetCellValue(item.Category);
+                        ICell cell_temp5 = row_temp.CreateCell(5);
+                        cell_temp5.SetCellValue(item.Price);
+                        ICell cell_temp6 = row_temp.CreateCell(6);
+                        cell_temp6.SetCellValue(item.Note);
+                        i++;
+                    }
+                }
 
-            for (int l = 0; l < row3.LastCellNum; l++)
-            {
-                sheet.AutoSizeColumn(l);
-            }
+                for (int l = 0; l < row3.LastCellNum; l++)
+                {
+                    sheet.AutoSizeColumn(l);
+                }
 
-            using (FileStream stream = new FileStream(name, FileMode.Create, FileAccess.Write))
+                using (FileStream stream = new FileStream(name, FileMode.Create, FileAccess.Write))
+                {
+                    wb.Write(stream);
+                    stream.Close();
+                }
+                var successForm = new SuccessForm();
+                successForm.ShowDialog();
+            }
+            catch (Exception ex)
             {
-                wb.Write(stream);
-                stream.Close();
+                var errorForm = new ErrorForm(ex.Message);
+                errorForm.ShowDialog();
             }
         }
 
@@ -416,23 +470,30 @@ namespace AZReport
             DialogResult result = openFileDialog3.ShowDialog(); // Show the dialog.
             if (result == DialogResult.OK) // Test result.
             {
-                string file = openFileDialog3.FileName;
-                textBox3.Text = file;
-                using (FileStream pr = new FileStream(file, FileMode.Open, FileAccess.Read))
-                {                    
-                    if (file.Contains(".xlsx"))
+                try
+                {
+                    string file = openFileDialog3.FileName;
+                    textBox3.Text = file;
+                    using (FileStream pr = new FileStream(file, FileMode.Open, FileAccess.Read))
                     {
-                        _iWorkbook = new XSSFWorkbook(pr);
+                        if (file.Contains(".xlsx"))
+                        {
+                            _iWorkbook = new XSSFWorkbook(pr);
+                        }
+                        else if (file.Contains(".xls"))
+                        {
+                            _iWorkbook = new HSSFWorkbook(pr);
+                        }
+                        else
+                        {
+                            return;
+                        }
                     }
-                    else if (file.Contains(".xls"))
-                    {
-                        _iWorkbook = new HSSFWorkbook(pr);
-                    }
-                    else
-                    {
-                        return;
-                    }
-                    ReadQuantity(_iWorkbook);
+                }
+                catch (Exception ex)
+                {
+                    var errorForm = new ErrorForm(ex.Message);
+                    errorForm.ShowDialog();
                 }
             }
         }
@@ -475,21 +536,31 @@ namespace AZReport
 
         private void saveFileDialog2_FileOk(object sender, CancelEventArgs e)
         {
-            string name = saveFileDialog2.FileName;
-            var wb = new XSSFWorkbook();
-            using (FileStream stream = new FileStream(@"H:\AZReport\TemplateEfficiency.xlsx", FileMode.Open, FileAccess.Read))
+            try
             {
-                wb = new XSSFWorkbook(stream);
-                stream.Close();
+                string name = saveFileDialog2.FileName;
+                var wb = new XSSFWorkbook();
+                using (FileStream stream = new FileStream(@"H:\AZReport\TemplateEfficiency.xlsx", FileMode.Open, FileAccess.Read))
+                {
+                    wb = new XSSFWorkbook(stream);
+                    stream.Close();
+                }
+                ISheet itemListSheet = wb.GetSheetAt(1);
+                createItemList(itemListSheet, reportStart, reportEnd);
+                ISheet timeTableSheet = wb.GetSheetAt(0);
+                createTimeTable(timeTableSheet, reportStart, reportEnd);
+                using (FileStream stream = new FileStream(name, FileMode.Create, FileAccess.Write))
+                {
+                    wb.Write(stream);
+                    stream.Close();
+                }
+                var successForm = new SuccessForm();
+                successForm.ShowDialog();
             }
-            ISheet itemListSheet = wb.GetSheetAt(1);
-            createItemList(itemListSheet, reportStart, reportEnd);
-            ISheet timeTableSheet = wb.GetSheetAt(0);
-            createTimeTable(timeTableSheet, reportStart, reportEnd);
-            using (FileStream stream = new FileStream(name, FileMode.Create, FileAccess.Write))
+            catch (Exception ex)
             {
-                wb.Write(stream);
-                stream.Close();
+                var errorForm = new ErrorForm(ex.Message);
+                errorForm.ShowDialog();
             }
         }
 
@@ -536,12 +607,12 @@ namespace AZReport
                     while (tempDate <= endDay)
                     {
                         ICell eff_cellweek = rowEff.GetCell(7 + l);
-                        eff_cellweek.SetCellValue(freqList.Where(x=>x.Code == item.Code && x.Date == new DateTime(startDay.Year, startDay.Month, startDay.Day, 0, 0, 0)).FirstOrDefault().Freq);
+                        eff_cellweek.SetCellValue(freqList.Where(x=>x.Code == item.Code && x.Date == new DateTime(startDay.Year, startDay.Month, startDay.Day, 0, 0, 0)).FirstOrDefault() != null? freqList.Where(x=>x.Code == item.Code && x.Date == new DateTime(startDay.Year, startDay.Month, startDay.Day, 0, 0, 0)).FirstOrDefault().Freq: 0);
                         tempDate = tempDate.AddDays(1);
                         l++;
                     }
 
-                    int q = (int)quantityList.Where(x => x.Code == item.Code).FirstOrDefault().Quantity;
+                    int q = quantityList.Where(x => x.Code == item.Code).FirstOrDefault() != null ?(int)quantityList.Where(x => x.Code == item.Code).FirstOrDefault().Quantity: 0;
                     ICell eff_cell10 = rowEff.CreateCell(27);
                     eff_cell10.SetCellValue(q);
                     ICell eff_cell11 = rowEff.CreateCell(28);
@@ -592,8 +663,8 @@ namespace AZReport
             {
                 var schedulePerDay = scheduleList.Where(x => x.Date.ToShortDateString() == timeTemp.ToShortDateString()).ToList();
                 int index = 4;
-                foreach (var i in schedulePerDay)
-                {                    
+                foreach (var i in schedulePerDay.Where(x=>x.Date.TimeOfDay > Convert.ToDateTime(dateTimePicker5.Value).TimeOfDay))
+                {   
                     var item = totalResult.Where(x=>x.Code==i.Code).FirstOrDefault();
                     if (Convert.ToDateTime(item.Duration).Minute > 4)
                     {
@@ -626,63 +697,19 @@ namespace AZReport
                             myCell3 = rowTime4.CreateCell(5 + dd * 6);
                         }
                         myCell3.SetCellValue(item.Category);
-                        var myCell5 = rowTime4.GetCell(2 + dd * 6);
-                        if (myCell5 == null)
-                        {
-                            myCell5 = rowTime4.CreateCell(2 + dd * 6);
-                        }
-                        myCell5.SetCellValue(i.Date.ToShortTimeString());
+                        //var myCell5 = rowTime4.GetCell(1 + dd * 6);
+                        //if (myCell5 == null)
+                        //{
+                        //    myCell5 = rowTime4.CreateCell(1 + dd * 6);
+                        //}
+                        //myCell5.SetCellValue(Convert.ToDateTime(i.Date).Hour);
                     }
                 }
                 timeTemp = timeTemp.AddDays(1);
                 dd++;
 
-            }
-            //var totalDay = countDay(quantity);
-            //for (int g = 6; g < 24; g++)
-            //{
-            //    IRow rowTime4 = sheetTime.GetRow(indexRowTime);
-            //    ICell cellWeek4 = rowTime4.GetCell(1);
-            //    cellWeek4.SetCellValue(g);
-            //    IRow rowTime5 = sheetTime.GetRow(++indexRowTime);
-            //    IRow rowTime6 = sheetTime.GetRow(++indexRowTime);
-            //    IRow rowTime7 = sheetTime.GetRow(++indexRowTime);
-
-            //    var listPro = getProgram(schedule, g);
-            //    int internalIndexRow = indexRowTime - 3;
-            //    foreach (var item in listPro)
-            //    {
-            //        var myRow = sheetTime.GetRow(internalIndexRow);
-            //        for (var m = 0; m < totalDay; m++)
-            //        {
-            //            var myCell = myRow.GetCell(1 + (m + 1) * 6);
-            //            myCell.SetCellValue(item.Name);
-            //            var myCell2 = myRow.GetCell(3 + (m) * 6);
-            //            myCell2.SetCellValue(System.Math.Round(item.Duration.Minute / 1.0 + item.Duration.Second / 60.0, 1, MidpointRounding.AwayFromZero));
-            //            var myCell4 = myRow.GetCell(4 + (m) * 6);
-            //            myCell4.SetCellValue(quantityList.Where(x => x.TapeCode == item.TapeCode).FirstOrDefault().Group);
-            //            var myCell3 = myRow.GetCell(5 + (m) * 6);
-            //            myCell3.SetCellValue(quantityList.Where(x => x.TapeCode == item.TapeCode).FirstOrDefault().Category);
-
-            //        }
-            //        internalIndexRow++;
-            //    }
-            //    while (internalIndexRow <= indexRowTime)
-            //    {
-            //        var myRow = sheetTime.GetRow(internalIndexRow);
-            //        for (var m = 0; m < totalDay; m++)
-            //        {
-            //            var myCell = myRow.GetCell(1 + (m + 1) * 6);
-            //            myCell.SetCellValue(0);
-            //            var myCell2 = myRow.GetCell(3 + (m) * 6);
-            //            myCell2.SetCellValue("#N/A");
-            //        }
-            //        internalIndexRow++;
-            //    }
-            //    ++indexRowTime;
-            //}
+            }          
         }
-
 
         private void dateTimePicker3_ValueChanged(object sender, EventArgs e)
         {
@@ -696,16 +723,175 @@ namespace AZReport
 
         private string calculateGroup(double eff)
         {
-            if (eff >= 200000)
-                return "A";
-            else if (eff >= 100000 && eff < 200000)
-                return "B";
-            else if (eff != 0)
-                return "C";
-            else
-                return "";
+            var levelList = _iLevelService.GetAll().ToList();
+            foreach (var i in levelList)
+            {
+                if (i.Begin != null)
+                {
+                    if ((int)i.Begin <= eff && (int)i.End >= eff)
+                    {
+                        return i.Name;
+                    }
+                }
+            }
+            return "";
         }
-    }
 
-    
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var levelList = _iLevelService.GetAll().ToList();
+                var a = levelList.Where(x => x.Name == "A").FirstOrDefault();
+                if (a != null)
+                {
+                    a.Begin = (int)Convert.ToDouble(textBox4.Text);
+                    a.End = (int)Convert.ToDouble(textBox7.Text);
+                    _iLevelService.Update(a);
+                }
+                else
+                {
+                    a = new Level();
+                    a.Name = "A";
+                    a.Begin = (int)Convert.ToDouble(textBox4.Text);
+                    a.End = (int)Convert.ToDouble(textBox7.Text);
+                    _iLevelService.Create(a);
+                }
+                var b = levelList.Where(x => x.Name == "B").FirstOrDefault();
+                if (b != null)
+                {
+                    b.Begin = (int)Convert.ToDouble(textBox5.Text);
+                    b.End = (int)Convert.ToDouble(textBox8.Text);
+                    _iLevelService.Update(b);
+                }
+                else
+                {
+                    b = new Level();
+                    b.Name = "B";
+                    b.Begin = (int)Convert.ToDouble(textBox5.Text);
+                    b.End = (int)Convert.ToDouble(textBox8.Text);
+                    _iLevelService.Create(b);
+                }
+                var c = levelList.Where(x => x.Name == "C").FirstOrDefault();
+                if (c != null)
+                {
+                    c.Begin = (int)Convert.ToDouble(textBox6.Text);
+                    c.End = (int)Convert.ToDouble(textBox9.Text);
+                    _iLevelService.Update(c);
+                }
+                else
+                {
+                    c = new Level();
+                    c.Name = "C";
+                    c.Begin = (int)Convert.ToDouble(textBox6.Text);
+                    c.End = (int)Convert.ToDouble(textBox9.Text);
+                    _iLevelService.Create(c);
+                }
+                _iLevelService.Save();
+                var successForm = new SuccessForm();
+                successForm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                var errorForm = new ErrorForm(ex.Message);
+                errorForm.ShowDialog();
+            }
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+            //textBox4.Text = textBox4.Text.ToString("N", CultureInfo.CreateSpecificCulture("en-US"));
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var timesetting = _iTimeSettingService.GetAll().ToList().FirstOrDefault();
+                if (timesetting != null)
+                {
+                    timesetting.time = dateTimePicker5.Value;
+                    _iTimeSettingService.Update(timesetting);
+                }
+                else
+                {
+                    timesetting = new TimeSetting();
+                    timesetting.time = dateTimePicker5.Value;
+                    _iTimeSettingService.Create(timesetting);
+                }
+                _iTimeSettingService.Save();
+                var successForm = new SuccessForm();
+                successForm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                var errorForm = new ErrorForm(ex.Message);
+                errorForm.ShowDialog();
+            }
+        }
+
+        private void groupBox5_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBox1.Text) && !string.IsNullOrWhiteSpace(textBox1.Text))
+            {
+                try
+                {
+                    ReadProgram(_iWorkbook);
+                    var successForm = new SuccessForm();
+                    successForm.ShowDialog();
+                }
+                catch(Exception ex){
+                    var errorForm = new ErrorForm(ex.Message);
+                    errorForm.ShowDialog();
+                }
+
+            }
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBox2.Text) && !string.IsNullOrWhiteSpace(textBox2.Text))
+            {
+                try
+                {
+                    ReadSchedule(_iWorkbook);
+                    var successForm = new SuccessForm();
+                    successForm.ShowDialog();
+                }
+                catch (Exception ex)
+                {
+                    var errorForm = new ErrorForm(ex.Message);
+                    errorForm.ShowDialog();
+                }
+            }
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBox3.Text) && !string.IsNullOrWhiteSpace(textBox3.Text))
+            {
+                try
+                {
+                    ReadQuantity(_iWorkbook);
+                    var successForm = new SuccessForm();
+                    successForm.ShowDialog();
+                }
+                catch (Exception ex)
+                {
+                    var errorForm = new ErrorForm(ex.Message);
+                    errorForm.ShowDialog();
+                }
+            }
+        }
+    }    
 }
