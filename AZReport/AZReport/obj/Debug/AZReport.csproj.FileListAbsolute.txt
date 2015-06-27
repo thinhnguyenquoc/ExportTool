@@ -60,8 +60,9 @@ H:\AZReport\AZReport\bin\Debug\Ninject.xml
 H:\AZReport\AZReport\bin\Debug\NPOI.xml
 H:\AZReport\AZReport\bin\Debug\NPOI.OOXML.xml
 H:\AZReport\AZReport\bin\Debug\NPOI.OpenXml4Net.xml
-H:\AZReport\AZReport\obj\Debug\AZReport.csprojResolveAssemblyReference.cache
 H:\AZReport\AZReport\obj\Debug\AZReport.exe
 H:\AZReport\AZReport\obj\Debug\AZReport.pdb
 E:\AZReport\AZReport\obj\Debug\AZReport.SuccessForm.resources
 E:\AZReport\AZReport\obj\Debug\AZReport.ErrorForm.resources
+H:\AZReport\AZReport\obj\Debug\AZReport.ErrorForm.resources
+H:\AZReport\AZReport\obj\Debug\AZReport.SuccessForm.resources
