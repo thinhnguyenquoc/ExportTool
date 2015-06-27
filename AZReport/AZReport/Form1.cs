@@ -529,7 +529,16 @@ namespace AZReport
         private void button5_Click(object sender, EventArgs e)
         {
             saveFileDialog2.Filter = "Excel|*.xls;*.xlsx";
-            saveFileDialog2.FileName = "AZ_Efficiency_" + reportStart.ToString("dd_MM_yyyy");
+            string title = "";
+            if (dateTimePicker3.Value.ToShortDateString() != dateTimePicker4.Value.ToShortDateString())
+            {
+                title = "AZ_Efficiency_" + dateTimePicker3.Value.Day.ToString() + "~" + dateTimePicker4.Value.ToString("d.MM.yyyy");
+            }
+            else
+            {
+                title = "AZ_Efficiency_" + dateTimePicker4.Value.ToString("d.MM.yyyy");
+            }
+            saveFileDialog2.FileName = title;
             saveFileDialog2.DefaultExt = "xlsx";
             saveFileDialog2.ShowDialog();
         }
@@ -540,7 +549,7 @@ namespace AZReport
             {
                 string name = saveFileDialog2.FileName;
                 var wb = new XSSFWorkbook();
-                using (FileStream stream = new FileStream(@"H:\AZReport\TemplateEfficiency.xlsx", FileMode.Open, FileAccess.Read))
+                using (FileStream stream = new FileStream(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TemplateEfficiency.xlsx"), FileMode.Open, FileAccess.Read))
                 {
                     wb = new XSSFWorkbook(stream);
                     stream.Close();
@@ -643,7 +652,15 @@ namespace AZReport
         private void createTimeTable(ISheet sheetTime, DateTime startDay, DateTime endDay)
         {
             #region header
-            string title = "Weekly programming SCTV10 channel \n "+ dateTimePicker3.Value.Day.ToString()+" ~ "+dateTimePicker4.Value.ToString("dd.MM.yyyy");
+            string title = "";
+            if (dateTimePicker3.Value.ToShortDateString() != dateTimePicker4.Value.ToShortDateString())
+            {
+                title = "Weekly programming SCTV10 channel \n " + dateTimePicker3.Value.Day.ToString() + " ~ " + dateTimePicker4.Value.ToString("d.MM.yyyy");
+            }
+            else
+            {
+                title = "Weekly programming SCTV10 channel \n " + dateTimePicker4.Value.ToString("d.MM.yyyy");
+            }
             IRow rowTime0 = sheetTime.GetRow(0);
             rowTime0.GetCell(2).SetCellValue(title);
             IRow rowTime1 = sheetTime.GetRow(1);
@@ -718,12 +735,7 @@ namespace AZReport
                                 myCell2 = rowTime4.CreateCell(3 + dd * 6);
                             }
                             myCell2.SetCellValue(Convert.ToDateTime(item.Duration).Minute);
-                            var myCell1 = rowTime4.GetCell(2 + dd * 6);
-                            if (myCell1 == null)
-                            {
-                                myCell1 = rowTime4.CreateCell(2 + dd * 6);
-                            }
-                            myCell1.SetCellValue(item.);
+                          
                             var myCell4 = rowTime4.GetCell(4 + dd * 6);
                             if (myCell4 == null)
                             {
