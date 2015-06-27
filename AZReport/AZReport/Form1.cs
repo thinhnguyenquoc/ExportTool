@@ -643,6 +643,9 @@ namespace AZReport
         private void createTimeTable(ISheet sheetTime, DateTime startDay, DateTime endDay)
         {
             #region header
+            string title = "Weekly programming SCTV10 channel \n "+ dateTimePicker3.Value.Day.ToString()+" ~ "+dateTimePicker4.Value.ToString("dd.MM.yyyy");
+            IRow rowTime0 = sheetTime.GetRow(0);
+            rowTime0.GetCell(2).SetCellValue(title);
             IRow rowTime1 = sheetTime.GetRow(1);
             IRow rowTime2 = sheetTime.GetRow(2);
             var tempDate = startDay;
@@ -656,59 +659,152 @@ namespace AZReport
                 tempDate = tempDate.AddDays(1);
             }
             #endregion
+            var timesetting = _iTimeSettingService.GetAll().ToList().FirstOrDefault();
+            int beginHour = timesetting.time.Hour;
+            int index1 = 4;
+            for (int p = beginHour; p < 24; p++)
+            {
+                IRow rowTime = sheetTime.GetRow(index1);
+                if (rowTime == null)
+                {
+                    rowTime = sheetTime.CreateRow(index1);
+                }
+                var myCell1 = rowTime.GetCell(1);
+                if (myCell1 == null)
+                {
+                    myCell1 = rowTime.CreateCell(1);
+                }
+                myCell1.SetCellValue(beginHour);
+                var myCell68 = rowTime.GetCell(68);
+                if (myCell68 == null)
+                {
+                    myCell68 = rowTime.CreateCell(68);
+                }
+                myCell68.SetCellValue(beginHour++);
+                index1 = index1 + 4;
+            }
             var scheduleList = _iScheduleService.GetByDate(startDay, endDay);
             var timeTemp = startDay;
             int dd = 0;
             while (timeTemp <= endDay)
             {
                 var schedulePerDay = scheduleList.Where(x => x.Date.ToShortDateString() == timeTemp.ToShortDateString()).ToList();
+                schedulePerDay = schedulePerDay.Where(x=>x.Date.TimeOfDay > Convert.ToDateTime(dateTimePicker5.Value).TimeOfDay).OrderBy(x=>x.Date).ToList();
+                List<ScheduleViewModel> groupHour = GroupHour(schedulePerDay).OrderBy(x => x.Hour).ToList();
                 int index = 4;
-                foreach (var i in schedulePerDay.Where(x=>x.Date.TimeOfDay > Convert.ToDateTime(dateTimePicker5.Value).TimeOfDay))
+                foreach (var i in groupHour)
                 {   
-                    var item = totalResult.Where(x=>x.Code==i.Code).FirstOrDefault();
-                    if (Convert.ToDateTime(item.Duration).Minute > 4)
+                    // add hour
+                    // add program
+                    foreach (var program in i.programs)
                     {
-                        IRow rowTime4 = sheetTime.GetRow(index++);
-                        if (rowTime4 == null)
+                        var item = totalResult.Where(x => x.Code == program.Code).FirstOrDefault();
+                        if (Convert.ToDateTime(item.Duration).Minute > 4)
                         {
-                            rowTime4 = sheetTime.CreateRow(index++);
+                            IRow rowTime4 = sheetTime.GetRow(index++);
+                            if (rowTime4 == null)
+                            {
+                                rowTime4 = sheetTime.CreateRow(index++);
+                            }
+                            var myCell = rowTime4.GetCell(7 + dd * 6);
+                            if (myCell == null)
+                            {
+                                myCell = rowTime4.CreateCell(7 + dd * 6);
+                            }
+                            myCell.SetCellValue(item.Name);
+                            var myCell2 = rowTime4.GetCell(3 + dd * 6);
+                            if (myCell2 == null)
+                            {
+                                myCell2 = rowTime4.CreateCell(3 + dd * 6);
+                            }
+                            myCell2.SetCellValue(Convert.ToDateTime(item.Duration).Minute);
+                            var myCell1 = rowTime4.GetCell(2 + dd * 6);
+                            if (myCell1 == null)
+                            {
+                                myCell1 = rowTime4.CreateCell(2 + dd * 6);
+                            }
+                            myCell1.SetCellValue(item.);
+                            var myCell4 = rowTime4.GetCell(4 + dd * 6);
+                            if (myCell4 == null)
+                            {
+                                myCell4 = rowTime4.CreateCell(4 + dd * 6);
+                            }
+                            myCell4.SetCellValue(item.Group);
+                            var myCell3 = rowTime4.GetCell(5 + dd * 6);
+                            if (myCell3 == null)
+                            {
+                                myCell3 = rowTime4.CreateCell(5 + dd * 6);
+                            }
+                            myCell3.SetCellValue(item.Category);
+                            //var myCell5 = rowTime4.GetCell(1 + dd * 6);
+                            //if (myCell5 == null)
+                            //{
+                            //    myCell5 = rowTime4.CreateCell(1 + dd * 6);
+                            //}
+                            //myCell5.SetCellValue(Convert.ToDateTime(i.Date).Hour);
                         }
-                        var myCell = rowTime4.GetCell(7 + dd * 6);
-                        if (myCell == null)
-                        {
-                            myCell = rowTime4.CreateCell(7 + dd * 6);
-                        }
-                        myCell.SetCellValue(item.Name);
-                        var myCell2 = rowTime4.GetCell(3 + dd * 6);
-                        if (myCell2 == null)
-                        {
-                            myCell2 = rowTime4.CreateCell(3 + dd * 6);
-                        }
-                        myCell2.SetCellValue(Convert.ToDateTime(item.Duration).Minute);
-                        var myCell4 = rowTime4.GetCell(4 + dd * 6);
-                        if (myCell4 == null)
-                        {
-                            myCell4 = rowTime4.CreateCell(4 + dd * 6);
-                        }
-                        myCell4.SetCellValue(item.Group);
-                        var myCell3 = rowTime4.GetCell(5 + dd * 6);
-                        if (myCell3 == null)
-                        {
-                            myCell3 = rowTime4.CreateCell(5 + dd * 6);
-                        }
-                        myCell3.SetCellValue(item.Category);
-                        //var myCell5 = rowTime4.GetCell(1 + dd * 6);
-                        //if (myCell5 == null)
-                        //{
-                        //    myCell5 = rowTime4.CreateCell(1 + dd * 6);
-                        //}
-                        //myCell5.SetCellValue(Convert.ToDateTime(i.Date).Hour);
+                    }
+                    if ((index - 4) % 4 != 0)
+                    {
+                        int tem = (index - 4) / 4;
+                        index = (tem + 1) * 4 + 4;
                     }
                 }
                 timeTemp = timeTemp.AddDays(1);
                 dd++;
 
             }          
+        }
+
+        private List<ScheduleViewModel> GroupHour(List<Schedule> originalList)
+        {
+            List<ScheduleViewModel> result = new List<ScheduleViewModel>();
+            foreach (var item in originalList)
+            {
+                addItemToScheduleList(item, result);
+            }
+            return result;
+        }
+
+        private List<ScheduleViewModel> addItemToScheduleList(Schedule item, List<ScheduleViewModel> result)
+        {           
+            var item_temp = totalResult.Where(x => x.Code == item.Code).FirstOrDefault();
+            DateTime time = Convert.ToDateTime(item_temp.Duration);
+            if (time.Minute > 4)
+            {
+                DateTime endTime = item.Date;
+                endTime = endTime.AddMinutes(time.Minute).AddSeconds(time.Second);
+                DateTime seprateTime = new DateTime(endTime.Year, endTime.Month, endTime.Day, endTime.Hour, 0, 0);
+                DateTime choosenTime = new DateTime();
+                if (item.Date <= seprateTime)
+                {
+                    if ((seprateTime - item.Date) >= (endTime - seprateTime))
+                    {
+                        choosenTime = item.Date;
+                    }
+                    else
+                    {
+                        choosenTime = endTime;
+                    }
+                }
+                else
+                    choosenTime = endTime;
+                var choosenItem = result.Where(x => x.Hour == choosenTime.Hour).FirstOrDefault();
+                if (choosenItem != null)
+                {
+                    choosenItem.programs.Add(item);
+                    choosenItem.programs = choosenItem.programs.OrderBy(x => x.Date).ToList();
+                }
+                else
+                {
+                    choosenItem = new ScheduleViewModel();
+                    choosenItem.Hour = choosenTime.Hour;
+                    choosenItem.programs = new List<Schedule>();
+                    choosenItem.programs.Add(item);
+                    result.Add(choosenItem);
+                }
+            }
+            return result;
         }
 
         private void dateTimePicker3_ValueChanged(object sender, EventArgs e)

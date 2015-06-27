@@ -142,6 +142,7 @@
     </Compile>
     <Compile Include="ViewModel\ProductivityViewModel.cs" />
     <Compile Include="ViewModel\ReportViewModel.cs" />
+    <Compile Include="ViewModel\ScheduleViewModel.cs" />
     <EmbeddedResource Include="ErrorForm.resx">
       <DependentUpon>ErrorForm.cs</DependentUpon>
     </EmbeddedResource>
