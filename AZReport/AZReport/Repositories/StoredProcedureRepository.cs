@@ -35,7 +35,7 @@ namespace AZReport.Repositories
             return courseList;
         }
 
-        public List<ReportViewModel> GetQuantity(DateTime start, DateTime end)
+        public List<ReportViewModel> GetTotalQuantity(DateTime start, DateTime end)
         {
             var startTime = new SqlParameter
             {

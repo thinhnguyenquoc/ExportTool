@@ -24,7 +24,7 @@ namespace AZReport.Services
 
         public List<ReportViewModel> GetQuantity(DateTime start, DateTime end)
         {
-            var result = _iStoredProcedureRepository.GetQuantity(start, end);
+            var result = _iStoredProcedureRepository.GetTotalQuantity(start, end);
             return result;
         }
 

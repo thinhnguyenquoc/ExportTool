@@ -44,5 +44,19 @@ namespace AZReport.Services
             }
             return program;
         }
+
+        public Program CheckAndCreate(Program program)
+        {
+            var pr = _programRepository.FindBy(x => x.Code == program.Code).FirstOrDefault();
+            if (pr == null)
+            {
+                _programRepository.Add(program);
+            }
+            else
+            {
+                //_programRepository.Edit(pr);
+            }
+            return program;
+        }
     }
 }

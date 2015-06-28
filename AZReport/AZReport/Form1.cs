@@ -96,7 +96,14 @@ namespace AZReport
                         program.Category = row.GetCell(4).StringCellValue.ToString();
                         program.Price = row.GetCell(5).NumericCellValue.ToString();
                         program.Note = row.GetCell(6).StringCellValue.ToString();
-                        _iProgramService.CheckAndUpdate(program);
+                        if (checkBox1.Checked)
+                        {
+                            _iProgramService.CheckAndUpdate(program);
+                        }
+                        else
+                        {
+                            _iProgramService.CheckAndCreate(program);
+                        }
                     }
                     _iProgramService.Save();
                 }
@@ -116,16 +123,46 @@ namespace AZReport
                     var startPoint = StartPoint(sheet);
                     while (startDay <= lastDay)
                     {
-                        for (int j = startPoint.First() + 1; j <= sheet.LastRowNum; j++)
+                        if (checkBox2.Checked)
                         {
-                            var row = sheet.GetRow(j);
-                            Schedule schedule = new Schedule();
-                            if (row.GetCell(startPoint.Last()) == null || row.GetCell(startPoint.Last()).NumericCellValue == 0)
-                                break;
-                            schedule.Code = row.GetCell(startPoint.Last() + 4).StringCellValue.ToString();
-                            var mytime = row.GetCell(startPoint.Last() + 1).DateCellValue;
-                            schedule.Date = new DateTime(startDay.Year, startDay.Month, startDay.Day, mytime.Hour, mytime.Minute, mytime.Second);
-                            _iScheduleService.CheckAndCreate(schedule);
+                            //delete old data
+                            if (_iScheduleService.CheckExistDate(startDay))
+                            {
+                                _iScheduleService.DeleteOldDate(startDay);
+                            }
+                            // add update data
+                            for (int j = startPoint.First() + 1; j <= sheet.LastRowNum; j++)
+                            {
+                                var row = sheet.GetRow(j);
+                                Schedule schedule = new Schedule();
+                                if (row.GetCell(startPoint.Last()) == null || row.GetCell(startPoint.Last()).NumericCellValue == 0)
+                                    break;
+                                schedule.Code = row.GetCell(startPoint.Last() + 4).StringCellValue.ToString();
+                                var mytime = row.GetCell(startPoint.Last() + 1).DateCellValue;
+                                schedule.Date = new DateTime(startDay.Year, startDay.Month, startDay.Day, mytime.Hour, mytime.Minute, mytime.Second);
+                                _iScheduleService.Create(schedule);
+                            }
+                        }
+                        else
+                        {
+                            if (_iScheduleService.CheckExistDate(startDay))
+                            {
+                                //do nothing
+                            }
+                            else
+                            {
+                                for (int j = startPoint.First() + 1; j <= sheet.LastRowNum; j++)
+                                {
+                                    var row = sheet.GetRow(j);
+                                    Schedule schedule = new Schedule();
+                                    if (row.GetCell(startPoint.Last()) == null || row.GetCell(startPoint.Last()).NumericCellValue == 0)
+                                        break;
+                                    schedule.Code = row.GetCell(startPoint.Last() + 4).StringCellValue.ToString();
+                                    var mytime = row.GetCell(startPoint.Last() + 1).DateCellValue;
+                                    schedule.Date = new DateTime(startDay.Year, startDay.Month, startDay.Day, mytime.Hour, mytime.Minute, mytime.Second);
+                                    _iScheduleService.Create(schedule);
+                                }
+                            }
                         }
                         startDay = startDay.AddDays(1);
                     }
@@ -367,7 +404,16 @@ namespace AZReport
         private void button3_Click(object sender, EventArgs e)
         {
             saveFileDialog1.Filter = "Excel|*.xls;*.xlsx";
-            saveFileDialog1.FileName = "Quantity";
+            string title = "";
+            if (dateTimePicker3.Value.ToShortDateString() != dateTimePicker4.Value.ToShortDateString())
+            {
+                title = "AZ_Quantity_" + dateTimePicker1.Value.Day.ToString() + "~" + dateTimePicker2.Value.ToString("d.MM.yyyy");
+            }
+            else
+            {
+                title = "AZ_Quantity_" + dateTimePicker2.Value.ToString("d.MM.yyyy");
+            }
+            saveFileDialog1.FileName = title;
             saveFileDialog1.DefaultExt = "xlsx";
             saveFileDialog1.ShowDialog();    
         }
@@ -377,6 +423,14 @@ namespace AZReport
             try
             {
                 var result = _iReportService.GetProductivity(new DateTime(start.Year, start.Month, start.Day, 0, 0, 0), new DateTime(end.Year, end.Month, end.Day, 23, 59, 59));
+                var quantityViewModel = new List<SaleViewModel>();
+                foreach (var productivity in result)
+                {
+                    var temp = new SaleViewModel();
+                    temp.Sales = _iSaleService.GetQuantity(new DateTime(start.Year, start.Month, start.Day, 0, 0, 0), new DateTime(end.Year, end.Month, end.Day, 23, 59, 59), productivity.Code);
+                    temp.Code = productivity.Code;
+                    quantityViewModel.Add(temp);
+                }
                 string name = saveFileDialog1.FileName;
                 var wb = new XSSFWorkbook();
                 // tab name
@@ -440,6 +494,31 @@ namespace AZReport
                         cell_temp5.SetCellValue(item.Price);
                         ICell cell_temp6 = row_temp.CreateCell(6);
                         cell_temp6.SetCellValue(item.Note);
+                        var tempStart1 = start;
+                        var k1 = 7;
+                        var sales = quantityViewModel.Where(x=> x.Code == item.Code).FirstOrDefault();
+                        while (DateTime.Compare(tempStart1, end) <= 0)
+                        {
+                            ICell cellk = row_temp.CreateCell(k1);
+                            if (sales != null)
+                            {
+                                var q = sales.Sales.Where(y => y.Date.Year == tempStart1.Year && y.Date.Month == tempStart1.Month && y.Date.Day == tempStart1.Day).FirstOrDefault();
+                                if (q != null)
+                                {
+                                    cellk.SetCellValue(q.Quantity);
+                                }
+                                else
+                                {
+                                    cellk.SetCellValue(0);
+                                }
+                            }
+                            else
+                            {
+                                cellk.SetCellValue(0);
+                            }
+                            tempStart1 = tempStart1.AddDays(1);
+                            k1++;
+                        }
                         i++;
                     }
                 }
