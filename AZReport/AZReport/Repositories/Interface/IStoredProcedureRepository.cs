@@ -10,7 +10,7 @@ namespace AZReport.Repositories.Interface
     public interface IStoredProcedureRepository : IGenericRepository<AZModel>
     {
         List<ProductivityViewModel> GetProductivity(DateTime start, DateTime end);
-        List<ReportViewModel> GetQuantity(DateTime start, DateTime end);
+        List<ReportViewModel> GetTotalQuantity(DateTime start, DateTime end);
         List<ReportViewModel> GetFreq(DateTime start, DateTime end);
     }
 }

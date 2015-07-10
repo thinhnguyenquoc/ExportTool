@@ -31,5 +31,10 @@ namespace AZReport.Services
             }
             return sale;
         }
+
+        public List<Sale> GetQuantity(DateTime start, DateTime end, String Code)
+        {
+            return _programRepository.FindBy(x => x.Code == Code && x.Date >= start && x.Date <= end).ToList();
+        }
     }
 }

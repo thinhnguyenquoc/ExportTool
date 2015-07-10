@@ -10,5 +10,7 @@ namespace AZReport.Services.IServices
     public interface ISaleService : IEntityService<Sale>
     {
         Sale CheckAndUpdate(Sale sale);
+
+        List<Sale> GetQuantity(DateTime start, DateTime end, String Code);
     }
 }

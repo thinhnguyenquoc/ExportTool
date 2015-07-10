@@ -9,5 +9,6 @@ namespace AZReport.Services.IServices
     public interface IProgramService : IEntityService<Program>
     {
         Program CheckAndUpdate(Program program);
+        Program CheckAndCreate(Program program);
     }
 }

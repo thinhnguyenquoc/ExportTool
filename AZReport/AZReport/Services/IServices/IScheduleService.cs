@@ -11,5 +11,7 @@ namespace AZReport.Services.IServices
     {
         Schedule CheckAndCreate(Schedule schedule);
         List<Schedule> GetByDate(DateTime start, DateTime end);
+        bool CheckExistDate(DateTime date);
+        void DeleteOldDate(DateTime date);
     }
 }

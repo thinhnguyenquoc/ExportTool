@@ -96,7 +96,14 @@ namespace AZReport
                         program.Category = row.GetCell(4).StringCellValue.ToString();
                         program.Price = row.GetCell(5).NumericCellValue.ToString();
                         program.Note = row.GetCell(6).StringCellValue.ToString();
-                        _iProgramService.CheckAndUpdate(program);
+                        if (checkBox1.Checked)
+                        {
+                            _iProgramService.CheckAndUpdate(program);
+                        }
+                        else
+                        {
+                            _iProgramService.CheckAndCreate(program);
+                        }
                     }
                     _iProgramService.Save();
                 }
@@ -116,16 +123,46 @@ namespace AZReport
                     var startPoint = StartPoint(sheet);
                     while (startDay <= lastDay)
                     {
-                        for (int j = startPoint.First() + 1; j <= sheet.LastRowNum; j++)
+                        if (checkBox2.Checked)
                         {
-                            var row = sheet.GetRow(j);
-                            Schedule schedule = new Schedule();
-                            if (row.GetCell(startPoint.Last()) == null || row.GetCell(startPoint.Last()).NumericCellValue == 0)
-                                break;
-                            schedule.Code = row.GetCell(startPoint.Last() + 4).StringCellValue.ToString();
-                            var mytime = row.GetCell(startPoint.Last() + 1).DateCellValue;
-                            schedule.Date = new DateTime(startDay.Year, startDay.Month, startDay.Day, mytime.Hour, mytime.Minute, mytime.Second);
-                            _iScheduleService.CheckAndCreate(schedule);
+                            //delete old data
+                            if (_iScheduleService.CheckExistDate(startDay))
+                            {
+                                _iScheduleService.DeleteOldDate(startDay);
+                            }
+                            // add update data
+                            for (int j = startPoint.First() + 1; j <= sheet.LastRowNum; j++)
+                            {
+                                var row = sheet.GetRow(j);
+                                Schedule schedule = new Schedule();
+                                if (row.GetCell(startPoint.Last()) == null || row.GetCell(startPoint.Last()).NumericCellValue == 0)
+                                    break;
+                                schedule.Code = row.GetCell(startPoint.Last() + 4).StringCellValue.ToString();
+                                var mytime = row.GetCell(startPoint.Last() + 1).DateCellValue;
+                                schedule.Date = new DateTime(startDay.Year, startDay.Month, startDay.Day, mytime.Hour, mytime.Minute, mytime.Second);
+                                _iScheduleService.Create(schedule);
+                            }
+                        }
+                        else
+                        {
+                            if (_iScheduleService.CheckExistDate(startDay))
+                            {
+                                //do nothing
+                            }
+                            else
+                            {
+                                for (int j = startPoint.First() + 1; j <= sheet.LastRowNum; j++)
+                                {
+                                    var row = sheet.GetRow(j);
+                                    Schedule schedule = new Schedule();
+                                    if (row.GetCell(startPoint.Last()) == null || row.GetCell(startPoint.Last()).NumericCellValue == 0)
+                                        break;
+                                    schedule.Code = row.GetCell(startPoint.Last() + 4).StringCellValue.ToString();
+                                    var mytime = row.GetCell(startPoint.Last() + 1).DateCellValue;
+                                    schedule.Date = new DateTime(startDay.Year, startDay.Month, startDay.Day, mytime.Hour, mytime.Minute, mytime.Second);
+                                    _iScheduleService.Create(schedule);
+                                }
+                            }
                         }
                         startDay = startDay.AddDays(1);
                     }
@@ -367,7 +404,16 @@ namespace AZReport
         private void button3_Click(object sender, EventArgs e)
         {
             saveFileDialog1.Filter = "Excel|*.xls;*.xlsx";
-            saveFileDialog1.FileName = "Quantity";
+            string title = "";
+            if (dateTimePicker3.Value.ToShortDateString() != dateTimePicker4.Value.ToShortDateString())
+            {
+                title = "AZ_Quantity_" + dateTimePicker1.Value.Day.ToString() + "~" + dateTimePicker2.Value.ToString("d.MM.yyyy");
+            }
+            else
+            {
+                title = "AZ_Quantity_" + dateTimePicker2.Value.ToString("d.MM.yyyy");
+            }
+            saveFileDialog1.FileName = title;
             saveFileDialog1.DefaultExt = "xlsx";
             saveFileDialog1.ShowDialog();    
         }
@@ -377,6 +423,14 @@ namespace AZReport
             try
             {
                 var result = _iReportService.GetProductivity(new DateTime(start.Year, start.Month, start.Day, 0, 0, 0), new DateTime(end.Year, end.Month, end.Day, 23, 59, 59));
+                var quantityViewModel = new List<SaleViewModel>();
+                foreach (var productivity in result)
+                {
+                    var temp = new SaleViewModel();
+                    temp.Sales = _iSaleService.GetQuantity(new DateTime(start.Year, start.Month, start.Day, 0, 0, 0), new DateTime(end.Year, end.Month, end.Day, 23, 59, 59), productivity.Code);
+                    temp.Code = productivity.Code;
+                    quantityViewModel.Add(temp);
+                }
                 string name = saveFileDialog1.FileName;
                 var wb = new XSSFWorkbook();
                 // tab name
@@ -440,6 +494,31 @@ namespace AZReport
                         cell_temp5.SetCellValue(item.Price);
                         ICell cell_temp6 = row_temp.CreateCell(6);
                         cell_temp6.SetCellValue(item.Note);
+                        var tempStart1 = start;
+                        var k1 = 7;
+                        var sales = quantityViewModel.Where(x=> x.Code == item.Code).FirstOrDefault();
+                        while (DateTime.Compare(tempStart1, end) <= 0)
+                        {
+                            ICell cellk = row_temp.CreateCell(k1);
+                            if (sales != null)
+                            {
+                                var q = sales.Sales.Where(y => y.Date.Year == tempStart1.Year && y.Date.Month == tempStart1.Month && y.Date.Day == tempStart1.Day).FirstOrDefault();
+                                if (q != null)
+                                {
+                                    cellk.SetCellValue(q.Quantity);
+                                }
+                                else
+                                {
+                                    cellk.SetCellValue(0);
+                                }
+                            }
+                            else
+                            {
+                                cellk.SetCellValue(0);
+                            }
+                            tempStart1 = tempStart1.AddDays(1);
+                            k1++;
+                        }
                         i++;
                     }
                 }
@@ -515,7 +594,7 @@ namespace AZReport
                         sale.Code = row.GetCell(1).StringCellValue.ToString();
                         for (int k = 7; k < proSheet.GetRow(2).LastCellNum; k++)
                         {
-                            sale.Quantity = row.GetCell(k) != null ? row.GetCell(k).NumericCellValue.ToString() : "0";
+                            sale.Quantity = row.GetCell(k) != null ? Convert.ToInt32(row.GetCell(k).NumericCellValue) : 0;
                             sale.Date = DateTime.Parse(proSheet.GetRow(2).GetCell(k).StringCellValue.ToString(), culture, System.Globalization.DateTimeStyles.AssumeLocal);
                             _iSaleService.CheckAndUpdate(sale);
                             _iSaleService.Save();
@@ -529,7 +608,16 @@ namespace AZReport
         private void button5_Click(object sender, EventArgs e)
         {
             saveFileDialog2.Filter = "Excel|*.xls;*.xlsx";
-            saveFileDialog2.FileName = "AZ_Efficiency_" + reportStart.ToString("dd_MM_yyyy");
+            string title = "";
+            if (dateTimePicker3.Value.ToShortDateString() != dateTimePicker4.Value.ToShortDateString())
+            {
+                title = "AZ_Efficiency_" + dateTimePicker3.Value.Day.ToString() + "~" + dateTimePicker4.Value.ToString("d.MM.yyyy");
+            }
+            else
+            {
+                title = "AZ_Efficiency_" + dateTimePicker4.Value.ToString("d.MM.yyyy");
+            }
+            saveFileDialog2.FileName = title;
             saveFileDialog2.DefaultExt = "xlsx";
             saveFileDialog2.ShowDialog();
         }
@@ -540,7 +628,7 @@ namespace AZReport
             {
                 string name = saveFileDialog2.FileName;
                 var wb = new XSSFWorkbook();
-                using (FileStream stream = new FileStream(@"H:\AZReport\TemplateEfficiency.xlsx", FileMode.Open, FileAccess.Read))
+                using (FileStream stream = new FileStream(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TemplateEfficiency.xlsx"), FileMode.Open, FileAccess.Read))
                 {
                     wb = new XSSFWorkbook(stream);
                     stream.Close();
@@ -567,7 +655,14 @@ namespace AZReport
         private void createItemList(ISheet sheet, DateTime startDay, DateTime endDay)
         {
             ICell topCel3 = sheet.GetRow(0).GetCell(3);
-            topCel3.SetCellValue(startDay.ToString("dd/MM/yyyy") + " - " + endDay.ToString("dd/MM/yyyy"));
+            if (startDay.Year == endDay.Year && startDay.Year == endDay.Year && startDay.Year == endDay.Year)
+            {
+                topCel3.SetCellValue(startDay.ToString("dd/MM/yyyy"));
+            }
+            else
+            {
+                topCel3.SetCellValue(startDay.ToString("dd/MM/yyyy") + " - " + endDay.ToString("dd/MM/yyyy"));
+            }
 
             var startDayTem = new DateTime(startDay.Year, startDay.Month, startDay.Day, 0, 0, 0);            
             IRow dayHeaderList = sheet.GetRow(1);
@@ -643,6 +738,17 @@ namespace AZReport
         private void createTimeTable(ISheet sheetTime, DateTime startDay, DateTime endDay)
         {
             #region header
+            string title = "";
+            if (dateTimePicker3.Value.ToShortDateString() != dateTimePicker4.Value.ToShortDateString())
+            {
+                title = "Weekly programming SCTV10 channel \n " + dateTimePicker3.Value.Day.ToString() + " ~ " + dateTimePicker4.Value.ToString("d.MM.yyyy");
+            }
+            else
+            {
+                title = "Weekly programming SCTV10 channel \n " + dateTimePicker4.Value.ToString("d.MM.yyyy");
+            }
+            IRow rowTime0 = sheetTime.GetRow(0);
+            rowTime0.GetCell(2).SetCellValue(title);
             IRow rowTime1 = sheetTime.GetRow(1);
             IRow rowTime2 = sheetTime.GetRow(2);
             var tempDate = startDay;
@@ -656,59 +762,147 @@ namespace AZReport
                 tempDate = tempDate.AddDays(1);
             }
             #endregion
+            var timesetting = _iTimeSettingService.GetAll().ToList().FirstOrDefault();
+            int beginHour = timesetting.time.Hour;
+            int index1 = 4;
+            for (int p = beginHour; p < 24; p++)
+            {
+                IRow rowTime = sheetTime.GetRow(index1);
+                if (rowTime == null)
+                {
+                    rowTime = sheetTime.CreateRow(index1);
+                }
+                var myCell1 = rowTime.GetCell(1);
+                if (myCell1 == null)
+                {
+                    myCell1 = rowTime.CreateCell(1);
+                }
+                myCell1.SetCellValue(beginHour);
+                var myCell68 = rowTime.GetCell(68);
+                if (myCell68 == null)
+                {
+                    myCell68 = rowTime.CreateCell(68);
+                }
+                myCell68.SetCellValue(beginHour++);
+                index1 = index1 + 4;
+            }
             var scheduleList = _iScheduleService.GetByDate(startDay, endDay);
             var timeTemp = startDay;
             int dd = 0;
             while (timeTemp <= endDay)
             {
                 var schedulePerDay = scheduleList.Where(x => x.Date.ToShortDateString() == timeTemp.ToShortDateString()).ToList();
+                schedulePerDay = schedulePerDay.Where(x=>x.Date.TimeOfDay > Convert.ToDateTime(dateTimePicker5.Value).TimeOfDay).OrderBy(x=>x.Date).ToList();
+                List<ScheduleViewModel> groupHour = GroupHour(schedulePerDay).OrderBy(x => x.Hour).ToList();
                 int index = 4;
-                foreach (var i in schedulePerDay.Where(x=>x.Date.TimeOfDay > Convert.ToDateTime(dateTimePicker5.Value).TimeOfDay))
+                foreach (var i in groupHour)
                 {   
-                    var item = totalResult.Where(x=>x.Code==i.Code).FirstOrDefault();
-                    if (Convert.ToDateTime(item.Duration).Minute > 4)
+                    // add hour
+                    // add program
+                    foreach (var program in i.programs)
                     {
-                        IRow rowTime4 = sheetTime.GetRow(index++);
-                        if (rowTime4 == null)
+                        var item = totalResult.Where(x => x.Code == program.Code).FirstOrDefault();
+                        if (Convert.ToDateTime(item.Duration).Minute > 4)
                         {
-                            rowTime4 = sheetTime.CreateRow(index++);
+                            IRow rowTime4 = sheetTime.GetRow(index++);
+                            if (rowTime4 == null)
+                            {
+                                rowTime4 = sheetTime.CreateRow(index++);
+                            }
+                            var myCell = rowTime4.GetCell(7 + dd * 6);
+                            if (myCell == null)
+                            {
+                                myCell = rowTime4.CreateCell(7 + dd * 6);
+                            }
+                            myCell.SetCellValue(item.Name);
+                            var myCell2 = rowTime4.GetCell(3 + dd * 6);
+                            if (myCell2 == null)
+                            {
+                                myCell2 = rowTime4.CreateCell(3 + dd * 6);
+                            }
+                            myCell2.SetCellValue(Convert.ToDateTime(item.Duration).Minute);
+                          
+                            var myCell4 = rowTime4.GetCell(4 + dd * 6);
+                            if (myCell4 == null)
+                            {
+                                myCell4 = rowTime4.CreateCell(4 + dd * 6);
+                            }
+                            myCell4.SetCellValue(item.Group);
+                            var myCell3 = rowTime4.GetCell(5 + dd * 6);
+                            if (myCell3 == null)
+                            {
+                                myCell3 = rowTime4.CreateCell(5 + dd * 6);
+                            }
+                            myCell3.SetCellValue(item.Category);
+                            //var myCell5 = rowTime4.GetCell(1 + dd * 6);
+                            //if (myCell5 == null)
+                            //{
+                            //    myCell5 = rowTime4.CreateCell(1 + dd * 6);
+                            //}
+                            //myCell5.SetCellValue(Convert.ToDateTime(i.Date).Hour);
                         }
-                        var myCell = rowTime4.GetCell(7 + dd * 6);
-                        if (myCell == null)
-                        {
-                            myCell = rowTime4.CreateCell(7 + dd * 6);
-                        }
-                        myCell.SetCellValue(item.Name);
-                        var myCell2 = rowTime4.GetCell(3 + dd * 6);
-                        if (myCell2 == null)
-                        {
-                            myCell2 = rowTime4.CreateCell(3 + dd * 6);
-                        }
-                        myCell2.SetCellValue(Convert.ToDateTime(item.Duration).Minute);
-                        var myCell4 = rowTime4.GetCell(4 + dd * 6);
-                        if (myCell4 == null)
-                        {
-                            myCell4 = rowTime4.CreateCell(4 + dd * 6);
-                        }
-                        myCell4.SetCellValue(item.Group);
-                        var myCell3 = rowTime4.GetCell(5 + dd * 6);
-                        if (myCell3 == null)
-                        {
-                            myCell3 = rowTime4.CreateCell(5 + dd * 6);
-                        }
-                        myCell3.SetCellValue(item.Category);
-                        //var myCell5 = rowTime4.GetCell(1 + dd * 6);
-                        //if (myCell5 == null)
-                        //{
-                        //    myCell5 = rowTime4.CreateCell(1 + dd * 6);
-                        //}
-                        //myCell5.SetCellValue(Convert.ToDateTime(i.Date).Hour);
+                    }
+                    if ((index - 4) % 4 != 0)
+                    {
+                        int tem = (index - 4) / 4;
+                        index = (tem + 1) * 4 + 4;
                     }
                 }
                 timeTemp = timeTemp.AddDays(1);
                 dd++;
 
             }          
+        }
+
+        private List<ScheduleViewModel> GroupHour(List<Schedule> originalList)
+        {
+            List<ScheduleViewModel> result = new List<ScheduleViewModel>();
+            foreach (var item in originalList)
+            {
+                addItemToScheduleList(item, result);
+            }
+            return result;
+        }
+
+        private List<ScheduleViewModel> addItemToScheduleList(Schedule item, List<ScheduleViewModel> result)
+        {           
+            var item_temp = totalResult.Where(x => x.Code == item.Code).FirstOrDefault();
+            DateTime time = Convert.ToDateTime(item_temp.Duration);
+            if (time.Minute > 4)
+            {
+                DateTime endTime = item.Date;
+                endTime = endTime.AddMinutes(time.Minute).AddSeconds(time.Second);
+                DateTime seprateTime = new DateTime(endTime.Year, endTime.Month, endTime.Day, endTime.Hour, 0, 0);
+                DateTime choosenTime = new DateTime();
+                if (item.Date <= seprateTime)
+                {
+                    if ((seprateTime - item.Date) >= (endTime - seprateTime))
+                    {
+                        choosenTime = item.Date;
+                    }
+                    else
+                    {
+                        choosenTime = endTime;
+                    }
+                }
+                else
+                    choosenTime = endTime;
+                var choosenItem = result.Where(x => x.Hour == choosenTime.Hour).FirstOrDefault();
+                if (choosenItem != null)
+                {
+                    choosenItem.programs.Add(item);
+                    choosenItem.programs = choosenItem.programs.OrderBy(x => x.Date).ToList();
+                }
+                else
+                {
+                    choosenItem = new ScheduleViewModel();
+                    choosenItem.Hour = choosenTime.Hour;
+                    choosenItem.programs = new List<Schedule>();
+                    choosenItem.programs.Add(item);
+                    result.Add(choosenItem);
+                }
+            }
+            return result;
         }
 
         private void dateTimePicker3_ValueChanged(object sender, EventArgs e)

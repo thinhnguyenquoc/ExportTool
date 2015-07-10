@@ -31,7 +31,24 @@ namespace AZReport.Services
 
         public List<Schedule> GetByDate(DateTime start, DateTime end)
         {
-            return _scheduleRepository.FindBy(x => x.Date <= end && x.Date >= start).ToList();
+            DateTime startTime = new DateTime(start.Year, start.Month, start.Day, 0,0,0);
+            DateTime endTime = new DateTime(end.Year, end.Month, end.Day, 23, 59, 59);
+            return _scheduleRepository.FindBy(x => x.Date <= endTime && x.Date >= startTime).ToList();
+        }
+
+        public bool CheckExistDate(DateTime date)
+        {
+            var result = _scheduleRepository.FindBy(x => x.Date.Year == date.Year && x.Date.Month == date.Month && x.Date.Day == date.Day).FirstOrDefault();
+            return result != null ? true : false;
+        }
+
+        public void DeleteOldDate(DateTime date)
+        {
+            var programs = _scheduleRepository.FindBy(x => x.Date.Year == date.Year && x.Date.Month == date.Month && x.Date.Day == date.Day).ToList();
+            foreach(var i in programs){
+                _scheduleRepository.Delete(i);
+            }
+            _scheduleRepository.Save();
         }
     }
 }
