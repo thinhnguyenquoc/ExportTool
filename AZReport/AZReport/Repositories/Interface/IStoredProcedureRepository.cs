@@ -11,6 +11,6 @@ namespace AZReport.Repositories.Interface
     {
         List<ProductivityViewModel> GetProductivity(DateTime start, DateTime end);
         List<ReportViewModel> GetTotalQuantity(DateTime start, DateTime end);
-        List<ReportViewModel> GetFreq(DateTime start, DateTime end);
+        List<ReportViewModel> GetFreq(DateTime start, DateTime end, DateTime time);
     }
 }

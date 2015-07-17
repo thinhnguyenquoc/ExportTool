@@ -38,17 +38,11 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-<<<<<<< HEAD
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.button9 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-=======
-            this.button9 = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
->>>>>>> origin/master
             this.button8 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -93,11 +87,6 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog3 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog2 = new System.Windows.Forms.SaveFileDialog();
-<<<<<<< HEAD
-=======
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
->>>>>>> origin/master
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -190,7 +179,6 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Read schedule";
             // 
-<<<<<<< HEAD
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
@@ -201,8 +189,6 @@
             this.checkBox2.Text = "Update";
             this.checkBox2.UseVisualStyleBackColor = true;
             // 
-=======
->>>>>>> origin/master
             // button9
             // 
             this.button9.Location = new System.Drawing.Point(349, 99);
@@ -236,7 +222,6 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Read program code ";
             // 
-<<<<<<< HEAD
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
@@ -247,8 +232,6 @@
             this.checkBox1.Text = "Update";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
-=======
->>>>>>> origin/master
             // button8
             // 
             this.button8.Location = new System.Drawing.Point(340, 91);
@@ -546,30 +529,18 @@
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(244, 45);
             this.label15.Name = "label15";
-<<<<<<< HEAD
             this.label15.Size = new System.Drawing.Size(27, 13);
             this.label15.TabIndex = 17;
             this.label15.Text = "Max";
-=======
-            this.label15.Size = new System.Drawing.Size(26, 13);
-            this.label15.TabIndex = 17;
-            this.label15.Text = "End";
->>>>>>> origin/master
             // 
             // label14
             // 
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(99, 45);
             this.label14.Name = "label14";
-<<<<<<< HEAD
             this.label14.Size = new System.Drawing.Size(24, 13);
             this.label14.TabIndex = 16;
             this.label14.Text = "Min";
-=======
-            this.label14.Size = new System.Drawing.Size(34, 13);
-            this.label14.TabIndex = 16;
-            this.label14.Text = "Begin";
->>>>>>> origin/master
             // 
             // label13
             // 
@@ -672,29 +643,6 @@
             // 
             this.saveFileDialog2.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog2_FileOk);
             // 
-<<<<<<< HEAD
-=======
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(18, 95);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(61, 17);
-            this.checkBox1.TabIndex = 4;
-            this.checkBox1.Text = "Update";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(18, 103);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(61, 17);
-            this.checkBox2.TabIndex = 6;
-            this.checkBox2.Text = "Update";
-            this.checkBox2.UseVisualStyleBackColor = true;
-            // 
->>>>>>> origin/master
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);

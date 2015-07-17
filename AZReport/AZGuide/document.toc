@@ -1,0 +1,9 @@
+\select@language {vietnam}
+\contentsline {section}{\numberline {1}Gi\IeC {\'\ohorn }i thi\IeC {\d \ecircumflex }u ph\IeC {\`\acircumflex }n m\IeC {\`\ecircumflex }m}{2}
+\contentsline {section}{\numberline {2}C\IeC {\'a}c t\IeC {\'\i }nh n\IeC {\u a}ng hi\IeC {\d \ecircumflex }n c\IeC {\'o} c\IeC {\h u}a ph\IeC {\`\acircumflex }n m\IeC {\`\ecircumflex }m}{2}
+\contentsline {subsection}{\numberline {2.1}T\IeC {\'\i }nh n\IeC {\u a}ng nh\IeC {\d \acircumflex }p danh s\IeC {\'a}ch c\IeC {\'a}c ch\IeC {\uhorn }\IeC {\ohorn }ng tr\IeC {\`\i }nh qu\IeC {\h a}ng c\IeC {\'a}o}{2}
+\contentsline {subsection}{\numberline {2.2}T\IeC {\'\i }nh n\IeC {\u a}ng nh\IeC {\d \acircumflex }p l\IeC {\d i}ch \IeC {\dj }\IeC {\~a} tr\IeC {\`\i }nh chi\IeC {\'\ecircumflex }u}{3}
+\contentsline {subsection}{\numberline {2.3}T\IeC {\'\i }nh n\IeC {\u a}ng t\IeC {\d a}o m\IeC {\~\acircumflex }u s\IeC {\h a}n l\IeC {\uhorn }\IeC {\d \ohorn }ng b\IeC {\'a}n h\IeC {\`a}ng}{3}
+\contentsline {subsection}{\numberline {2.4}T\IeC {\'\i }nh n\IeC {\u a}ng l\IeC {\uhorn }u s\IeC {\h a}n l\IeC {\uhorn }\IeC {\d \ohorn }ng b\IeC {\'a}n h\IeC {\`a}ng}{3}
+\contentsline {subsection}{\numberline {2.5}T\IeC {\'\i }nh n\IeC {\u a}ng t\IeC {\d a}o b\IeC {\'a}o c\IeC {\'a}o}{3}
+\contentsline {section}{\numberline {3}Th\IeC {\^o}ng b\IeC {\'a}o l\IeC {\~\ocircumflex }i}{4}

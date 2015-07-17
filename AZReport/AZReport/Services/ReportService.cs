@@ -28,9 +28,9 @@ namespace AZReport.Services
             return result;
         }
 
-        public List<ReportViewModel> GetFreq(DateTime start, DateTime end)
+        public List<ReportViewModel> GetFreq(DateTime start, DateTime end, DateTime time)
         {
-            var result = _iStoredProcedureRepository.GetFreq(start, end);
+            var result = _iStoredProcedureRepository.GetFreq(start, end, time);
             return result;
         }
     }

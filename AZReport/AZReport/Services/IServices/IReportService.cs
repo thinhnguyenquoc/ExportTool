@@ -10,6 +10,6 @@ namespace AZReport.Services.IServices
     {
         List<ProductivityViewModel> GetProductivity(DateTime start, DateTime end);
         List<ReportViewModel> GetQuantity(DateTime start, DateTime end);
-        List<ReportViewModel> GetFreq(DateTime start, DateTime end);
+        List<ReportViewModel> GetFreq(DateTime start, DateTime end, DateTime time);
     }
 }

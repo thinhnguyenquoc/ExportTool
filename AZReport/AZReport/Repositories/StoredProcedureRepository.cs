@@ -130,7 +130,7 @@ namespace AZReport.Repositories
             return result;
         }
 
-        public List<ReportViewModel> GetFreq(DateTime start, DateTime end)
+        public List<ReportViewModel> GetFreq(DateTime start, DateTime end, DateTime time)
         {
             //var startTime = new SqlParameter
             //{
@@ -163,7 +163,7 @@ namespace AZReport.Repositories
 
             var codeList = from s in _context.Schedules
                            join p in _context.Programs on s.Code equals p.Code
-                           where s.Date >= start && s.Date <= end
+                           where s.Date >= start && s.Date <= end && s.Date.Hour >= time.Hour && s.Date.Minute >= time.Minute && s.Date.Second >= time.Second 
                            select new
                            {
                                Code = s.Code,
