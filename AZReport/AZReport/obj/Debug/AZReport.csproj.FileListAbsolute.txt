@@ -67,6 +67,7 @@ H:\AZReport\AZReport\obj\Debug\AZReport.ErrorForm.resources
 H:\AZReport\AZReport\obj\Debug\AZReport.SuccessForm.resources
 H:\AZReport\AZReport\bin\Debug\TemplateEfficiency.xlsx
 H:\AZReport\AZReport\obj\Debug\AZReport.csprojResolveAssemblyReference.cache
+<<<<<<< HEAD
 E:\AZReport\AZReport\bin\Debug\TemplateEfficiency.xlsx
 E:\AZReport\AZReport\bin\Debug\azshop.ico
 E:\AZReport\AZReport\obj\Debug\AZReport.csprojResolveAssemblyReference.cache
@@ -151,3 +152,5 @@ F:\share\AZReport_compact\AZReport\obj\Debug\AZReport.Form1.resources
 F:\share\AZReport_compact\AZReport\obj\Debug\AZReport.Properties.Resources.resources
 F:\share\AZReport_compact\AZReport\obj\Debug\AZReport.SuccessForm.resources
 F:\share\AZReport_compact\AZReport\obj\Debug\AZReport.csproj.GenerateResource.Cache
+=======
+>>>>>>> origin/master

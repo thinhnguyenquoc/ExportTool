@@ -124,6 +124,7 @@ namespace AZReport
                     while (startDay <= lastDay)
                     {
                         if (checkBox2.Checked)
+<<<<<<< HEAD
                         {
                             //delete old data
                             if (_iScheduleService.CheckExistDate(startDay))
@@ -145,6 +146,29 @@ namespace AZReport
                         }
                         else
                         {
+=======
+                        {
+                            //delete old data
+                            if (_iScheduleService.CheckExistDate(startDay))
+                            {
+                                _iScheduleService.DeleteOldDate(startDay);
+                            }
+                            // add update data
+                            for (int j = startPoint.First() + 1; j <= sheet.LastRowNum; j++)
+                            {
+                                var row = sheet.GetRow(j);
+                                Schedule schedule = new Schedule();
+                                if (row.GetCell(startPoint.Last()) == null || row.GetCell(startPoint.Last()).NumericCellValue == 0)
+                                    break;
+                                schedule.Code = row.GetCell(startPoint.Last() + 4).StringCellValue.ToString();
+                                var mytime = row.GetCell(startPoint.Last() + 1).DateCellValue;
+                                schedule.Date = new DateTime(startDay.Year, startDay.Month, startDay.Day, mytime.Hour, mytime.Minute, mytime.Second);
+                                _iScheduleService.Create(schedule);
+                            }
+                        }
+                        else
+                        {
+>>>>>>> origin/master
                             if (_iScheduleService.CheckExistDate(startDay))
                             {
                                 //do nothing

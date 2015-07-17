@@ -5,10 +5,14 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZReport", "AZReport\AZReport.csproj", "{3E6B57A3-EC9B-47FD-93F6-2DE641DF5D3A}"
 EndProject
+<<<<<<< HEAD
 Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "SetupAZReport", "SetupAZReport\SetupAZReport.isproj", "{CE73EA0F-D3FA-44EC-99CD-E04EF88F33B1}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3E6B57A3-EC9B-47FD-93F6-2DE641DF5D3A} = {3E6B57A3-EC9B-47FD-93F6-2DE641DF5D3A}
 	EndProjectSection
+=======
+Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "SetupAZReport", "SetupAZReport\SetupAZReport.isproj", "{8EEA6BD7-A1B0-4076-910F-5E1BF2749341}"
+>>>>>>> origin/master
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +33,7 @@ Global
 		{3E6B57A3-EC9B-47FD-93F6-2DE641DF5D3A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E6B57A3-EC9B-47FD-93F6-2DE641DF5D3A}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
 		{3E6B57A3-EC9B-47FD-93F6-2DE641DF5D3A}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
 		{CE73EA0F-D3FA-44EC-99CD-E04EF88F33B1}.CD_ROM|Any CPU.ActiveCfg = CD_ROM
 		{CE73EA0F-D3FA-44EC-99CD-E04EF88F33B1}.CD_ROM|Any CPU.Build.0 = CD_ROM
 		{CE73EA0F-D3FA-44EC-99CD-E04EF88F33B1}.Debug|Any CPU.ActiveCfg = DVD-5
@@ -39,6 +44,18 @@ Global
 		{CE73EA0F-D3FA-44EC-99CD-E04EF88F33B1}.Release|Any CPU.Build.0 = SingleImage
 		{CE73EA0F-D3FA-44EC-99CD-E04EF88F33B1}.SingleImage|Any CPU.ActiveCfg = SingleImage
 		{CE73EA0F-D3FA-44EC-99CD-E04EF88F33B1}.SingleImage|Any CPU.Build.0 = SingleImage
+=======
+		{8EEA6BD7-A1B0-4076-910F-5E1BF2749341}.CD_ROM|Any CPU.ActiveCfg = CD_ROM
+		{8EEA6BD7-A1B0-4076-910F-5E1BF2749341}.CD_ROM|Any CPU.Build.0 = CD_ROM
+		{8EEA6BD7-A1B0-4076-910F-5E1BF2749341}.Debug|Any CPU.ActiveCfg = DVD-5
+		{8EEA6BD7-A1B0-4076-910F-5E1BF2749341}.Debug|Any CPU.Build.0 = DVD-5
+		{8EEA6BD7-A1B0-4076-910F-5E1BF2749341}.DVD-5|Any CPU.ActiveCfg = DVD-5
+		{8EEA6BD7-A1B0-4076-910F-5E1BF2749341}.DVD-5|Any CPU.Build.0 = DVD-5
+		{8EEA6BD7-A1B0-4076-910F-5E1BF2749341}.Release|Any CPU.ActiveCfg = SingleImage
+		{8EEA6BD7-A1B0-4076-910F-5E1BF2749341}.Release|Any CPU.Build.0 = SingleImage
+		{8EEA6BD7-A1B0-4076-910F-5E1BF2749341}.SingleImage|Any CPU.ActiveCfg = SingleImage
+		{8EEA6BD7-A1B0-4076-910F-5E1BF2749341}.SingleImage|Any CPU.Build.0 = SingleImage
+>>>>>>> origin/master
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
